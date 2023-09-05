@@ -35,3 +35,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 
 Made with the tutorial : https://www.youtube.com/watch?v=NNWX2flw5mg
+
+BUilding the CSS
