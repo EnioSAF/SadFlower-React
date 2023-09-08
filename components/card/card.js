@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import Button, { IconTypes } from '../button/button';
+import Button from '../button/button';
 import ConditionalRender from './conditional-renderer';
 import styles from './card.module.sass';
+import GetCategoryColor from '@/src/app/helpers/get-category-color';
 
 const Card = (props) => (
     <div className={`${styles.card_wrap} ${props.className || ''}`}>
@@ -13,11 +14,17 @@ const Card = (props) => (
         </div>
         <div className={styles.card_content}>
           <ConditionalRender condition={props.label}>
-            <div className={`${styles.card_label} h6 mb-10 c-orange`}>${props.label}</div>
+            <div className={`${styles.card_label} h6 mb-10 c-${GetCategoryColor(props.label)}`}>{props.label}</div>
           </ConditionalRender>
-            <div className={`${styles.card_title} h3 mb-20`}>Enio and the Gang</div>
-            <p className={`${styles.card_summary} fw-600`}>Purus in mollis nunc sed id semper risus in hendrerit. Odio euismod lacinia at quis risus sed vulputate odio. Consectetur adipiscing elit pellentesque habitant.</p>
-            <Button href="#" icon={IconTypes.ARROW_RIGHT}>Donne-m'en plus</Button>
+          <ConditionalRender condition={props.title}>
+            <div className={`${styles.card_title} h3 mb-20`}>{props.title}</div>
+          </ConditionalRender>
+          <ConditionalRender condition={props.summary}>
+          <p className={`${styles.card_summary} fw-600`}>{props.summary}</p>
+          </ConditionalRender>
+          <ConditionalRender condition={props.href}>
+          <Button href={props.href} icon={props.btnIcon}>{props.btnLabel || "Donne-m'en plus !"}</Button>
+          </ConditionalRender>
         </div>
       </div>
     </div>
