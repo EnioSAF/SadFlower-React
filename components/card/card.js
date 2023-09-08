@@ -4,13 +4,13 @@ import ConditionalRender from './conditional-renderer';
 import styles from './card.module.sass';
 
 const Card = (props) => (
-    <div className={`${styles.card_warp} ${props.className || ''}`}>
+    <div className={`${styles.card_wrap} ${props.className || ''}`}>
       <div className={styles.card}>
         <div className={styles.card_imageWrap}>
             <div className={styles.card_image}>
                 <Image src="/1.jpg" alt="legang" fill={true} />
             </div>
-            </div>
+        </div>
         <div className={styles.card_content}>
           <ConditionalRender condition={props.label}>
             <div className={`${styles.card_label} h6 mb-10 c-orange`}>${props.label}</div>
