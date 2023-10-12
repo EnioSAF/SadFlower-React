@@ -11,7 +11,7 @@ const BlogDetails = () => (
         </div>
     </div>
    
-    <Image className={`${styles.stylepourdetails} mb-50`} src="/6.jpg" alt="6" width="1280" height="387" />
+    <Image className={`${styles.stylepourdetails} mb-50`} src="/8.jpg" alt="6" width="1050" height="387" />
    
    <div className="row">
         <div className="col col_9">
