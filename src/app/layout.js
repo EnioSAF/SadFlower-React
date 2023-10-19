@@ -14,7 +14,6 @@ const openSans = Open_Sans({
   variable: '--font-open-sans'
 });
 
-
 export const metadata = {
   title: 'SadFlower',
   description: 'SadFlower World',
