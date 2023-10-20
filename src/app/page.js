@@ -2,6 +2,7 @@
     import {IconTypes} from '@/components/button/button';
     import config from '../config';
     import fetchBlogs from './helpers/fetch-blogs';
+    import 'bootstrap/dist/css/bootstrap.min.css';
 
     const Home = async () => {
         const [featuredBlogs, blogs] = await Promise.all([
