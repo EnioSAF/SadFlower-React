@@ -14,7 +14,6 @@ const openSans = Open_Sans({
   variable: '--font-open-sans'
 });
 
-
 export const metadata = {
   title: 'SadFlower',
   description: 'SadFlower World',
@@ -26,6 +25,7 @@ const RootLayout = ({ children }) =>  (
         <Header />
         {children}
         <Footer />
+        <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
       </body>
     </html>
   );
