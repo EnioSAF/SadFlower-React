@@ -1,9 +1,7 @@
-import Navigation from "./navbar/navigation";
-
 const Header = () => (
     <header class="pt-80 pb-80">
         <div className="container">
-        <Navigation />
+        <h1>SadFlower</h1>
         </div>
     </header>
 );
