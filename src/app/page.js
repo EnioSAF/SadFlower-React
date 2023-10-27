@@ -1,10 +1,6 @@
     import Card from '@/components/card/card';
     import {IconTypes} from '@/components/button/button';
     import config from '../config';
-<<<<<<< HEAD
-    import fetchBlogs from './helpers/fetch-blogs';
-    import 'bootstrap/dist/css/bootstrap.min.css';
-=======
 
     const fetchBlogs = async (params) => {
         const reqOptions = {
@@ -18,7 +14,6 @@
 
         return response;
     }
->>>>>>> parent of 67be18c (FINISH)
 
     const Home = async () => {
         const [featuredBlogs, blogs] = await Promise.all([
