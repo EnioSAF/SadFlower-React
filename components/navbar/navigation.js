@@ -15,7 +15,7 @@ const Navigation = () => (
 			<Navbar.Link href="#" active>
 				Home
 			</Navbar.Link>
-			<Navbar.Link as={Link} href="#">
+			<Navbar.Link as={Link} href="http://localhost:3000/about">
 				About
 			</Navbar.Link>
 			<Navbar.Link href="#">Services</Navbar.Link>
