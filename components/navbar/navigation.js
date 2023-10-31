@@ -12,15 +12,21 @@ const Navigation = () => (
 		</Navbar.Brand>
 		<Navbar.Toggle />
 		<Navbar.Collapse>
-			<Navbar.Link href="#" active>
+			<Navbar.Link href="http://localhost:3000">
 				Home
 			</Navbar.Link>
-			<Navbar.Link as={Link} href="http://localhost:3000/about">
+			<Navbar.Link href="http://localhost:3000/about">
 				About
 			</Navbar.Link>
-			<Navbar.Link href="#">Services</Navbar.Link>
-			<Navbar.Link href="#">Pricing</Navbar.Link>
-			<Navbar.Link href="#">Contact</Navbar.Link>
+			<Navbar.Link href="#">
+				Services
+			</Navbar.Link>
+			<Navbar.Link href="#">
+				Pricing
+			</Navbar.Link>
+			<Navbar.Link href="#">
+				Contact
+			</Navbar.Link>
 		</Navbar.Collapse>
 	</Navbar>
 );
