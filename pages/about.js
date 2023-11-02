@@ -1,15 +1,28 @@
 import React from 'react';
+import RND, { Rnd } from 'react-rnd';
 import Header from '@/components/header';
 import "@/styles/styles.sass";
 
 function About() {
     return (
-        <div>
-            <Header />
-            <h1>À propos de moi</h1>
-            <p>Je suis un développeur web passionné par React.</p>
-        </div>
+        <Rnd
+            default={{
+                x: 0,
+                y: 0,
+                width: 320,
+                height: 200,
+            }}
+            minWidth={200}
+            minHeight={150}
+            style={{ border: '2px solid #000' }}
+        >
+            <div className="fenetre-article">
+                <h2>Titre de l'article</h2>
+                <hr />
+                <p>Contenu de l'article...</p>
+            </div>
+        </Rnd>
     );
-}
+};
 
 export default About;
