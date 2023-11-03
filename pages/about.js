@@ -1,5 +1,5 @@
 import React from 'react';
-import RND, { Rnd } from 'react-rnd';
+import { Rnd } from 'react-rnd';
 import Header from '@/components/header';
 import "@/styles/styles.sass";
 
