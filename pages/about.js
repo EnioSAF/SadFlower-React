@@ -1,9 +1,28 @@
-import React from 'react';
-import { Rnd } from 'react-rnd';
+import React, { useState, useEffect } from 'react';
+import RND, { Rnd } from 'react-rnd';
 import Header from '@/components/header';
 import "@/styles/styles.sass";
+import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
 
 function About() {
+    const [articleData, setArticleData] = useState({});
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const [blogs] = await Promise.all([
+                await fetchBlogs()
+            ]);
+            console.log(blogs);
+            console.log(fetchBlogs);
+            // Vérifie que blogs.data est défini et qu'il a au moins un élément
+            if (blogs && blogs.data && blogs.data.length > 0) {
+                const selectedArticle = blogs.data[1];
+                setArticleData(selectedArticle);
+            }
+        }
+        fetchData();
+    }, []);
+
     return (
         <Rnd
             default={{
@@ -17,12 +36,16 @@ function About() {
             style={{ border: '2px solid #000' }}
         >
             <div className="fenetre-article">
-                <h2>Titre de l'article</h2>
-                <hr />
-                <p>Contenu de l'article...</p>
+                {articleData && articleData.attributes && (
+                    <>
+                        <h2>{articleData.attributes.Title}</h2>
+                        <hr />
+                        <p>{articleData.attributes.Summary}</p>
+                    </>
+                )}
             </div>
         </Rnd>
     );
-};
-
+    console.log(articleData);
+}
 export default About;
