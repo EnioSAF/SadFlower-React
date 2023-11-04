@@ -24,10 +24,10 @@ const RootLayout = ({ children }) => (
 		<body
 			className={`${openSans.className} ${openSans.variable} ${lato.variable}`}
 		>
+
 			<Header />
 			{children}
 			<Footer />
-			<script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 		</body>
 	</html>
 );
