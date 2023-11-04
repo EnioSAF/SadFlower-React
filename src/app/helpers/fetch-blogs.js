@@ -11,7 +11,6 @@ const fetchBlogs = async (params) => {
 		`${config.api}/api/blogs?populate=*&${params}`,
 		reqOptions
 	);
-	console.log(reqOptions)
 	const response = await request.json();
 
 	return response;

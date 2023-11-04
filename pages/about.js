@@ -9,22 +9,18 @@ function About() {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log("Fetching data")
             const [blogs] = await Promise.all([
                 await fetchBlogs()
             ]);
-            console.log("blogs: ", blogs);
             // Vérifie que blogs.data est défini et qu'il a au moins un élément
             if (blogs && blogs.data && blogs.data.length > 0) {
                 const selectedArticle = blogs.data[1];
-                console.log("selectedArticle: ", selectedArticle)
                 setArticleData(selectedArticle);
             }
         }
         fetchData();
     }, []);
 
-    console.log(articleData)
     return (
         <Rnd
             default={{
@@ -48,6 +44,5 @@ function About() {
             </div>
         </Rnd>
     );
-    console.log(articleData);
 }
 export default About;
