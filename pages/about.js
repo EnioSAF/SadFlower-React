@@ -3,31 +3,40 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
 import Window from '@/components/system32/windows/simplewindow';
+import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 
-// import "@/styles/styles.sass";
 import "98.css";
 
 function About() {
-    const [articleData, setArticleData] = useState(null);
+    const [featuredBlogs, setFeaturedBlogs] = useState(null);
+    const [blogs, setBlogs] = useState(null);
 
-    useEffect(() => {
+    useEffect(() => { //Fonction pour fetch les articles
         const fetchData = async () => {
-            const [blogs] = await Promise.all([
-                await fetchBlogs()
+            const [featuredBlogsData, blogsData] = await Promise.all([
+                await fetchBlogs("filters[IsFeatured][$eq]=true"),
+                await fetchBlogs("filters[IsFeatured][$eq]=false")
             ]);
-            // Vérifie que blogs.data est défini et qu'il a au moins un élément
-            if (blogs && blogs.data && blogs.data.length > 0) {
-                const selectedArticle = blogs.data[1];
-                setArticleData(selectedArticle);
-            }
+            setFeaturedBlogs(featuredBlogsData);
+            setBlogs(blogsData);
         }
         fetchData();
     }, []);
 
-    return (
+    return ( //Affichage de la page
         <div>
-            {articleData && <Window articleData={articleData} />}
+            <div>
+                {featuredBlogs && featuredBlogs.data.map((blog, index) => (
+                    <FeaturedWindow key={index} articleData={blog} />
+                ))}
+            </div>
+            <div>
+                {blogs && blogs.data.map((blog, index) => (
+                    <Window key={index} articleData={blog} />
+                ))}
+            </div>
         </div>
     );
 }
+
 export default About;
