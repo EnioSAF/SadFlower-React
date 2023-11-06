@@ -1,11 +1,26 @@
 import React from "react";
+import { Rnd } from "react-rnd";
 import "98.css";
 
-const SimpleWindow = () => {
+const Window = ({ articleData }) => {
     return (
-        <div style={{ width: 300 }} className="window">
+        <Rnd
+            default={{
+                x: 0,
+                y: 0,
+                width: 320,
+                height: 200,
+            }}
+            minWidth={200}
+            minHeight={150}
+            style={{
+                border: '2px solid #000',
+                fontFamily: 'Arial, sans-serif',
+            }}
+            className="window"
+        >
             <div className="title-bar">
-                <div className="title-bar-text">Ma Super Fenêtre</div>
+                <div className="title-bar-text">{articleData.attributes.Title}</div>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />
@@ -14,10 +29,18 @@ const SimpleWindow = () => {
             </div>
 
             <div className="window-body">
-                <p style={{ textAlign: "center" }}>Contenu de la fenêtre ici</p>
+                <div className="fenetre-article">
+                    {articleData && articleData.attributes && (
+                        <>
+                            <h2>{articleData.attributes.Title}</h2>
+                            <hr />
+                            <p>{articleData.attributes.Summary}</p>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+        </Rnd>
     );
 };
 
-export default SimpleWindow;
+export default Window;

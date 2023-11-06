@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import RND, { Rnd } from 'react-rnd';
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
-import SimpleWindow from '@/components/system32/windows/simplewindow';
+import Window from '@/components/system32/windows/simplewindow';
 
-import "@/styles/styles.sass";
+// import "@/styles/styles.sass";
+import "98.css";
 
 function About() {
-    const [articleData, setArticleData] = useState({});
+    const [articleData, setArticleData] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,28 +26,7 @@ function About() {
 
     return (
         <div>
-        <SimpleWindow />
-        <Rnd
-            default={{
-                x: 0,
-                y: 0,
-                width: 320,
-                height: 200,
-            }}
-            minWidth={200}
-            minHeight={150}
-            style={{ border: '2px solid #000' }}
-        >
-            <div className="fenetre-article">
-                {articleData && articleData.attributes && (
-                    <>
-                        <h2>{articleData.attributes.Title}</h2>
-                        <hr />
-                        <p>{articleData.attributes.Summary}</p>
-                    </>
-                )}
-            </div>
-        </Rnd>
+            {articleData && <Window articleData={articleData} />}
         </div>
     );
 }
