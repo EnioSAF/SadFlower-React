@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import RND, { Rnd } from 'react-rnd';
 import Header from '@/components/header';
-import "@/styles/styles.sass";
 import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
+import SimpleWindow from '@/components/system32/windows/simplewindow';
+
+import "@/styles/styles.sass";
 
 function About() {
     const [articleData, setArticleData] = useState({});
@@ -22,6 +24,8 @@ function About() {
     }, []);
 
     return (
+        <div>
+        <SimpleWindow />
         <Rnd
             default={{
                 x: 0,
@@ -43,6 +47,7 @@ function About() {
                 )}
             </div>
         </Rnd>
+        </div>
     );
 }
 export default About;
