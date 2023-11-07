@@ -2,17 +2,17 @@ import React from "react";
 import { Rnd } from "react-rnd";
 import "98.css";
 
-const FeaturedWindow = ({ articleData }) => {
+const Window = ({ articleData }) => {
     return (
         <Rnd
             default={{
                 x: 0,
                 y: 0,
-                width: 320,
+                width: 350,
                 height: 200,
             }}
-            minWidth={200}
-            minHeight={150}
+            minWidth={350}
+            minHeight={200}
             style={{
                 border: '2px solid #000',
                 fontFamily: 'Arial, sans-serif',
@@ -43,4 +43,4 @@ const FeaturedWindow = ({ articleData }) => {
     );
 };
 
-export default FeaturedWindow;
+export default Window;
