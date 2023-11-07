@@ -1,6 +1,8 @@
 import React from "react";
 import { Rnd } from "react-rnd";
+
 import "98.css";
+import "./WindowStyles.sass"
 
 const Window = ({ articleData }) => {
     return (
