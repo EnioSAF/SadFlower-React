@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
+import TaskBar from '@/components/system32/desktop/TaskBar';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 
+import '/styles/styles.sass'
 import "98.css";
 
 function About() {
@@ -34,6 +34,9 @@ function About() {
                 {blogs && blogs.data.map((blog, index) => (
                     <Window key={index} articleData={blog} />
                 ))}
+            </div>
+            <div>
+                <TaskBar />
             </div>
         </div>
     );

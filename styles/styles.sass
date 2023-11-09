@@ -1,14 +1,10 @@
-@import 'normalize.css/normalize.css'
-@import 'global'
-@import 'grid'
-@import 'typography'
-@import 'hr'
+//Endroit pour gérer les styles de tes pages
 
-@import 'utils/spacings'
-@import 'utils/color'
-@import 'utils/fonts'
-@import 'utils/widths'
+// Ici c'est pour gérer les styles visuels
+@import './system32/desktop'
 
-@tailwind 'base'
-@tailwind 'components'
-@tailwind 'utilities'
+// Ici c'est les "utils", les outils pour construire la page
+@import './utils/grid'
+@import './utils/spacings'
+@import './utils/widths'
+@import './utils/responsive'

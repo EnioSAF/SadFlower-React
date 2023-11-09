@@ -1,0 +1,14 @@
+.window
+    position: relative
+
+.status-bar
+    position: absolute
+    bottom: 0
+    width: 95%
+    display: flex
+    justify-content: space-between
+    padding: 5px
+
+.window-body
+    height: calc(100% - 30px) // Hauteur de la fenêtre moins la hauteur de la barre de titre
+    overflow: hidden // Cache le contenu qui dépasse de la fenêtre

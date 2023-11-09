@@ -1,7 +1,6 @@
 import { Lato, Open_Sans } from "next/font/google";
-import "@/styles/styles.sass";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import '@/styles/styles.sass'
+import { updateStyles } from "@/styles/utils/responsive";
 
 const lato = Lato({
 	subsets: ["latin"],
@@ -19,17 +18,20 @@ export const metadata = {
 	description: "SadFlower World",
 };
 
-const RootLayout = ({ children }) => (
-	<html lang="en">
-		<body
-			className={`${openSans.className} ${openSans.variable} ${lato.variable}`}
-		>
+const RootLayout = ({ children }) => {
+	updateStyles(); // Appel de la fonction updateStyles
 
-			<Header />
-			{children}
-			<Footer />
-		</body>
-	</html>
-);
+	return (
+		<html lang="fr">
+			<body
+				className={`${openSans.className} ${openSans.variable} ${lato.variable}`}
+			>
+				<Header />
+				{children}
+				<Footer />
+			</body>
+		</html>
+	);
+};
 
 export default RootLayout;
