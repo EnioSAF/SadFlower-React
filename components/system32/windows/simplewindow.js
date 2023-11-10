@@ -5,24 +5,13 @@ import "/styles/system32/window.sass";
 
 const Window = ({ articleData }) => {
     const [zIndex, setZIndex] = useState(1);
-    const [isMinimized, setIsMinimized] = useState(false);
 
     const bringToFront = () => {
         setZIndex((prevZIndex) => prevZIndex + 1);
     };
 
-    const minimizeWindow = () => {
-        setIsMinimized(true);
-    };
-
-    const restoreWindow = () => {
-        setIsMinimized(false);
-        bringToFront(); // Ramène la fenêtre à l'avant-plan lors de la restauration
-    };
-
     return (
         <>
-            {!isMinimized ? (
                 <Rnd
                     style={{
                         fontFamily: "Arial, sans-serif",
@@ -43,7 +32,7 @@ const Window = ({ articleData }) => {
                     <div className="title-bar">
                         <div className="title-bar-text">{articleData.attributes.Title}</div>
                         <div className="title-bar-controls">
-                            <button aria-label="Minimize" onClick={minimizeWindow} />
+                            <button aria-label="Minimize" />
                             <button aria-label="Maximize" />
                             <button aria-label="Close" />
                         </div>
@@ -66,11 +55,6 @@ const Window = ({ articleData }) => {
                         <p className="status-bar-field">CPU Usage: 14%</p>
                     </div>
                 </Rnd>
-            ) : (
-                <div className="minimized-window" onClick={restoreWindow}>
-                    {articleData.attributes.Title}
-                </div>
-            )}
         </>
     );
 };
