@@ -1,14 +1,19 @@
 .window
     position: relative
+    overflow: hidden // Empêche le contenu de déborder de la fenêtre
 
 .status-bar
     position: absolute
     bottom: 0
+    bottom: 2.5% // Ajuste la position pour éviter de recouvrir la bordure de la fenêtre
     width: 95%
     display: flex
     justify-content: space-between
     padding: 5px
+    z-index: 2
+    background-color: #C0C0C0
+    box-sizing: border-box
 
 .window-body
-    height: calc(100% - 30px) // Hauteur de la fenêtre moins la hauteur de la barre de titre
-    overflow: hidden // Cache le contenu qui dépasse de la fenêtre
+    height: calc(100% - 30px)
+    overflow: hidden

@@ -13,15 +13,18 @@ const TaskBar = () => {
 
 	const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-return (
-    <div className="footer">
-        <button className="start-button">Start</button>
-        <div className="separator">|</div>
-        <div className="spacer"></div>
-        <div className="separator">|</div>
-        <div className="taskbar">
-            {/* Met ici tes icônes de tâches, genre des liens vers tes projets et tout ça */}
-        </div>
+	return (
+		<div className="footer">
+			<button className="start-button">
+				<span className="logo">👁</span>
+				<span className="start-text">Start</span>
+			</button>
+			<div className="separator">|</div>
+			<div className="spacer"></div>
+			<div className="separator">|</div>
+			<div className="taskbar">
+				{/* Met ici tes icônes de tâches, genre des liens vers tes projets et tout ça */}
+			</div>
 			<div className="time-zone">
 				{currentTime.toLocaleDateString()} <span className="separator">|</span> {currentTime.toLocaleTimeString()}
 			</div>
