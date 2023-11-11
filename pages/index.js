@@ -1,14 +1,14 @@
+// Dans About.js
 import React, { useState, useEffect } from 'react';
 import TaskBar from '@/components/system32/desktop/TaskBar';
-import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
+import fetchBlogs from '@/src/app/helpers/fetch-blogs';
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 import ArticleExe from '@/components/system32/windows/articlewindow';
 import Icon from '@/components/system32/applications/icon';
 
 import "98.css";
-import '/styles/styles.sass'
-
+import '/styles/styles.sass';
 
 function About() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
@@ -34,6 +34,11 @@ function About() {
         }
     };
 
+    const handleArticleExeClose = () => {
+        // La fenêtre Articles.exe a été fermée
+        setIsArticleExeOpen(false);
+    };
+
     return (
         <div>
             <div className="desktop">
@@ -44,7 +49,10 @@ function About() {
                 />
                 {/* Ajoute d'autres icônes ici si nécessaire */}
             </div>
-            {isArticleExeOpen && <ArticleExe />}
+            {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
+            
+            
+            {/* A ajouter si tu veux voir les fenêtres indépendantes
             <div>
                 {featuredBlogs && featuredBlogs.data.map((blog, index) => (
                     <FeaturedWindow key={index} articleData={blog} />
@@ -54,7 +62,9 @@ function About() {
                 {blogs && blogs.data.map((blog, index) => (
                     <Window key={index} articleData={blog} />
                 ))}
-            </div>
+            </div> */}
+
+
             <div>
                 <TaskBar />
             </div>
