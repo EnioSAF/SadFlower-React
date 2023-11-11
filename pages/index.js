@@ -3,15 +3,19 @@ import TaskBar from '@/components/system32/desktop/TaskBar';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs'; // Importe ta fonction pour récupérer les articles
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
+import ArticleExe from '@/components/system32/windows/articlewindow';
+import Icon from '@/components/system32/applications/icon';
 
-import '/styles/styles.sass'
 import "98.css";
+import '/styles/styles.sass'
+
 
 function About() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
+    const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
 
-    useEffect(() => { //Fonction pour fetch les articles
+    useEffect(() => {
         const fetchData = async () => {
             const [featuredBlogsData, blogsData] = await Promise.all([
                 await fetchBlogs("filters[IsFeatured][$eq]=true"),
@@ -23,8 +27,24 @@ function About() {
         fetchData();
     }, []);
 
-    return ( //Affichage de la page
+    const handleIconClick = (iconName) => {
+        // Ouvre la fenêtre Articles.exe ici
+        if (iconName === "Articles") {
+            setIsArticleExeOpen(true);
+        }
+    };
+
+    return (
         <div>
+            <div className="desktop">
+                <Icon
+                    title="Articles.exe"
+                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                    onClick={() => handleIconClick("Articles")}
+                />
+                {/* Ajoute d'autres icônes ici si nécessaire */}
+            </div>
+            {isArticleExeOpen && <ArticleExe />}
             <div>
                 {featuredBlogs && featuredBlogs.data.map((blog, index) => (
                     <FeaturedWindow key={index} articleData={blog} />

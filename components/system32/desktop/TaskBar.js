@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '/styles/system32/taskbar.sass';
+import '/styles/system32/desktop/taskbar.sass';
 
 const TaskBar = () => {
 	const [currentTime, setCurrentTime] = useState(new Date());

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import "98.css";
-import "/styles/system32/window.sass";
+import "/styles/system32/windows/window.sass";
 
 const FeaturedWindow = ({ articleData }) => {
     const [zIndex, setZIndex] = useState(1);
