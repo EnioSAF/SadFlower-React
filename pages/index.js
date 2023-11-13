@@ -28,14 +28,12 @@ function About() {
     }, []);
 
     const handleIconClick = (iconName) => {
-        // Ouvre la fenêtre Articles.exe ici
         if (iconName === "Articles") {
             setIsArticleExeOpen(true);
         }
     };
 
     const handleArticleExeClose = () => {
-        // La fenêtre Articles.exe a été fermée
         setIsArticleExeOpen(false);
     };
 

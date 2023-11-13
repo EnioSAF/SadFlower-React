@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Rnd } from 'react-rnd';
 import Icon from '../applications/icon';
 import FeaturedWindow from './featuredwindow';
-import SimpleWindow from './simplewindow'; // Importe SimpleWindow ici
+import SimpleWindow from './simplewindow';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs';
 
 import '/styles/system32/applications/windowarticle.sass';
@@ -15,7 +15,7 @@ const ArticleExe = ({ onClose }) => {
     const [blogs, setBlogs] = useState(null);
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [isWindowOpen, setIsWindowOpen] = useState(true);
-    const [windowSection, setWindowSection] = useState(null); // Ajoute windowSection ici
+    const [windowSection, setWindowSection] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,7 +33,7 @@ const ArticleExe = ({ onClose }) => {
         console.log(`Icon clicked: ${articleTitle}`);
         setSelectedArticle(articleTitle);
         setIsWindowOpen(true);
-        setWindowSection(section); // Assure-toi que cette ligne est ajoutée
+        setWindowSection(section);
     };
 
     const handleClose = () => {
