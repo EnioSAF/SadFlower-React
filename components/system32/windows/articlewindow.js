@@ -9,7 +9,7 @@ import config from '@/src/config';
 import '/styles/system32/applications/windowarticle.sass';
 import "98.css";
 
-const ArticleExe = ({ onClose }) => {
+const ArticleExe = ({ onClose, closeWindow }) => {
     const [position, setPosition] = useState({ x: 50, y: 50 });
     const [size, setSize] = useState({ width: 400, height: 300 });
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
@@ -17,6 +17,9 @@ const ArticleExe = ({ onClose }) => {
     const [selectedArticle, setSelectedArticle] = useState(null);
     const [isWindowOpen, setIsWindowOpen] = useState(true);
     const [windowSection, setWindowSection] = useState(null);
+    const [isMainArticleExeOpen, setIsMainArticleExeOpen] = useState(true);
+    const [upperSectionWindows, setUpperSectionWindows] = useState([]);
+    const [lowerSectionWindows, setLowerSectionWindows] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -41,14 +44,23 @@ const ArticleExe = ({ onClose }) => {
         }
     };
 
-
     const handleClose = () => {
         setIsWindowOpen(false);
         onClose();
     };
 
-    const [upperSectionWindows, setUpperSectionWindows] = useState([]);
-    const [lowerSectionWindows, setLowerSectionWindows] = useState([]);
+    const handleCloseMainArticleExe = () => {
+        setIsMainArticleExeOpen(false);
+        onClose(); // Appelle la fonction onClose uniquement pour la fenêtre principale
+    };
+
+    const handleCloseWindow = (window, section) => {
+        if (section === "upper") {
+            setUpperSectionWindows(upperSectionWindows.filter(w => w !== window));
+        } else {
+            setLowerSectionWindows(lowerSectionWindows.filter(w => w !== window));
+        }
+    };
 
     const strapiBaseUrl = 'http://localhost:1337'; // Rajout de l'url pour les icônes
 
@@ -74,7 +86,7 @@ const ArticleExe = ({ onClose }) => {
                         <div className="title-bar-controls">
                             <button aria-label="Minimize" />
                             <button aria-label="Maximize" />
-                            <button aria-label="Close" onClick={handleClose} />
+                            <button aria-label="Close" onClick={handleCloseMainArticleExe} />
                         </div>
                     </div>
 
@@ -116,6 +128,7 @@ const ArticleExe = ({ onClose }) => {
                 <FeaturedWindow
                     key={index}
                     articleData={featuredBlogs.data.find(blog => blog.attributes.Title === window.title)}
+                    closeWindow={() => handleCloseWindow(window, "upper")}
                 />
             ))}
 
@@ -123,6 +136,7 @@ const ArticleExe = ({ onClose }) => {
                 <SimpleWindow
                     key={index}
                     articleData={blogs.data.find(blog => blog.attributes.Title === window.title)}
+                    closeWindow={() => handleCloseWindow(window, "lower")}
                 />
             ))}
         </>

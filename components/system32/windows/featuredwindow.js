@@ -3,7 +3,7 @@ import { Rnd } from "react-rnd";
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
-const FeaturedWindow = ({ articleData }) => {
+const FeaturedWindow = ({ articleData, closeWindow }) => {
     const [zIndex, setZIndex] = useState(1);
 
     const bringToFront = () => {
@@ -34,7 +34,7 @@ const FeaturedWindow = ({ articleData }) => {
                         <div className="title-bar-controls">
                             <button aria-label="Minimize" />
                             <button aria-label="Maximize" />
-                            <button aria-label="Close" />
+                            <button aria-label="Close" onClick={closeWindow} />
                         </div>
                     </div>
 
