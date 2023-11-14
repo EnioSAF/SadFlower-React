@@ -1,5 +1,8 @@
+import Image from "next/image";
 import React, { useState } from "react";
+import config from "@/src/config";
 import { Rnd } from "react-rnd";
+import styles from '@/styles/utils/style.module.sass'
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
@@ -45,6 +48,14 @@ const Window = ({ articleData, closeWindow }) => {
                                     <h2>{articleData.attributes.Title}</h2>
                                     <hr />
                                     <p>{articleData.attributes.Summary}</p>
+                                    <hr />
+                                    <p>{articleData.attributes.Content}</p>
+                                    <Image
+                                    className={`${styles.stylepourdetails} mb-50`}
+                                    src={`${config.api}${articleData.attributes.FeaturedImage.data.attributes.url}`}
+                                    alt="6"
+                                    width="1050"
+                                    height="387" />
                                 </>
                             )}
                         </div>
