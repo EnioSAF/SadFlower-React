@@ -4,6 +4,7 @@ import Icon from '../applications/icon';
 import FeaturedWindow from './featuredwindow';
 import SimpleWindow from './simplewindow';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs';
+import config from '@/src/config';
 
 import '/styles/system32/applications/windowarticle.sass';
 import "98.css";
@@ -31,15 +32,25 @@ const ArticleExe = ({ onClose }) => {
 
     const handleIconClick = (articleTitle, section) => {
         console.log(`Icon clicked: ${articleTitle}`);
-        setSelectedArticle(articleTitle);
-        setIsWindowOpen(true);
-        setWindowSection(section);
+        const newWindow = { title: articleTitle, section };
+
+        if (section === "upper") {
+            setUpperSectionWindows([...upperSectionWindows, newWindow]);
+        } else {
+            setLowerSectionWindows([...lowerSectionWindows, newWindow]);
+        }
     };
+
 
     const handleClose = () => {
         setIsWindowOpen(false);
         onClose();
     };
+
+    const [upperSectionWindows, setUpperSectionWindows] = useState([]);
+    const [lowerSectionWindows, setLowerSectionWindows] = useState([]);
+
+    const strapiBaseUrl = 'http://localhost:1337'; // Rajout de l'url pour les icônes
 
     return (
         <>
@@ -71,12 +82,13 @@ const ArticleExe = ({ onClose }) => {
                         <div className="upper-section">
                             <h3>La Crème</h3>
                             {featuredBlogs && featuredBlogs.data.map((blog, index) => (
-                                <Icon
-                                    key={index}
-                                    title={blog.attributes.Title}
-                                    iconPath={blog.attributes.IconPath}
-                                    onClick={() => handleIconClick(blog.attributes.Title, "upper")}
-                                />
+                                <div key={index}>
+                                    <Icon
+                                        title={blog.attributes.Title}
+                                        iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
+                                        onClick={() => handleIconClick(blog.attributes.Title, "upper")}
+                                    />
+                                </div>
                             ))}
                         </div>
 
@@ -86,7 +98,7 @@ const ArticleExe = ({ onClose }) => {
                                 <Icon
                                     key={index}
                                     title={blog.attributes.Title}
-                                    iconPath={blog.attributes.IconPath}
+                                    iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "lower")}
                                 />
                             ))}
@@ -100,17 +112,19 @@ const ArticleExe = ({ onClose }) => {
                 </Rnd>
             )}
 
-            {selectedArticle && windowSection === "upper" && (
+            {upperSectionWindows.map((window, index) => (
                 <FeaturedWindow
-                    articleData={featuredBlogs.data.find(blog => blog.attributes.Title === selectedArticle)}
+                    key={index}
+                    articleData={featuredBlogs.data.find(blog => blog.attributes.Title === window.title)}
                 />
-            )}
+            ))}
 
-            {selectedArticle && windowSection === "lower" && (
+            {lowerSectionWindows.map((window, index) => (
                 <SimpleWindow
-                    articleData={blogs.data.find(blog => blog.attributes.Title === selectedArticle)}
+                    key={index}
+                    articleData={blogs.data.find(blog => blog.attributes.Title === window.title)}
                 />
-            )}
+            ))}
         </>
     );
 };
