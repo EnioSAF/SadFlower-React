@@ -10,7 +10,7 @@ import Icon from '@/components/system32/applications/icon';
 import "98.css";
 import '/styles/styles.sass';
 
-function About() {
+function Index() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
@@ -70,4 +70,4 @@ function About() {
     );
 }
 
-export default About;
+export default Index;
