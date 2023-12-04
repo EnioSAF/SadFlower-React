@@ -14,7 +14,9 @@ function Index() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
+    const [isClient, setIsClient] = useState(false); // Nouvelle state pour gérer côté client
 
+    // Premier useEffect pour récupérer les articles Featured ou non
     useEffect(() => {
         const fetchData = async () => {
             const [featuredBlogsData, blogsData] = await Promise.all([
@@ -25,6 +27,12 @@ function Index() {
             setBlogs(blogsData);
         }
         fetchData();
+    }, []);
+
+    // Le deuxième useEffect pour des actions côté client
+    useEffect(() => {
+        // Code à exécuter côté client, par exemple pour des animations ou changements d'état
+        setIsClient(true);
     }, []);
 
     const handleIconClick = (iconName) => {
@@ -47,25 +55,30 @@ function Index() {
                 />
                 {/* Ajoute d'autres icônes ici si nécessaire */}
             </div>
-            {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
-            
-            
-            {/* A ajouter si tu veux voir les fenêtres indépendantes
-            <div>
-                {featuredBlogs && featuredBlogs.data.map((blog, index) => (
-                    <FeaturedWindow key={index} articleData={blog} />
-                ))}
-            </div>
-            <div>
-                {blogs && blogs.data.map((blog, index) => (
-                    <Window key={index} articleData={blog} />
-                ))}
-            </div> */}
 
+            {isClient && ( // Condition pour rendre seulement côté client
+                <>
+                    {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
 
-            <div>
-                <TaskBar />
-            </div>
+                    {/* A ajouter si tu veux voir les fenêtres indépendantes
+                    <div>
+                        {featuredBlogs && featuredBlogs.data.map((blog, index) => (
+                            <FeaturedWindow key={index} articleData={blog} />
+                        ))}
+                    </div>
+                    <div>
+                        {blogs && blogs.data.map((blog, index) => (
+                            <Window key={index} articleData={blog} />
+                        ))}
+                    </div> */}
+                </>
+            )}
+
+            {isClient && ( // Condition pour rendre seulement côté client
+                <div>
+                    <TaskBar />
+                </div>
+            )}
         </div>
     );
 }
