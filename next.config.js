@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        remotePatterns: [
-          {
-            protocol: 'https',
-            hostname: 'https://sadflower-server-3c85453c8087.herokuapp.com',
-          },
-        ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'https://sadflower-server-3c85453c8087.herokuapp.com',
       },
-    }
+    ],
+    disableStaticImages: true,
+  },
+}
 
 module.exports = nextConfig
