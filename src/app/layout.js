@@ -1,6 +1,7 @@
 import { Lato, Open_Sans } from "next/font/google";
 import '@/styles/styles.sass'
 import { updateStyles } from "@/styles/utils/responsive";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const lato = Lato({
 	subsets: ["latin"],
@@ -23,6 +24,7 @@ const RootLayout = ({ children }) => {
 
 	return (
 		<html lang="fr">
+			<SpeedInsights/>
 			<body
 				className={`${openSans.className} ${openSans.variable} ${lato.variable}`}
 			>
