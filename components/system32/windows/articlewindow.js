@@ -62,7 +62,7 @@ const ArticleExe = ({ onClose, closeWindow }) => {
         }
     };
 
-    const strapiBaseUrl = 'https://sadflower-server-3c85453c8087.herokuapp.com/'; // Rajout de l'url pour les icônes
+    const strapiBaseUrl = 'https://sadflower-server-3c85453c8087.herokuapp.com'; // Rajout de l'url pour les icônes
 
     return (
         <>
