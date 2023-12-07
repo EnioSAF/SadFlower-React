@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'https://sadflower-server-3c85453c8087.herokuapp.com',
-      },
-    ],
-    disableStaticImages: true,
+    domains: ['sadflower-server-3c85453c8087.herokuapp.com'], // Ajoute le domaine de ton backend ici
   },
 }
 
