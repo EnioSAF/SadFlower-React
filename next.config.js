@@ -3,8 +3,8 @@ const nextConfig = {
     images: {
         remotePatterns: [
           {
-            protocol: 'http',
-            hostname: 'localhost',
+            protocol: 'https',
+            hostname: 'https://sadflower-server-3c85453c8087.herokuapp.com',
           },
         ],
       },
