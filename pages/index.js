@@ -6,6 +6,7 @@ import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 import ArticleExe from '@/components/system32/windows/articlewindow';
 import Icon from '@/components/system32/applications/icon';
+import BootsScreen from '@/components/system32/windows/bootscreen';
 
 import "98.css";
 import '/styles/styles.sass';
@@ -48,6 +49,7 @@ function Index() {
     return (
         <div>
             <div className="desktop">
+                <BootsScreen/>
                 <Icon
                     title="Articles.exe"
                     iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
