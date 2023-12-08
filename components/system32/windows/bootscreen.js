@@ -4,54 +4,96 @@ import TypeIt from "typeit-react";
 import styles from '@/styles/system32/windows/bootscreen.module.sass';
 
 const BootsScreen = () => {
-    const [showScreen, setShowScreen] = useState(false);
+    const [showScreen, setShowScreen] = useState(true);
     const [allowKeyPress, setAllowKeyPress] = useState(false);
-    const [debugMode, setDebugMode] = useState(false); // met ça en true si tu veux voir le bootscreen, sinon tu ne le vois qu'une fois et il disparait pour toujours ensuite
 
     const handleKeyPress = () => {
-        setShowScreen(false);
-        localStorage.setItem('hasVisited', 'true');
+        if (allowKeyPress) {
+            setShowScreen(false);
+            localStorage.setItem('hasVisited', 'true');
+            document.cookie = "hasVisited=true; max-age=31536000";
+        }
     };
 
     useEffect(() => {
-        let keyPressHandler;
-
-        if (allowKeyPress && showScreen) {
-            keyPressHandler = () => {
+        const keyPressHandler = (event) => {
+            if (showScreen) {
                 handleKeyPress();
-                setAllowKeyPress(false);
-            };
+            }
+        };
 
-            window.addEventListener('keydown', keyPressHandler);
-            window.addEventListener('mousedown', keyPressHandler);
-        }
+        window.addEventListener('keydown', keyPressHandler);
+        window.addEventListener('mousedown', keyPressHandler);
 
         return () => {
             window.removeEventListener('keydown', keyPressHandler);
             window.removeEventListener('mousedown', keyPressHandler);
         };
-    }, [allowKeyPress, showScreen]);
+    }, [showScreen, allowKeyPress]);
 
     useEffect(() => {
-        const hasVisitedBefore = localStorage.getItem('hasVisited');
+        const hasVisitedCookie = document.cookie
+            .split(";")
+            .some((item) => item.trim().startsWith("hasVisited="));
 
-        if (!hasVisitedBefore) {
-            setShowScreen(true);
-
+        if (hasVisitedCookie) {
+            setShowScreen(false);
+        } else {
             const timer = setTimeout(() => {
                 setAllowKeyPress(true);
             }, 16000);
 
             return () => clearTimeout(timer);
-        } else {
-            if (debugMode) {
-                setShowScreen(true);
-            }
         }
-    }, [debugMode]);
+    }, []);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
+
+            {/* Logo ASCII */}
+
+            <TypeIt
+                options={{
+                    strings: ["This will be typed!"],
+                    speed: 0.1,
+                    waitUntilVisible: false,
+                    lifelike : true,
+                    cursorChar: " ", //- modify cursor
+                }}  
+            >
+                <pre className={styles.asciiLogo}>                                                              
+{`            --:=#**+-==     ===#==-    --+#%*-=:              
+          =:%-=:.   .-=-%*-+@=:.  -=*=%#=:    .-+%=             
+        .#*=             -+%   -    =@=      .   -%@            
+       -#%                 +*===--==*-  -   :+     %@           
+       @%     .    =  :+-+*+--:-=-:--+#+=-=:=      *@           
+      =%       :+. =*++-=:             :====-=     @@           
+      #%         =*++=                     =+-==  #@ ::         
+      :*=    .. *=#:   +++*.          %:-++  :#.%%= .-=+@-=     
+       %#:     @:+    -+:-:@         @@+=+*    +-#.      :=++   
+        *%=   #.%      @@@@+          =@@%.     #.@        =**. 
+     .=@--=#= @%      +=                         @*          @% 
+   :#%-     --%@     #@     ==#@+*#%+=           @=.-=--.    -+ 
+  =@=         @--    +@@  =#=:       =@*         #%      .    * 
+ +@=       :--=-@        #*            =%       @ @.         ++ 
+ @@     -==: :=+=%                             %.@          :#@ 
+ #@    :.       ====                         =+==%*.       ==@  
+ #@             # ====-                    =+++:  =%=    =*==   
+ =+%.          #@   =++====.          .=-+#+=      =**-#*--     
+  -++==        @%   .- ===+**++-=*=*##*+=- -*       @=:         
+    .=-*%##**#:@@         -- :#==:-:  +*+   =*       *@         
+               @@         *   +       %%-    #.      %@         
+               :##        #           @%      .     .*#         
+                =##       :          @@             @%          
+                 :#*=              -@**           :##.          
+                  =-@==-      ==:%*- =@+==.   -=##=             
+                     :=:*#*##+:-=      :--=+++:=. `}
+                </pre>
+            </TypeIt>
+
+            {/* Texte TypeIt */}
+
+            <div className={styles.textBoot}>
             <TypeIt
                 options={{
                     speed: 0,
@@ -123,6 +165,7 @@ const BootsScreen = () => {
                     return instance;
                 }}
             />
+            </div>
         </div>
     );
 };
