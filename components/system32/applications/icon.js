@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from 'react';
+
 import '/styles/system32/applications/icon.sass';
 
 const Icon = ({ title, iconPath, onClick }) => {
