@@ -61,7 +61,6 @@ const BootsScreen = () => {
 
             <TypeIt
                 options={{
-                    strings: ["This will be typed!"],
                     speed: 0.1,
                     waitUntilVisible: false,
                     lifelike: true,
@@ -113,7 +112,7 @@ const BootsScreen = () => {
                     }}
                     getBeforeInit={(instance) => {
                         instance
-                            .type("INITIALISATION", { instant: true })
+                            .type("INITIALISATION CORE 1.1", { instant: true })
                             .pause(3000)
                             .break({ delay: 500 }) //-- Retour à la ligne
                             .break({ delay: 500 })
