@@ -112,7 +112,7 @@ const BootsScreen = () => {
                     }}
                     getBeforeInit={(instance) => {
                         instance
-                            .type("INITIALISATION CORE 1.1", { instant: true })
+                            .type("INITIALISATION CORE 1.02", { instant: true })
                             .pause(3000)
                             .break({ delay: 500 }) //-- Retour à la ligne
                             .break({ delay: 500 })
@@ -127,7 +127,7 @@ const BootsScreen = () => {
                             .pause(500)
                             .break()
                             .options({ speed: 0, lifeLike: false })
-                            .type("unpacking data preparing injection")
+                            .type("ADDED SCROLL AND REVISITED ARTICLES.EXE")
                             .break()
                             .type("data compromised, self check entering")
                             .break()

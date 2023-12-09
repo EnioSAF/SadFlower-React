@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import config from "@/src/config";
 import { Rnd } from "react-rnd";
 import styles from '@/styles/utils/style.module.sass'
+
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
