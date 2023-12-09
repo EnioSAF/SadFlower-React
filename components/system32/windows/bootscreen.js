@@ -48,7 +48,7 @@ const BootsScreen = () => {
         } else {
             const timer = setTimeout(() => {
                 setAllowKeyPress(true);
-            }, 16000);
+            }, 16000); //Temps avant de pouvoir appuiller sur les touches (16secondes)
 
             return () => clearTimeout(timer);
         }
@@ -68,7 +68,8 @@ const BootsScreen = () => {
                 }}
             >
                 <pre className={styles.asciiLogo}>
-                    {`            --:=#**+-==     ===#==-    --+#%*-=:              
+                    {`
+             --:=#**+-==     ===#==-    --+#%*-=:              
           =:%-=:.   .-=-%*-+@=:.  -=*=%#=:    .-+%=             
         .#*=             -+%   -    =@=      .   -%@            
        -#%                 +*===--==*-  -   :+     %@           
@@ -93,7 +94,8 @@ const BootsScreen = () => {
                 =##       :          @@             @%          
                  :#*=              -@**           :##.          
                   =-@==-      ==:%*- =@+==.   -=##=             
-                     :=:*#*##+:-=      :--=+++:=. `}
+                     :=:*#*##+:-=      :--=+++:=. 
+                     `}
                 </pre>
             </TypeIt>
 
@@ -112,40 +114,16 @@ const BootsScreen = () => {
                     }}
                     getBeforeInit={(instance) => {
                         instance
-                            .type("INITIALISATION CORE 1.02", { instant: true })
+                            .options({ speed: 50, lifeLike: true })
+                            .type("INITIALISATION CORE 1.02", { lifeLike: true })
                             .pause(3000)
-                            .break({ delay: 500 }) //-- Retour à la ligne
-                            .break({ delay: 500 })
-                            .type("UPDATING CONNECTION...") //-- Penser à rajouter des trucs ici
-                            .pause(2000) //-- T'as vraiment besoin d'explications ? 
-                            .delete(null, { instant: true }) //-- Supprime les caractères (instantanéments)
-                            .options({ speed: 1, lifeLike: false })
-                            .type("connecting to the : SADFLOWER SERVER")
-                            .break()
-                            .break()
-                            .type("BOOT system sequence")
-                            .pause(500)
-                            .break()
-                            .options({ speed: 0, lifeLike: false })
-                            .type("ADDED SCROLL AND REVISITED ARTICLES.EXE")
-                            .break()
-                            .type("data compromised, self check entering")
-                            .break()
-                            .options({ speed: 1, lifeLike: false })
-                            .type("data 1,2,3,4,69,420,42,19,06,98 wrongly 3nC0d€aD")
-                            .break()
-                            .options({ speed: 0, lifeLike: false })
-                            .type("entering recovering processus")
-                            .break()
-                            .type("breakpoint found {CHECK}")
-                            .break()
-                            .type("analysing lyrics and [self-care]")
-                            .break()
-                            .type("notion : [self-care] lacking inside ?")
-                            .break()
-                            .pause(860)
                             .delete(null, { instant: true })
-                            .type("SIGNING IN")
+                            .options({ speed: 1, lifeLike: false })
+                            .pause(860)
+                            .type("ADDED :")
+                            .pause(2000)
+                            .break()
+                            .type("-Changed Articles.exe style + scroll")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })

@@ -14,6 +14,19 @@ const FeaturedWindow = ({ articleData, closeWindow }) => {
         setZIndex((prevZIndex) => prevZIndex + 1);
     };
 
+    // Fonction pour générer une position aléatoire
+    const getRandomPosition = () => {
+        // Obtient la largeur et la hauteur de la fenêtre
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Obtient des coordonnées aléatoires à l'intérieur de l'écran
+        const x = Math.floor(Math.random() * (windowWidth - 350)); // 350 est la largeur de la fenêtre
+        const y = Math.floor(Math.random() * (windowHeight - 220)); // 220 est la hauteur de la fenêtre
+
+        return { x, y };
+    };
+
     return (
         <>
             <Rnd
@@ -22,13 +35,12 @@ const FeaturedWindow = ({ articleData, closeWindow }) => {
                     zIndex: zIndex,
                 }}
                 default={{
-                    x: 0,
-                    y: 0,
+                    ...getRandomPosition(), // Utilise la fonction pour définir la position initiale
                     width: 350,
                     height: 220,
                 }}
                 minWidth={350}
-                minHeight={65}
+                minHeight={380}
                 className="window"
                 onMouseDownCapture={bringToFront}
                 onDragStart={bringToFront}
