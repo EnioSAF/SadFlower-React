@@ -115,7 +115,7 @@ const BootsScreen = () => {
                     getBeforeInit={(instance) => {
                         instance
                             .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.02", { lifeLike: true })
+                            .type("INITIALISATION CORE 1.03", { lifeLike: true })
                             .pause(3000)
                             .delete(null, { instant: true })
                             .options({ speed: 1, lifeLike: false })
@@ -123,7 +123,10 @@ const BootsScreen = () => {
                             .type("ADDED :")
                             .pause(2000)
                             .break()
-                            .type("-Changed Articles.exe style + scroll")
+                            .type(" 1.02 : -Changed Articles.exe style + scroll")
+                            .pause(2000)
+                            .break()
+                            .type(" 1.03 : -Added touchscreen compatibility")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })

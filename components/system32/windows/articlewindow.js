@@ -75,13 +75,17 @@ const ArticleExe = ({ onClose }) => {
                     bringToFront();
                     setActiveWindow("main");
                 }}
+                onTouchStart={() => {
+                    bringToFront();
+                    setActiveWindow("main");
+                }}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">Articles.exe</div>
                     <div className="title-bar-controls">
                         <button aria-label="Minimize" />
                         <button aria-label="Maximize" />
-                        <button aria-label="Close" onClick={onClose} />
+                        <button aria-label="Close" onClick={onClose} onTouch={onClose} />
                     </div>
                 </div>
 
@@ -94,12 +98,13 @@ const ArticleExe = ({ onClose }) => {
                                     title={blog.attributes.Title}
                                     iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "upper")}
+                                    onTouchStart={() => handleIconClick(blog.attributes.Title, "upper")}
                                 />
                             </div>
                         ))}
                     </div>
 
-<div className="section-divider"></div>
+                    <div className="section-divider"></div>
 
                     <h3>Les Articles</h3>
                     <div className="lower-section">
@@ -109,6 +114,7 @@ const ArticleExe = ({ onClose }) => {
                                     title={blog.attributes.Title}
                                     iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "lower")}
+                                    onTouchStart={() => handleIconClick(blog.attributes.Title, "upper")}
                                 />
                             </div>
                         ))}

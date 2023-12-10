@@ -43,13 +43,14 @@ const Window = ({ articleData, closeWindow }) => {
                 className="window"
                 onMouseDownCapture={bringToFront}
                 onDragStart={bringToFront}
+                onTouchStart={bringToFront}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">{articleData.attributes.Title}</div>
                     <div className="title-bar-controls">
                         <button aria-label="Minimize" />
                         <button aria-label="Maximize" />
-                        <button aria-label="Close" onClick={closeWindow} />
+                        <button aria-label="Close" onClick={closeWindow} onTouch={closeWindow} />
                     </div>
                 </div>
 
