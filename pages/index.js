@@ -1,10 +1,10 @@
-// Dans About.js
 import React, { useState, useEffect } from 'react';
 import TaskBar from '@/components/system32/desktop/TaskBar';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs';
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 import ArticleExe from '@/components/system32/windows/articlewindow';
+import TwitchWindow from '@/components/system32/windows/twitchwindow';  // Importe le composant TwitchWindow
 import Icon from '@/components/system32/applications/icon';
 import BootsScreen from '@/components/system32/windows/bootscreen';
 
@@ -15,9 +15,9 @@ function Index() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
-    const [isClient, setIsClient] = useState(false); // Nouvelle state pour gérer côté client
+    const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);  // Nouvelle state pour gérer la fenêtre Twitch
+    const [isClient, setIsClient] = useState(false);
 
-    // Premier useEffect pour récupérer les articles Featured ou non
     useEffect(() => {
         const fetchData = async () => {
             const [featuredBlogsData, blogsData] = await Promise.all([
@@ -30,15 +30,15 @@ function Index() {
         fetchData();
     }, []);
 
-    // Le deuxième useEffect pour des actions côté client
     useEffect(() => {
-        // Code à exécuter côté client, par exemple pour des animations ou changements d'état
         setIsClient(true);
     }, []);
 
     const handleIconClick = (iconName) => {
         if (iconName === "Articles") {
             setIsArticleExeOpen(true);
+        } else if (iconName === "TwitchWindow") {
+            setIsTwitchWindowOpen(true);
         }
     };
 
@@ -55,33 +55,24 @@ function Index() {
                     iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
                     onClick={() => handleIconClick("Articles")}
                 />
+                {/* Nouvel icône pour Twitch */}
                 <Icon
-                    title="WhoAmI.info"
+                    title="Twitch.exe"
                     iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                    // onClick={() => handleIconClick("Articles")}
+                    onClick={() => handleIconClick("TwitchWindow")}
                 />
                 {/* Ajoute d'autres icônes ici si nécessaire */}
             </div>
 
-            {isClient && ( // Condition pour rendre seulement côté client
+            {isClient && (
                 <>
                     {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
-
-                    {/* A ajouter si tu veux voir les fenêtres indépendantes
-                    <div>
-                        {featuredBlogs && featuredBlogs.data.map((blog, index) => (
-                            <FeaturedWindow key={index} articleData={blog} />
-                        ))}
-                    </div>
-                    <div>
-                        {blogs && blogs.data.map((blog, index) => (
-                            <Window key={index} articleData={blog} />
-                        ))}
-                    </div> */}
+                    {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}  {/* Affiche la fenêtre Twitch si ouverte */}
+                    {/* A ajouter si tu veux voir les fenêtres indépendantes */}
                 </>
             )}
 
-            {isClient && ( // Condition pour rendre seulement côté client
+            {isClient && (
                 <div>
                     <TaskBar />
                 </div>
