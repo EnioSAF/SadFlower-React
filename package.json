@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run reset-cookie",
     "start": "next start",
     "lint": "next lint",
     "reset-cookie": "curl -X POST https://sadflower-react-eniosadflowers-projects.vercel.app/reset-cookie -H 'Authorization: Bearer $1906'"
