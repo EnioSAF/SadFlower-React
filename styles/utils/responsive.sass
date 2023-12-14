@@ -5,21 +5,37 @@ $large-screen: 1024px
 
 // Styles pour les petits écrans (téléphone)
 @media screen and (max-width: $small-screen)
-body
-    font-size: 14px
-.container
-    max-width: 90%
+    body
+        font-size: 14px
+
+    .container
+        max-width: 90%
+
+    // Styles pour la fenêtre Articles.exe en plein écran
+    .window
+        width: 100% !important
+        height: calc(100% - 40px) !important // Ajuste la hauteur pour laisser place à la Title Bar
+        position: fixed !important
+    .body
+        padding: 20px !important
+
+    // Désactiver la fonction draggable
+    .react-draggable
+        touch-action: none
+        user-select: none
 
 // Styles pour les écrans de taille moyenne (tablettes)
-@media screen and (min-width: $small-screen) and (max-width: $medium-screen)
-body
-    font-size: 16px
-.container
-    max-width: 80%
+@media screen and (min-width: $small-screen + 1) and (max-width: $medium-screen)
+    body
+        font-size: 16px
+
+    .container
+        max-width: 80%
 
 // Styles pour les grands écrans (ordinateurs)
-@media screen and (min-width: $medium-screen) and (max-width: $large-screen)
-body
-    font-size: 18px
-.container
-    max-width: 70%
+@media screen and (min-width: $medium-screen + 1) and (max-width: $large-screen)
+    body
+        font-size: 18px
+
+    .container
+        max-width: 70%

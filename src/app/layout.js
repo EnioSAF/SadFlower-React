@@ -1,7 +1,8 @@
-import { Lato, Open_Sans } from "next/font/google";
-import '@/styles/styles.sass'
-import { updateStyles } from "@/styles/utils/responsive";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+
+import { Lato, Open_Sans } from "next/font/google";
+import { updateStyles } from "@/styles/utils/responsive";
+import '@/styles/styles.sass'
 
 const lato = Lato({
 	subsets: ["latin"],

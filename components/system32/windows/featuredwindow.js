@@ -8,11 +8,6 @@ import "98.css";
 import "/styles/system32/windows/window.sass";
 
 const FeaturedWindow = ({ articleData, closeWindow }) => {
-    const [zIndex, setZIndex] = useState(1);
-
-    const bringToFront = () => {
-        setZIndex((prevZIndex) => prevZIndex + 1);
-    };
 
     // Fonction pour générer une position aléatoire
     const getRandomPosition = () => {
@@ -32,7 +27,6 @@ const FeaturedWindow = ({ articleData, closeWindow }) => {
             <Rnd
                 style={{
                     fontFamily: "Arial, sans-serif",
-                    zIndex: zIndex,
                 }}
                 default={{
                     ...getRandomPosition(), // Utilise la fonction pour définir la position initiale
@@ -42,9 +36,6 @@ const FeaturedWindow = ({ articleData, closeWindow }) => {
                 minWidth={350}
                 minHeight={380}
                 className="window"
-                onMouseDownCapture={bringToFront}
-                onDragStart={bringToFront}
-                onTouchStart={bringToFront}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">🌟{articleData.attributes.Title}🌟</div>

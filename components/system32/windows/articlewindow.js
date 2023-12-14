@@ -15,8 +15,6 @@ const ArticleExe = ({ onClose }) => {
     const [blogs, setBlogs] = useState(null);
     const [upperSectionWindows, setUpperSectionWindows] = useState([]);
     const [lowerSectionWindows, setLowerSectionWindows] = useState([]);
-    const [zIndexCounter, setZIndexCounter] = useState(1);
-    const [activeWindow, setActiveWindow] = useState("main");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,14 +28,9 @@ const ArticleExe = ({ onClose }) => {
         fetchData();
     }, []);
 
-    const bringToFront = () => {
-        setZIndexCounter(prevCounter => prevCounter + 1);
-    };
-
     const handleIconClick = (articleTitle, section) => {
         console.log(`Icon clicked: ${articleTitle}`);
         const newWindow = { title: articleTitle, section };
-
         if (section === "upper") {
             setUpperSectionWindows(prevWindows => [...prevWindows, newWindow]);
         } else {
@@ -60,7 +53,6 @@ const ArticleExe = ({ onClose }) => {
             <Rnd
                 style={{
                     fontFamily: "Arial, sans-serif",
-                    zIndex: activeWindow === "main" ? zIndexCounter : zIndexCounter + 1,
                 }}
                 default={{
                     x: position.x,
@@ -71,14 +63,6 @@ const ArticleExe = ({ onClose }) => {
                 minWidth={420}
                 minHeight={500}
                 className="window"
-                onClick={() => {
-                    bringToFront();
-                    setActiveWindow("main");
-                }}
-                onTouchStart={() => {
-                    bringToFront();
-                    setActiveWindow("main");
-                }}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">Articles.exe</div>
@@ -132,11 +116,6 @@ const ArticleExe = ({ onClose }) => {
                     key={index}
                     articleData={featuredBlogs.data.find(blog => blog.attributes.Title === window.title)}
                     closeWindow={() => handleCloseWindow(window, "upper")}
-                    style={{ zIndex: activeWindow === window.title ? zIndexCounter : zIndexCounter + 1 }}
-                    onClick={() => {
-                        bringToFront();
-                        setActiveWindow(window.title);
-                    }}
                 />
             ))}
 
@@ -145,11 +124,6 @@ const ArticleExe = ({ onClose }) => {
                     key={index}
                     articleData={blogs.data.find(blog => blog.attributes.Title === window.title)}
                     closeWindow={() => handleCloseWindow(window, "lower")}
-                    style={{ zIndex: activeWindow === window.title ? zIndexCounter : zIndexCounter + 1 }}
-                    onClick={() => {
-                        bringToFront();
-                        setActiveWindow(window.title);
-                    }}
                 />
             ))}
         </>

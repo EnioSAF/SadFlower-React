@@ -3,15 +3,11 @@ import React, { useState } from "react";
 import config from "@/src/config";
 import { Rnd } from "react-rnd";
 import styles from '@/styles/utils/style.module.sass'
+
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
 const Window = ({ articleData, closeWindow }) => {
-    const [zIndex, setZIndex] = useState(1);
-
-    const bringToFront = () => {
-        setZIndex((prevZIndex) => prevZIndex + 1);
-    };
 
     // Fonction pour générer une position aléatoire
     const getRandomPosition = () => {
@@ -31,7 +27,6 @@ const Window = ({ articleData, closeWindow }) => {
             <Rnd
                 style={{
                     fontFamily: "Arial, sans-serif",
-                    zIndex: zIndex,
                 }}
                 default={{
                     ...getRandomPosition(), // Utilise la fonction pour définir la position initiale
@@ -41,9 +36,6 @@ const Window = ({ articleData, closeWindow }) => {
                 minWidth={350}
                 minHeight={380}
                 className="window"
-                onMouseDownCapture={bringToFront}
-                onDragStart={bringToFront}
-                onTouchStart={bringToFront}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">{articleData.attributes.Title}</div>
@@ -63,6 +55,7 @@ const Window = ({ articleData, closeWindow }) => {
                                 <p>{articleData.attributes.Summary}</p>
                                 <hr />
                                 <p>{articleData.attributes.Content}</p>
+                                <hr />
                                 <Image
                                     className={`${styles.stylepourdetails} mb-50`}
                                     src={`${config.api}${articleData.attributes.FeaturedImage.data.attributes.url}`}
