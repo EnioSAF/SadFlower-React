@@ -16,13 +16,7 @@ $large-screen: 1024px
         width: 100% !important
         height: calc(100% - 40px) !important // Ajuste la hauteur pour laisser place à la Title Bar
         position: fixed !important
-    .body
-        padding: 20px !important
-
-    // Désactiver la fonction draggable
-    .react-draggable
-        touch-action: none
-        user-select: none
+        user-drag: none // Désactive l'interaction avec la souris
 
 // Styles pour les écrans de taille moyenne (tablettes)
 @media screen and (min-width: $small-screen + 1) and (max-width: $medium-screen)

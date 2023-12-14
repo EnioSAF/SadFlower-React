@@ -9,7 +9,6 @@ import '/styles/system32/windows/articlewindow.sass';
 import "98.css";
 
 const ArticleExe = ({ onClose }) => {
-    const [position, setPosition] = useState({ x: 50, y: 50 });
     const [size, setSize] = useState({ width: 400, height: 300 });
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
@@ -28,6 +27,9 @@ const ArticleExe = ({ onClose }) => {
         fetchData();
     }, []);
 
+    // Fonction pour vérifier la taille de l'écran
+    const isMobileScreen = () => window.innerWidth <= 600
+
     const handleIconClick = (articleTitle, section) => {
         console.log(`Icon clicked: ${articleTitle}`);
         const newWindow = { title: articleTitle, section };
@@ -38,6 +40,28 @@ const ArticleExe = ({ onClose }) => {
         }
     };
 
+    // Fonction pour gérer le focus des fenêtres
+    const [focusedWindows, setFocusedWindows] = useState([]);
+    const [articleExeZIndex, setArticleExeZIndex] = useState(0);
+
+
+    const handleWindowClick = (window) => {
+        if (window === "ArticleExe") {
+            // Si on clique sur ArticleExe, on la met en premier plan
+            setArticleExeZIndex(prevZIndex => prevZIndex + 1);
+        } else {
+            // Si on clique sur une autre fenêtre, on met à jour le tableau focusedWindows
+            setFocusedWindows(prevWindows => [window, ...prevWindows.filter(w => w !== window)].reverse());
+        }
+    };
+
+    // Fonction pour centrer la fenêtre
+    const getInitialPosition = () => ({
+        x: isMobileScreen() ? (window.innerWidth - window.innerWidth * 0.9) / 2 : 0,
+        y: isMobileScreen() ? (window.innerHeight - window.innerHeight * 0.9) / 2 : 0,
+    });
+
+    // Fonction pour fermer les fenêtres
     const handleCloseWindow = (window, section) => {
         if (section === "upper") {
             setUpperSectionWindows(prevWindows => prevWindows.filter(w => w.title !== window.title));
@@ -53,16 +77,13 @@ const ArticleExe = ({ onClose }) => {
             <Rnd
                 style={{
                     fontFamily: "Arial, sans-serif",
+                    zIndex: articleExeZIndex,
                 }}
-                default={{
-                    x: position.x,
-                    y: position.y,
-                    width: size.width,
-                    height: size.height,
-                }}
-                minWidth={420}
+                position= {isMobileScreen()}
+                minWidth={390}
                 minHeight={500}
                 className="window"
+                disableDragging={isMobileScreen()}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">Articles.exe</div>
@@ -98,7 +119,7 @@ const ArticleExe = ({ onClose }) => {
                                     title={blog.attributes.Title}
                                     iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "lower")}
-                                    onTouchStart={() => handleIconClick(blog.attributes.Title, "upper")}
+                                    onTouchStart={() => handleIconClick(blog.attributes.Title, "lower")}
                                 />
                             </div>
                         ))}
@@ -116,6 +137,8 @@ const ArticleExe = ({ onClose }) => {
                     key={index}
                     articleData={featuredBlogs.data.find(blog => blog.attributes.Title === window.title)}
                     closeWindow={() => handleCloseWindow(window, "upper")}
+                    onClick={() => handleWindowClick(window)}
+                    zIndex={focusedWindows.indexOf(window) + 1} // Donne le bon z-index dynamiquement
                 />
             ))}
 
@@ -124,6 +147,8 @@ const ArticleExe = ({ onClose }) => {
                     key={index}
                     articleData={blogs.data.find(blog => blog.attributes.Title === window.title)}
                     closeWindow={() => handleCloseWindow(window, "lower")}
+                    onClick={() => handleWindowClick(window)}
+                    zIndex={focusedWindows.indexOf(window) + 1} // Donne le bon z-index dynamiquement
                 />
             ))}
         </>
