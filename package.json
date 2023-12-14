@@ -7,7 +7,7 @@
     "build": "next build && npm run reset-cookie",
     "start": "next start",
     "lint": "next lint",
-    "reset-cookie": "curl -X POST https://sadflower-react-eniosadflowers-projects.vercel.app/reset-cookie -H 'Authorization: Bearer $1906'"
+    "reset-cookie": "curl -X POST https://sadflower-react-eniosadflowers-projects.vercel.app/resetcookie -H 'Authorization: Bearer $1906'"
   },
   "dependencies": {
     "@vercel/speed-insights": "^1.0.0",
