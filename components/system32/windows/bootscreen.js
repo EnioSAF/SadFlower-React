@@ -9,7 +9,7 @@ const BootsScreen = () => {
 
     useEffect(() => {
         const checkFirstVisit = async () => {
-            const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
+            const isFirstVisitEnabled = true;
 
             if (isFirstVisitEnabled) {
                 const hasVisited = sessionStorage.getItem('hasVisited');
