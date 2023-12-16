@@ -9,42 +9,31 @@ const BootsScreen = () => {
 
     useEffect(() => {
         const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
-
+    
         if (!isFirstVisitEnabled) {
             setShowScreen(false);
             return;
         }
-
-        const timer = setTimeout(() => {
-            setAllowKeyPress(true);
-        }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
-
-        return () => clearTimeout(timer);
-
-    }, []);
-
-    const handleKeyPress = () => {
-        if (allowKeyPress) {
+    
+        // Ici, tu peux ajouter du code pour gérer l'affichage du bootscreen
+        // Tu peux utiliser une variable de session ou un cookie pour suivre la première visite
+        const hasVisited = sessionStorage.getItem('hasVisited');
+    
+        if (hasVisited) {
+            // L'utilisateur a déjà visité le site avant ce déploiement
             setShowScreen(false);
+        } else {
+            // L'utilisateur n'a pas encore visité le site après ce déploiement
+            const timer = setTimeout(() => {
+                setAllowKeyPress(true);
+            }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
+    
+            // Enregistre la visite dans la session
+            sessionStorage.setItem('hasVisited', 'true');
+    
+            return () => clearTimeout(timer);
         }
-    };
-
-    useEffect(() => {
-        const keyPressHandler = () => {
-            if (showScreen) {
-                handleKeyPress();
-            }
-        };
-
-        window.addEventListener('keydown', keyPressHandler);
-        window.addEventListener('mousedown', keyPressHandler);
-
-        return () => {
-            window.removeEventListener('keydown', keyPressHandler);
-            window.removeEventListener('mousedown', keyPressHandler);
-        };
-
-    }, [showScreen, allowKeyPress]);
+    }, []);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
@@ -107,7 +96,7 @@ const BootsScreen = () => {
                     getBeforeInit={(instance) => {
                         instance
                             .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.03(02)", { lifeLike: true })
+                            .type("INITIALISATION CORE 1.04", { lifeLike: true })
                             .pause(3000)
                             .delete(null, { instant: true })
                             .options({ speed: 1, lifeLike: false })
@@ -115,10 +104,7 @@ const BootsScreen = () => {
                             .type("ADDED :")
                             .pause(2000)
                             .break()
-                            .type(" 1.02 : -Changed Articles.exe style + scroll")
-                            .pause(2000)
-                            .break()
-                            .type(" 1.03(02) : -Added touchscreen compatibility + Twitch.exe")
+                            .type(" 1.04 : -Phone Compatibility updated + Bootscreen updated")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })

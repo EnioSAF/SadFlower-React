@@ -25,27 +25,6 @@ function Index() {
         setIsClient(true);
     }, []);
 
-    // Fonction pour réinitialisier les cookies (vérifie si le site est déjà visité)
-    useEffect(() => {
-        const hasVisitedBefore = localStorage.getItem('hasVisited');
-
-        if (!hasVisitedBefore) {
-            // Si c'est la première visite, réinitialisez le cookie côté serveur
-            fetch('/api/reset-cookie')
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(data.message);
-
-                    // Force le rechargement de la page
-                    window.location.reload();
-                });
-
-            // Marquez la visite actuelle comme effectuée
-            localStorage.setItem('hasVisited', 'true');
-        }
-    }, []);
-
-
     // Fonction pour fetch les articles de blog
     useEffect(() => {
         const fetchData = async () => {
