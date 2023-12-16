@@ -9,30 +9,31 @@ const BootsScreen = () => {
 
     useEffect(() => {
         const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
-    
+
         if (!isFirstVisitEnabled) {
             setShowScreen(false);
             return;
         }
-    
+
         // Ici, tu peux ajouter du code pour gérer l'affichage du bootscreen
         // Tu peux utiliser une variable de session ou un cookie pour suivre la première visite
         const hasVisited = sessionStorage.getItem('hasVisited');
-    
+        console.log('hasVisited:', hasVisited);
+
         if (hasVisited === null) {
             // Affiche le bootscreen
             const timer = setTimeout(() => {
                 setAllowKeyPress(true);
             }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
-        
+
             // Enregistre la visite dans la session
             sessionStorage.setItem('hasVisited', 'true');
-        
+
             return () => clearTimeout(timer);
         } else {
             // L'utilisateur a déjà visité le site avant ce déploiement
             setShowScreen(false);
-        }        
+        }
     }, []);
 
     return (
@@ -129,7 +130,7 @@ const BootsScreen = () => {
                             .type("S A D F L O W E R  W O R L D")
                         return instance;
                     }}
-                /> 
+                />
             </div>
         </div>
     );
