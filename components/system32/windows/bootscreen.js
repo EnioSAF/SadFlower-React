@@ -8,32 +8,29 @@ const BootsScreen = () => {
     const [allowKeyPress, setAllowKeyPress] = useState(false);
 
     useEffect(() => {
-        const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
+        const checkFirstVisit = async () => {
+            const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
 
-        if (!isFirstVisitEnabled) {
-            setShowScreen(false);
-            return;
-        }
+            if (isFirstVisitEnabled) {
+                const hasVisited = sessionStorage.getItem('hasVisited');
+                console.log('hasVisited:', hasVisited);
 
-        // Ici, tu peux ajouter du code pour gérer l'affichage du bootscreen
-        // Tu peux utiliser une variable de session ou un cookie pour suivre la première visite
-        const hasVisited = sessionStorage.getItem('hasVisited');
-        console.log('hasVisited:', hasVisited);
+                if (hasVisited === null) {
+                    const timer = setTimeout(() => {
+                        setAllowKeyPress(true);
+                    }, 16000);
 
-        if (hasVisited === null) {
-            // Affiche le bootscreen
-            const timer = setTimeout(() => {
-                setAllowKeyPress(true);
-            }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
+                    sessionStorage.setItem('hasVisited', 'true');
+                    return () => clearTimeout(timer);
+                } else {
+                    setShowScreen(false);
+                }
+            } else {
+                setShowScreen(false);
+            }
+        };
 
-            // Enregistre la visite dans la session
-            sessionStorage.setItem('hasVisited', 'true');
-
-            return () => clearTimeout(timer);
-        } else {
-            // L'utilisateur a déjà visité le site avant ce déploiement
-            setShowScreen(false);
-        }
+        checkFirstVisit();
     }, []);
 
     return (
