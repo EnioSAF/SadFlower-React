@@ -52,6 +52,8 @@ function Index() {
         setIsArticleExeOpen(false);
     };
 
+    console.log("BootsScreen is mounting:", isClient);
+
     return (
         <div>
             <div className="desktop">
