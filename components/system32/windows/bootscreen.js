@@ -7,23 +7,30 @@ const BootsScreen = () => {
     const [showScreen, setShowScreen] = useState(true);
     const [allowKeyPress, setAllowKeyPress] = useState(false);
 
-    // Fonction pour réinitialiser le cookie
-    const resetVisitedCookie = () => {
-        localStorage.removeItem('hasVisited');
-        document.cookie = "hasVisited=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    };
+    useEffect(() => {
+        const isFirstVisitEnabled = process.env.FIRST_VISIT_ENABLED === 'true';
 
+        if (!isFirstVisitEnabled) {
+            setShowScreen(false);
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setAllowKeyPress(true);
+        }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
+
+        return () => clearTimeout(timer);
+
+    }, []);
 
     const handleKeyPress = () => {
         if (allowKeyPress) {
             setShowScreen(false);
-            localStorage.setItem('hasVisited', 'true');
-            document.cookie = "hasVisited=true; max-age=31536000";
         }
     };
 
     useEffect(() => {
-        const keyPressHandler = (event) => {
+        const keyPressHandler = () => {
             if (showScreen) {
                 handleKeyPress();
             }
@@ -36,23 +43,8 @@ const BootsScreen = () => {
             window.removeEventListener('keydown', keyPressHandler);
             window.removeEventListener('mousedown', keyPressHandler);
         };
+
     }, [showScreen, allowKeyPress]);
-
-    useEffect(() => {
-        const hasVisitedCookie = document.cookie
-            .split(";")
-            .some((item) => item.trim().startsWith("hasVisited="));
-
-        if (hasVisitedCookie) {
-            setShowScreen(false);
-        } else {
-            const timer = setTimeout(() => {
-                setAllowKeyPress(true);
-            }, 16000); //Temps avant de pouvoir appuiller sur les touches (16secondes)
-
-            return () => clearTimeout(timer);
-        }
-    }, []);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
@@ -151,7 +143,7 @@ const BootsScreen = () => {
                             .type("S A D F L O W E R  W O R L D")
                         return instance;
                     }}
-                />
+                /> 
             </div>
         </div>
     );
