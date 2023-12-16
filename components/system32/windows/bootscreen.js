@@ -31,7 +31,20 @@ const BootsScreen = () => {
         };
 
         checkFirstVisit();
-    }, []);
+
+        const handleKeyPress = () => {
+            if (allowKeyPress) {
+                setShowScreen(false);
+                document.removeEventListener('keydown', handleKeyPress);
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyPress);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [allowKeyPress]);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
