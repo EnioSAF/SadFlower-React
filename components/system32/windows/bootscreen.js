@@ -31,15 +31,16 @@ const BootsScreen = () => {
         };
 
         checkFirstVisit();
+    }, []);
 
-        const handleKeyPress = (event) => {
-            if (allowKeyPress) {
-                event.preventDefault();
-                setShowScreen(false);
-                document.removeEventListener('keydown', handleKeyPress);
-            }
-        };
+    const handleKeyPress = (event) => {
+        event.preventDefault();
+        if (allowKeyPress) {
+            setShowScreen(false);
+        }
+    };
 
+    useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
 
         return () => {
@@ -57,7 +58,7 @@ const BootsScreen = () => {
                     speed: 0.1,
                     waitUntilVisible: false,
                     lifelike: true,
-                    cursorChar: " ", //- modify cursor
+                    cursorChar: " ",
                 }}
             >
                 <pre className={styles.asciiLogo}>
@@ -98,12 +99,12 @@ const BootsScreen = () => {
                 <TypeIt
                     options={{
                         speed: 0,
-                        lifelike: false, //- non random typing speed
-                        cursorChar: "▮", //- modify cursor
-                        html: true, //- display html
-                        loop: false, //- stop looping
-                        waituntilvisible: true, //- hahem
-                        breakLines: false, //- lines printed on top of each others
+                        lifelike: false,
+                        cursorChar: "▮",
+                        html: true,
+                        loop: false,
+                        waituntilvisible: true,
+                        breakLines: false,
                     }}
                     getBeforeInit={(instance) => {
                         instance
