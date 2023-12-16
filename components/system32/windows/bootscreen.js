@@ -19,21 +19,20 @@ const BootsScreen = () => {
         // Tu peux utiliser une variable de session ou un cookie pour suivre la première visite
         const hasVisited = sessionStorage.getItem('hasVisited');
     
-        if (hasVisited) {
-            // L'utilisateur a déjà visité le site avant ce déploiement
-            setShowScreen(false);
-        } else {
-            // L'utilisateur n'a pas encore visité le site après ce déploiement
+        if (hasVisited === null) {
+            // Affiche le bootscreen
             const timer = setTimeout(() => {
                 setAllowKeyPress(true);
             }, 16000); // Temps avant de pouvoir appuyer sur les touches (16 secondes)
-    
+        
             // Enregistre la visite dans la session
             sessionStorage.setItem('hasVisited', 'true');
-    
+        
             return () => clearTimeout(timer);
+        } else {
+            // L'utilisateur a déjà visité le site avant ce déploiement
+            setShowScreen(false);
         }
-    }, []);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
