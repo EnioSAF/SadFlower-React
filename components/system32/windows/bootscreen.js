@@ -32,7 +32,8 @@ const BootsScreen = () => {
         } else {
             // L'utilisateur a déjà visité le site avant ce déploiement
             setShowScreen(false);
-        }
+        }        
+    }, []);
 
     return (
         <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
