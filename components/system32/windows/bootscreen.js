@@ -102,7 +102,7 @@ const BootsScreen = () => {
                             .type("ADDED :")
                             .pause(2000)
                             .break()
-                            .type(" 1.04 : -Phone Compatibility updated + Bootscreen updated")
+                            .type(" 1.04 : -Phone Compatibility updated + Bootscreen updated (TRY)")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })
