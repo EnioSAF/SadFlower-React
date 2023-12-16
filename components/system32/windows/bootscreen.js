@@ -32,8 +32,9 @@ const BootsScreen = () => {
 
         checkFirstVisit();
 
-        const handleKeyPress = () => {
+        const handleKeyPress = (event) => {
             if (allowKeyPress) {
+                event.preventDefault();
                 setShowScreen(false);
                 document.removeEventListener('keydown', handleKeyPress);
             }
