@@ -59,20 +59,21 @@ const BootsScreen = () => {
     }, [allowKeyPress]);
 
     return (
-        <div ref={bootsScreenRef} className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
+        showScreen && (
+            <div ref={bootsScreenRef} className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
 
-            {/* Logo ASCII */}
+                {/* Logo ASCII */}
 
-            <TypeIt
-                options={{
-                    speed: 0.1,
-                    waitUntilVisible: false,
-                    lifelike: true,
-                    cursorChar: " ",
-                }}
-            >
-                <pre className={styles.asciiLogo}>
-                    {`
+                <TypeIt
+                    options={{
+                        speed: 0.1,
+                        waitUntilVisible: false,
+                        lifelike: true,
+                        cursorChar: " ",
+                    }}
+                >
+                    <pre className={styles.asciiLogo}>
+                        {`
              --:=#**+-==     ===#==-    --+#%*-=:              
           =:%-=:.   .-=-%*-+@=:.  -=*=%#=:    .-+%=             
         .#*=             -+%   -    =@=      .   -%@            
@@ -100,66 +101,69 @@ const BootsScreen = () => {
                   =-@==-      ==:%*- =@+==.   -=##=             
                      :=:*#*##+:-=      :--=+++:=. 
                      `}
-                </pre>
-            </TypeIt>
+                    </pre>
+                </TypeIt>
 
-            {/* Texte TypeIt */}
+                {/* Texte TypeIt */}
 
-            <div className={styles.textBoot}>
-                <TypeIt
-                    options={{
-                        speed: 0,
-                        lifelike: false,
-                        cursorChar: "▮",
-                        html: true,
-                        loop: false,
-                        waituntilvisible: true,
-                        breakLines: false,
-                    }}
-                    getBeforeInit={(instance) => {
-                        instance
-                            .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.0.2", { lifeLike: true })
-                            .break()
-                            .pause(3000)
-                            .delete(null, { instant: true })
-                            .options({ speed: 1, lifeLike: false })
-                            .pause(860)
-                            .type("ADDED :")
-                            .pause(2000)
-                            .break()
-                            .type(" 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)")
-                            .break()
-                            .type(" 1.0.1 : -Added touch + click to bootscreen")
-                            .break()
-                            .type(" 1.0.2 : -Better BootScreen")
-                            .pause(2000)
-                            .delete(null, { instant: true })
-                            .type("■□□□□□□□□□ 01%", { instant: true })
-                            .pause(1000)
-                            .delete(null, { instant: true })
-                            .type("■□□□□□□□□□ 420%", { instant: true })
-                            .pause(42)
-                            .delete(null, { instant: true })
-                            .type("■■■□□□□□□□ 30%", { instant: true })
-                            .pause(1000)
-                            .delete(null, { instant: true })
-                            .type("■■■■■■□□□□ 69%", { instant: true })
-                            .pause(69)
-                            .delete(null, { instant: true })
-                            .type("■■■■■■■■■■ 100%", { instant: true })
-                            .pause(1500)
-                            .delete(null, { instant: true })
-                            .options({ speed: 1, lifeLike: false, instant: true })
-                            .type("PRESS ANY KEY TO ENTER THE :")
-                            .break()
-                            .options({ speed: 250, lifeLike: true })
-                            .type("S A D F L O W E R  W O R L D")
-                        return instance;
-                    }}
-                />
+                <div className={styles.textBoot}>
+                    <TypeIt
+                        options={{
+                            speed: 0,
+                            lifelike: false,
+                            cursorChar: "▮",
+                            html: true,
+                            loop: false,
+                            waituntilvisible: true,
+                            breakLines: false,
+                        }}
+                        getBeforeInit={(instance) => {
+                            instance
+                                .options({ speed: 50, lifeLike: true })
+                                .type("INITIALISATION CORE 1.0.3", { lifeLike: true })
+                                .break()
+                                .pause(3000)
+                                .delete(null, { instant: true })
+                                .options({ speed: 1, lifeLike: false })
+                                .pause(860)
+                                .type("ADDED :")
+                                .pause(2000)
+                                .break()
+                                .type(" 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)")
+                                .break()
+                                .type(" 1.0.1 : -Added touch + click to bootscreen")
+                                .break()
+                                .type(" 1.0.2 : -Better BootScreen")
+                                .break()
+                                .type(" 1.0.3 : -Even Better BootScreen")
+                                .pause(2000)
+                                .delete(null, { instant: true })
+                                .type("■□□□□□□□□□ 01%", { instant: true })
+                                .pause(1000)
+                                .delete(null, { instant: true })
+                                .type("■□□□□□□□□□ 420%", { instant: true })
+                                .pause(42)
+                                .delete(null, { instant: true })
+                                .type("■■■□□□□□□□ 30%", { instant: true })
+                                .pause(1000)
+                                .delete(null, { instant: true })
+                                .type("■■■■■■□□□□ 69%", { instant: true })
+                                .pause(69)
+                                .delete(null, { instant: true })
+                                .type("■■■■■■■■■■ 100%", { instant: true })
+                                .pause(1500)
+                                .delete(null, { instant: true })
+                                .options({ speed: 1, lifeLike: false, instant: true })
+                                .type("PRESS ANY KEY TO ENTER THE :")
+                                .break()
+                                .options({ speed: 250, lifeLike: true })
+                                .type("S A D F L O W E R  W O R L D")
+                            return instance;
+                        }}
+                    />
+                </div>
             </div>
-        </div>
+        )
     );
 };
 
