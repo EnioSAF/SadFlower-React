@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { APP_VERSION } from '@/version';
 import TypeIt from "typeit-react";
 
 import styles from '@/styles/system32/windows/bootscreen.module.sass';
@@ -10,17 +11,23 @@ const BootsScreen = () => {
     useEffect(() => {
         const checkFirstVisit = async () => {
             const isFirstVisitEnabled = true;
-
+    
             if (isFirstVisitEnabled) {
-                const hasVisited = sessionStorage.getItem('hasVisited');
-                console.log('hasVisited:', hasVisited);
+                const storedVersion = localStorage.getItem('version');
 
+                if (storedVersion !== APP_VERSION) {
+                    localStorage.setItem('version', APP_VERSION);
+                    localStorage.removeItem('hasVisited');
+                }
+    
+                const hasVisited = localStorage.getItem('hasVisited');
+    
                 if (hasVisited === null) {
                     const timer = setTimeout(() => {
                         setAllowKeyPress(true);
                     }, 16000);
-
-                    sessionStorage.setItem('hasVisited', 'true');
+    
+                    localStorage.setItem('hasVisited', 'true');
                     return () => clearTimeout(timer);
                 } else {
                     setShowScreen(false);
@@ -29,8 +36,10 @@ const BootsScreen = () => {
                 setShowScreen(false);
             }
         };
-
-        checkFirstVisit();
+    
+        const cleanup = checkFirstVisit()
+    
+        return cleanup;
     }, []);
 
     const handleKeyPress = (event) => {
@@ -109,7 +118,7 @@ const BootsScreen = () => {
                     getBeforeInit={(instance) => {
                         instance
                             .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.04", { lifeLike: true })
+                            .type("INITIALISATION CORE 1.0.0", { lifeLike: true })
                             .pause(3000)
                             .delete(null, { instant: true })
                             .options({ speed: 1, lifeLike: false })
@@ -117,7 +126,7 @@ const BootsScreen = () => {
                             .type("ADDED :")
                             .pause(2000)
                             .break()
-                            .type(" 1.04 : -Phone Compatibility updated + Bootscreen updated (TRY)")
+                            .type(" 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })

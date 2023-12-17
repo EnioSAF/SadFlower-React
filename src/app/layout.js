@@ -1,4 +1,5 @@
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { APP_VERSION } from "@/version";
 
 import { Lato, Open_Sans } from "next/font/google";
 import { updateStyles } from "@/styles/utils/responsive";
