@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { APP_VERSION } from '@/version';
 import TypeIt from "typeit-react";
 
@@ -7,11 +7,12 @@ import styles from '@/styles/system32/windows/bootscreen.module.sass';
 const BootsScreen = () => {
     const [showScreen, setShowScreen] = useState(true);
     const [allowKeyPress, setAllowKeyPress] = useState(false);
+    const bootsScreenRef = useRef(null);
 
     useEffect(() => {
         const checkFirstVisit = async () => {
             const isFirstVisitEnabled = true;
-    
+
             if (isFirstVisitEnabled) {
                 const storedVersion = localStorage.getItem('version');
 
@@ -19,14 +20,14 @@ const BootsScreen = () => {
                     localStorage.setItem('version', APP_VERSION);
                     localStorage.removeItem('hasVisited');
                 }
-    
+
                 const hasVisited = localStorage.getItem('hasVisited');
-    
+
                 if (hasVisited === null) {
                     const timer = setTimeout(() => {
                         setAllowKeyPress(true);
                     }, 16000);
-    
+
                     localStorage.setItem('hasVisited', 'true');
                     return () => clearTimeout(timer);
                 } else {
@@ -36,9 +37,9 @@ const BootsScreen = () => {
                 setShowScreen(false);
             }
         };
-    
-        const cleanup = checkFirstVisit()
-    
+
+        const cleanup = checkFirstVisit();
+
         return cleanup;
     }, []);
 
@@ -49,16 +50,30 @@ const BootsScreen = () => {
         }
     };
 
+    const handleClick = () => {
+        setShowScreen(false);
+    };
+
+    const handleTouch = () => {
+        setShowScreen(false);
+    };
+
     useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
 
+        bootsScreenRef.current.addEventListener('click', handleClick);
+        bootsScreenRef.current.addEventListener('touchstart', handleTouch);
+
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
+
+            bootsScreenRef.current.removeEventListener('click', handleClick);
+            bootsScreenRef.current.removeEventListener('touchstart', handleTouch);
         };
     }, [allowKeyPress]);
 
     return (
-        <div className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
+        <div ref={bootsScreenRef} className={`${styles.bootsScreen} ${showScreen ? '' : styles.hidden}`}>
 
             {/* Logo ASCII */}
 
@@ -119,6 +134,7 @@ const BootsScreen = () => {
                         instance
                             .options({ speed: 50, lifeLike: true })
                             .type("INITIALISATION CORE 1.0.0", { lifeLike: true })
+                            .break()
                             .pause(3000)
                             .delete(null, { instant: true })
                             .options({ speed: 1, lifeLike: false })
@@ -127,6 +143,9 @@ const BootsScreen = () => {
                             .pause(2000)
                             .break()
                             .type(" 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)")
+                            .pause(2000)
+                            .break()
+                            .type(" 1.0.1 : -Added touch + click to bootscreen")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })
