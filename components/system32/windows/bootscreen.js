@@ -10,7 +10,7 @@ const BootsScreen = () => {
     const bootsScreenRef = useRef(null);
 
     useEffect(() => {
-        const checkFirstVisit = async () => {
+        const checkFirstVisit = () => {
             const isFirstVisitEnabled = true;
 
             if (isFirstVisitEnabled) {
