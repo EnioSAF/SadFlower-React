@@ -23,10 +23,8 @@ const BootsScreen = () => {
 
                 const hasVisited = localStorage.getItem('hasVisited');
 
-                if (hasVisited === null) {
-                    const timer = setTimeout(() => {
-                        setAllowKeyPress(true);
-                    }, 16000);
+                if (!hasVisited) {
+                    const timer = setTimeout(() => setAllowKeyPress(true), 16000);
 
                     localStorage.setItem('hasVisited', 'true');
                     return () => clearTimeout(timer);
@@ -39,36 +37,24 @@ const BootsScreen = () => {
         };
 
         const cleanup = checkFirstVisit();
-
         return cleanup;
     }, []);
 
-    const handleKeyPress = (event) => {
-        event.preventDefault();
+    const handleInteraction = () => {
         if (allowKeyPress) {
             setShowScreen(false);
         }
     };
 
-    const handleClick = () => {
-        setShowScreen(false);
-    };
-
-    const handleTouch = () => {
-        setShowScreen(false);
-    };
-
     useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-
-        bootsScreenRef.current.addEventListener('click', handleClick);
-        bootsScreenRef.current.addEventListener('touchstart', handleTouch);
+        document.addEventListener('keydown', handleInteraction);
+        bootsScreenRef.current.addEventListener('click', handleInteraction);
+        bootsScreenRef.current.addEventListener('touchstart', handleInteraction);
 
         return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-
-            bootsScreenRef.current.removeEventListener('click', handleClick);
-            bootsScreenRef.current.removeEventListener('touchstart', handleTouch);
+            document.removeEventListener('keydown', handleInteraction);
+            bootsScreenRef.current.removeEventListener('click', handleInteraction);
+            bootsScreenRef.current.removeEventListener('touchstart', handleInteraction);
         };
     }, [allowKeyPress]);
 
@@ -133,7 +119,7 @@ const BootsScreen = () => {
                     getBeforeInit={(instance) => {
                         instance
                             .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.0.1", { lifeLike: true })
+                            .type("INITIALISATION CORE 1.0.2", { lifeLike: true })
                             .break()
                             .pause(3000)
                             .delete(null, { instant: true })
@@ -143,9 +129,10 @@ const BootsScreen = () => {
                             .pause(2000)
                             .break()
                             .type(" 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)")
-                            .pause(2000)
                             .break()
                             .type(" 1.0.1 : -Added touch + click to bootscreen")
+                            .break()
+                            .type(" 1.0.2 : -Better BootScreen")
                             .pause(2000)
                             .delete(null, { instant: true })
                             .type("■□□□□□□□□□ 01%", { instant: true })
