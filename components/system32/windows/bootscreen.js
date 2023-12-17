@@ -133,7 +133,7 @@ const BootsScreen = () => {
                     getBeforeInit={(instance) => {
                         instance
                             .options({ speed: 50, lifeLike: true })
-                            .type("INITIALISATION CORE 1.0.0", { lifeLike: true })
+                            .type("INITIALISATION CORE 1.0.1", { lifeLike: true })
                             .break()
                             .pause(3000)
                             .delete(null, { instant: true })
