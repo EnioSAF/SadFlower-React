@@ -1,0 +1,94 @@
+/* RÉGLAGES DES SCANLINES RÉGULIÈRES */
+
+// Largeur d'une scanline (min. : 1px)
+$scan-width: 2px
+
+// Émule un écran CRT pré-2000 qui abîme vos yeux ♥ (true, false)
+$scan-crt: true
+
+// Images par seconde (doit être > 1), s'applique uniquement si $scan-crt: true;
+$scan-fps: 60
+
+// Couleur de la scanline (rgba)
+$scan-color: rgba(#000000, .3)
+
+// Définit z-index sur 8, comme dans ♥ 8-bits ♥, ou…
+// Définissez z-index sur 2147483648 ou plus pour activer les scanlines en plein écran sur Chrome (ne fonctionne pas dans Firefox ou IE);
+$scan-z-index: 2147483648
+
+/* RÉGLAGES DE LA SCANLINE MOBILE */
+
+// Scanline mobile (true, false)
+$scan-moving-line: true
+
+// Opacité de la scanline mobile
+$scan-opacity: .75
+
+// Opacité des petites scanlines
+$scanlines-opacity: 85%
+
+/* MIXINS */
+
+// Appliquer l'animation CRT : @include scan-crt($scan-crt);
+@mixin scan-crt($scan-crt)
+  @if $scan-crt == true
+    animation: scanlines 1s steps($scan-fps) infinite
+  @else
+    animation: none
+
+// Appliquer l'animation de la scanline mobile : @include scan-crt($scan-crt);
+@mixin scan-moving($scan-moving-line)
+  @if $scan-moving-line == true
+    animation: scanline 6s linear infinite
+  @else
+    animation: none
+
+/* CLASSE .scanlines EN CSS */
+
+.scanlines
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  overflow: hidden // seulement pour animer la scanline unique
+
+  &:before,
+  &:after
+    display: block
+    pointer-events: none
+    content: ''
+    position: fixed
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+
+  // Scanline unique se déplaçant sur l'écran
+  &:before
+    width: 100%
+    height: $scan-width * 1
+    z-index: $scan-z-index + 1
+    background: $scan-color
+    opacity: $scan-opacity
+    @include scan-moving($scan-moving-line)
+
+  // Les scanlines, donc!
+  &:after
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
+    z-index: $scan-z-index
+    background: linear-gradient(to bottom, transparent $scanlines-opacity, $scan-color 51%)
+    background-size: 100% $scan-width * 2
+    @include scan-crt($scan-crt)
+
+/* ANIMER LA SCANLINE UNIQUE */
+@keyframes scanline
+  0%
+    transform: translate3d(0, 200000%, 0)
+
+@keyframes scanlines
+  0%
+    background-position: 0 50%
