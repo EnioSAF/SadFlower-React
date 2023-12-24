@@ -56,7 +56,7 @@ function Index() {
     console.log("BootsScreen is mounting:", isClient);
 
     return (
-            <div className='scanlines'>
+        <div className="scanlines">
                 <div className="crt">
                     <div className="desktop">
                         <BootsScreen />
@@ -88,7 +88,7 @@ function Index() {
                         </div>
                     )}
                 </div>
-            </div>
+        </div>
     );
 }
 
