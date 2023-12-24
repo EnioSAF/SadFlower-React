@@ -3,6 +3,7 @@ import fetchBlogs from '@/src/app/helpers/fetch-blogs';
 
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
+import Whoami from '@/components/system32/windows/whoami';
 import ArticleExe from '@/components/system32/windows/articlewindow';
 import TwitchWindow from '@/components/system32/windows/twitchwindow';
 
@@ -18,7 +19,8 @@ function Index() {
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
-    const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);  // Nouvelle state pour gérer la fenêtre Twitch
+    const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
+    const [isWhoamiOpen, setWhoamiOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
     // Fonction pour gérer les élements dynamique côté client
@@ -45,6 +47,8 @@ function Index() {
             setIsArticleExeOpen(true);
         } else if (iconName === "TwitchWindow") {
             setIsTwitchWindowOpen(true);
+        } else if (iconName === "Whoami") {
+            setWhoamiOpen(true);
         }
     };
 
@@ -63,7 +67,7 @@ function Index() {
                         <Icon
                             title="WhoAmI.exe"
                             iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                            onClick={() => handleIconClick("")}
+                            onClick={() => handleIconClick("Whoami")}
                         />
                         <Icon
                             title="Articles.exe"
@@ -82,8 +86,8 @@ function Index() {
                     {isClient && (
                         <>
                             {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
-                            {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}  {/* Affiche la fenêtre Twitch si ouverte */}
-                            {/* A ajouter si tu veux voir les fenêtres indépendantes */}
+                            {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
+                            {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
                         </>
                     )}
 

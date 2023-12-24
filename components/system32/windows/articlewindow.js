@@ -127,8 +127,8 @@ const ArticleExe = ({ onClose }) => {
                 </div>
                 <div className="status-bar">
                     <p className="status-bar-field">SADFLOWER</p>
-                    <p className="status-bar-field">Slide 1</p>
-                    <p className="status-bar-field">CPU Usage: 14%</p>
+                    <p className="status-bar-field">BlogMode : on</p>
+                    <p className="status-bar-field">CPU Usage: 66%</p>
                 </div>
             </Rnd>
 

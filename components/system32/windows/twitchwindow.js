@@ -70,8 +70,8 @@ const TwitchWindow = ({ closeWindow }) => {
 
                 <div className="status-bar">
                     <p className="status-bar-field">twitch.tv/eniosadflower</p>
-                    <p className="status-bar-field">Slide 1</p>
-                    <p className="status-bar-field">CPU Usage: 14%</p>
+                    <p className="status-bar-field">VideoPlayer</p>
+                    <p className="status-bar-field">CPU Usage: 55%</p>
                 </div>
             </Rnd>
         </>

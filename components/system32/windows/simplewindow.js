@@ -81,8 +81,8 @@ const Window = ({ articleData, closeWindow, onClick, zIndex }) => {
                 </div>
                 <div className="status-bar">
                     <p className="status-bar-field">{articleData.attributes.Category}</p>
-                    <p className="status-bar-field">Slide 1</p>
-                    <p className="status-bar-field">CPU Usage: 14%</p>
+                    <p className="status-bar-field">ReadMode : on</p>
+                    <p className="status-bar-field">CPU Usage: 10%</p>
                 </div>
             </Rnd>
         </>
