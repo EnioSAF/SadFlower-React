@@ -61,6 +61,11 @@ function Index() {
                     <div className="desktop">
                         <BootsScreen />
                         <Icon
+                            title="WhoAmI.exe"
+                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                            onClick={() => handleIconClick("")}
+                        />
+                        <Icon
                             title="Articles.exe"
                             iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
                             onClick={() => handleIconClick("Articles")}
