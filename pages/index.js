@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import fetchBlogs from '@/src/app/helpers/fetch-blogs';
+import Image from 'next/image';
 
 import Window from '@/components/system32/windows/simplewindow';
 import FeaturedWindow from '@/components/system32/windows/featuredwindow';
@@ -60,9 +61,16 @@ function Index() {
     console.log("BootsScreen is mounting:", isClient);
 
     return (
-        <div className="scanlines">
+            <div className="scanlines">
                 <div className="crt">
                     <div className="desktop">
+                    <Image
+                className="overlaycrt-image"
+                src='/Overlay/overlaycrt.png'
+                alt="Overlay Image"
+                width={1920}
+                height={1080}
+            />
                         <BootsScreen />
                         <Icon
                             title="WhoAmI.exe"
@@ -97,7 +105,7 @@ function Index() {
                         </div>
                     )}
                 </div>
-        </div>
+            </div>
     );
 }
 

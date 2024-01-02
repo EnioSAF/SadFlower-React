@@ -10,7 +10,7 @@ $scan-crt: true
 $scan-fps: 60
 
 // Couleur de la scanline (rgba)
-$scan-color: rgba(#000000, .3)
+$scan-color: rgba(#000000, .1)
 
 // Définit z-index sur 8, comme dans ♥ 8-bits ♥, ou…
 // Définissez z-index sur 2147483648 ou plus pour activer les scanlines en plein écran sur Chrome (ne fonctionne pas dans Firefox ou IE);
@@ -22,10 +22,10 @@ $scan-z-index: 2147483648
 $scan-moving-line: true
 
 // Opacité de la scanline mobile
-$scan-opacity: .75
+$scan-opacity: .50
 
 // Opacité des petites scanlines
-$scanlines-opacity: 85%
+$scanlines-opacity: 87%
 
 /* MIXINS */
 
@@ -85,11 +85,10 @@ $scanlines-opacity: 85%
     @include scan-crt($scan-crt)
 
   & .fisheye-container
-        z-index: $scan-z-index + 2 // Assure que le fisheye est au-dessus des scanlines
+    z-index: $scan-z-index + 2 // Assure que le fisheye est au-dessus des scanlines
 
   & .color-displacement
-        z-index: $scan-z-index + 1 // Assure que le displacement est entre les scanlines
-
+    z-index: $scan-z-index + 1 // Assure que le displacement est entre les scanlines
 
 /* ANIMER LA SCANLINE UNIQUE */
 @keyframes scanline
@@ -103,19 +102,24 @@ $scanlines-opacity: 85%
 /* RÉGLAGES Pixel de l'écran */
 
 .crt::after
-    content: " "
-    position: fixed
-    top: 0
-    left: 0
-    bottom: 0
-    right: 0
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))
-    z-index: 9999
-    background-size: 100% 2.5px, 3.5px 100%
-    pointer-events: none
+  content: " "
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))
+  z-index: 9999
+  background-size: 100% 2.5px, 3.5px 100%
+  pointer-events: none
 
+.overlaycrt-image
+  position: absolute
+  width: 150% // Pour agrandir, tu vois
+  height: 150% // Pareil ici, frère
+  top: 50% // Pour centrer verticalement
+  left: 50% // Pour centrer horizontalement
+  transform: translate(-50%, -50%) // Encore un coup pour centrer
+  pointer-events: none // Laisse les événements passer à travers
+  z-index: 9999999999 // Assure que l'image est au-dessus de tout
 /* RÉGLAGES Fisheye */
-
-
-
-
