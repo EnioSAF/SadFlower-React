@@ -80,8 +80,8 @@ const ArticleExe = ({ onClose }) => {
                     zIndex: articleExeZIndex,
                 }}
                 position= {isMobileScreen()}
-                minWidth={390}
-                minHeight={500}
+                minWidth={350}
+                minHeight={380}
                 className="window"
                 disableDragging={isMobileScreen()}
             >

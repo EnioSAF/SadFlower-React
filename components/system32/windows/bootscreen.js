@@ -120,7 +120,7 @@ const BootsScreen = () => {
                         getBeforeInit={(instance) => {
                             instance
                                 .options({ speed: 50, lifeLike: true })
-                                .type("INITIALISATION CORE 1.0.3", { lifeLike: true })
+                                .type("INITIALISATION CORE 1.0.4", { lifeLike: true })
                                 .break()
                                 .pause(3000)
                                 .delete(null, { instant: true })
@@ -136,6 +136,8 @@ const BootsScreen = () => {
                                 .type(" 1.0.2 : -Better BootScreen")
                                 .break()
                                 .type(" 1.0.3 : -Even Better BootScreen")
+                                .break()
+                                .type(" 1.0.4 : -Phone version updated + CRT shaders") 
                                 .pause(2000)
                                 .delete(null, { instant: true })
                                 .type("■□□□□□□□□□ 01%", { instant: true })

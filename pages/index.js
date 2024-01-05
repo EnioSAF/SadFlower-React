@@ -61,51 +61,53 @@ function Index() {
     console.log("BootsScreen is mounting:", isClient);
 
     return (
-            <div className="scanlines">
-                <div className="crt">
-                    <div className="desktop">
-                    <Image
-                className="overlaycrt-image"
-                src='/Overlay/overlaycrt.png'
-                alt="Overlay Image"
-                width={1920}
-                height={1080}
-            />
-                        <BootsScreen />
-                        <Icon
-                            title="WhoAmI.exe"
-                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                            onClick={() => handleIconClick("Whoami")}
-                        />
-                        <Icon
-                            title="Articles.exe"
-                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                            onClick={() => handleIconClick("Articles")}
-                        />
-                        {/* Nouvel icône pour Twitch */}
-                        <Icon
-                            title="Twitch.exe"
-                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                            onClick={() => handleIconClick("TwitchWindow")}
-                        />
-                        {/* Ajoute d'autres icônes ici si nécessaire */}
-                    </div>
+                <div className='pinchbulgewrapper'>
+                    <div className="scanlines">
+                        <div className="crt">
+                            <div className="desktop">
+                                <Image
+                                    className="overlaycrt-image"
+                                    src='/Overlay/overlaycrt.png'
+                                    alt="Overlay Image"
+                                    width={1920}
+                                    height={1080}
+                                />
+                                <BootsScreen />
+                                <Icon
+                                    title="WhoAmI.exe"
+                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                                    onClick={() => handleIconClick("Whoami")}
+                                />
+                                <Icon
+                                    title="Articles.exe"
+                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                                    onClick={() => handleIconClick("Articles")}
+                                />
+                                {/* Nouvel icône pour Twitch */}
+                                <Icon
+                                    title="Twitch.exe"
+                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                                    onClick={() => handleIconClick("TwitchWindow")}
+                                />
+                                {/* Ajoute d'autres icônes ici si nécessaire */}
+                            </div>
 
-                    {isClient && (
-                        <>
-                            {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
-                            {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
-                            {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
-                        </>
-                    )}
+                            {isClient && (
+                                <>
+                                    {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
+                                    {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
+                                    {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
+                                </>
+                            )}
 
-                    {isClient && (
-                        <div className="taskbar">
-                            <TaskBar />
+                            {isClient && (
+                                <div className="taskbar">
+                                    <TaskBar />
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
-            </div>
     );
 }
 

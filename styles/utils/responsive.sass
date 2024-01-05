@@ -18,6 +18,20 @@ $large-screen: 1024px
         position: fixed !important
         user-drag: none // Désactive l'interaction avec la souris
 
+        // Customise la "title-bar" sur téléphone
+    .title-bar
+        margin-top: 18px
+        margin: 20ox
+        font-size: 2em
+
+        .title-bar-controls button
+            transform: scale(1.5) // Double la taille des boutons dans title-bar-controls
+            margin-right: 15px
+
+    .status-bar
+        margin-bottom: 35px
+
+
 // Styles pour les écrans de taille moyenne (tablettes)
 @media screen and (min-width: $small-screen + 1) and (max-width: $medium-screen)
     body

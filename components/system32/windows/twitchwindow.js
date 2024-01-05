@@ -63,9 +63,11 @@ const TwitchWindow = ({ closeWindow }) => {
                     </div>
                 </div>
 
-                <div className="twitch-window-body">
-                    <div className="twitch-player">{twitchPlayer}</div>
-                    <div className="twitch-chat">{twitchChat}</div>
+                <div className="window-body">
+                    <div className="twitch-window-body">
+                        <div className="twitch-player">{twitchPlayer}</div>
+                        <div className="twitch-chat">{twitchChat}</div>
+                    </div>
                 </div>
 
                 <div className="status-bar">

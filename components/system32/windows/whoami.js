@@ -6,8 +6,9 @@ import styles from '@/styles/utils/style.module.sass'
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/whoami.sass";
 
-const Whoami = ({ articleData, closeWindow, onClick, zIndex }) => {
+const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
     // Fonction pour vérifier la taille de l'écran
     const isMobileScreen = () => window.innerWidth <= 600
@@ -24,11 +25,6 @@ const Whoami = ({ articleData, closeWindow, onClick, zIndex }) => {
 
         return { x, y };
 
-        // Fonction pour centrer la fenêtre
-        const getInitialPosition = () => ({
-            x: isMobileScreen() ? (window.innerWidth - window.innerWidth * 0.9) / 2 : 0,
-            y: isMobileScreen() ? (window.innerHeight - window.innerHeight * 0.9) / 2 : 0,
-        });
     };
 
     return (
@@ -61,7 +57,8 @@ const Whoami = ({ articleData, closeWindow, onClick, zIndex }) => {
 
                 <div className="window-body">
 
-{/* A remplir */}
+<h2>EN CONSTRUCTION</h2>
+<p>Reviens vite ;)</p>
 
                 </div>
                 <div className="status-bar">
