@@ -4,6 +4,8 @@ import config from "@/src/config";
 import { Rnd } from "react-rnd";
 import styles from '@/styles/utils/style.module.sass'
 
+import GitHubCalendar from 'react-github-calendar';
+
 import "98.css";
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
@@ -57,8 +59,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                 <div className="window-body">
 
-<h2>EN CONSTRUCTION</h2>
-<p>Reviens vite ;)</p>
+                <GitHubCalendar username="EnioSAF" />
 
                 </div>
                 <div className="status-bar">
