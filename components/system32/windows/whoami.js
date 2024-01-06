@@ -1,32 +1,55 @@
-import Image from "next/image";
-import React, { useState } from "react";
-import config from "@/src/config";
+import React from "react";
 import { Rnd } from "react-rnd";
-import styles from '@/styles/utils/style.module.sass'
-
+import styles from '@/styles/utils/style.module.sass';
+import { Terminal, useEventQueue, textLine, textWord, commandWord } from 'crt-terminal';
 import GitHubCalendar from 'react-github-calendar';
 
-import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/whoami.sass";
-
 const Whoami = ({ closeWindow, onClick, zIndex }) => {
+    const isMobileScreen = () => window.innerWidth <= 600;
 
-    // Fonction pour vérifier la taille de l'écran
-    const isMobileScreen = () => window.innerWidth <= 600
-
-    // Fonction pour générer une position aléatoire
     const getRandomPosition = () => {
-        // Obtient la largeur et la hauteur de la fenêtre
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        // Obtient des coordonnées aléatoires à l'intérieur de l'écran
-        const x = Math.floor(Math.random() * (windowWidth - 350)); // 350 est la largeur de la fenêtre
-        const y = Math.floor(Math.random() * (windowHeight - 220)); // 220 est la hauteur de la fenêtre
+        const x = Math.floor(Math.random() * (windowWidth - 350));
+        const y = Math.floor(Math.random() * (windowHeight - 220));
 
         return { x, y };
+    };
 
+    const eventQueue = useEventQueue();
+    const { print } = eventQueue.handlers;
+
+    const handleCommand = (command) => {
+        // Logique de question-réponse
+        if (command.toLowerCase() === 'bonjour') {
+            print([
+                textLine({
+                    words: [textWord({ characters: 'Salut! Comment ça va ?', className: 'custom-response' })],
+                }),
+            ]);
+        } else if (command.toLowerCase() === 'musique') {
+            print([
+                textLine({
+                    words: [textWord({ characters: 'J\'écoute de la musique en ce moment.', className: 'custom-response' })],
+                }),
+            ]);
+        } else if (command.toLowerCase() === 'help') {
+            print([
+                textLine({
+                    words: [textWord({ characters: 'Je suis EnioSadFlower, j\'éssaye d\'apprendre la programmation et de m\'améliorer dans ce domaine.', className: 'custom-response' })],
+                }),
+            ]);
+        } else {
+            print([
+                textLine({
+                    words: [
+                        textWord({ characters: 'Désolé, je ne comprends pas la commande : ' }),
+                        commandWord({ characters: command, prompt: '>' }),
+                    ],
+                }),
+            ]);
+        }
     };
 
     return (
@@ -37,7 +60,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                     zIndex: zIndex,
                 }}
                 default={{
-                    ...getRandomPosition(), // Utilise la fonction pour définir la position initiale
+                    ...getRandomPosition(),
                     width: 350,
                     height: 220,
                 }}
@@ -61,7 +84,16 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                 <GitHubCalendar username="EnioSAF" />
 
+
+                    {/* Intégration du terminal CRT avec la nouvelle logique de question-réponse */}
+                    <Terminal
+                        queue={eventQueue}
+                        banner={[textLine({ words: [textWord({ characters: 'En attente du message de : USER-5304' })] })]}
+                        onCommand={handleCommand}
+                    />
                 </div>
+
+
                 <div className="status-bar">
                     <p className="status-bar-field">AboutMe</p>
                     <p className="status-bar-field">Slide 1</p>
