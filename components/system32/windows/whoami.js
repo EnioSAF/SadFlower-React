@@ -86,7 +86,8 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                 <div className="window-body">
 
-                    <GitHubCalendar username="EnioSAF" />
+
+                    <GitHubCalendar username="EnioSAF" year={2024} />
 
                     <div className="command-section">
                         <input
@@ -97,7 +98,6 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                         />
                         <button onClick={handleCommand}>Send Command</button>
                     </div>
-
 
                     <div className="output-section">
                         <p>Output:</p>
