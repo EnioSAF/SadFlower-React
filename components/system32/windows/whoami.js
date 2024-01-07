@@ -7,6 +7,8 @@ import GitHubCalendar from 'react-github-calendar';
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/whoami.sass";
+
 
 const Whoami = ({ closeWindow, onClick, zIndex }) => {
     const isMobileScreen = () => window.innerWidth <= 600;
@@ -26,7 +28,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
     const handleCommand = async () => {
         try {
-            const apiKey = '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';
+            const apiKey = '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';
             const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
             const messages = [
@@ -84,9 +86,9 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                 <div className="window-body">
 
-                <GitHubCalendar username="EnioSAF" />
+                    <GitHubCalendar username="EnioSAF" />
 
-                    <div>
+                    <div className="command-section">
                         <input
                             type="text"
                             value={input}
@@ -95,10 +97,11 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                         />
                         <button onClick={handleCommand}>Send Command</button>
                     </div>
-                    <div>
-                    
+
+
+                    <div className="output-section">
                         <p>Output:</p>
-                        <TypeIt><p>{output}</p></TypeIt>
+                        <img src='/Gif/EnioHead.gif'></img><p>{output}</p>
                     </div>
 
 
