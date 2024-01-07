@@ -1,8 +1,11 @@
-import React from "react";
-import { Rnd } from "react-rnd";
-import styles from '@/styles/utils/style.module.sass';
-import { Terminal, useEventQueue, textLine, textWord, commandWord } from 'crt-terminal';
+import React, { useState } from 'react';
+import { Rnd } from 'react-rnd';
+
+import axios from 'axios';
 import GitHubCalendar from 'react-github-calendar';
+
+import "98.css";
+import "/styles/system32/windows/window.sass";
 
 const Whoami = ({ closeWindow, onClick, zIndex }) => {
     const isMobileScreen = () => window.innerWidth <= 600;
@@ -17,38 +20,36 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         return { x, y };
     };
 
-    const eventQueue = useEventQueue();
-    const { print } = eventQueue.handlers;
+    const [output, setOutput] = useState('');
+    const [input, setInput] = useState('');
 
-    const handleCommand = (command) => {
-        // Logique de question-réponse
-        if (command.toLowerCase() === 'bonjour') {
-            print([
-                textLine({
-                    words: [textWord({ characters: 'Salut! Comment ça va ?', className: 'custom-response' })],
-                }),
-            ]);
-        } else if (command.toLowerCase() === 'musique') {
-            print([
-                textLine({
-                    words: [textWord({ characters: 'J\'écoute de la musique en ce moment.', className: 'custom-response' })],
-                }),
-            ]);
-        } else if (command.toLowerCase() === 'help') {
-            print([
-                textLine({
-                    words: [textWord({ characters: 'Je suis EnioSadFlower, j\'éssaye d\'apprendre la programmation et de m\'améliorer dans ce domaine.', className: 'custom-response' })],
-                }),
-            ]);
-        } else {
-            print([
-                textLine({
-                    words: [
-                        textWord({ characters: 'Désolé, je ne comprends pas la commande : ' }),
-                        commandWord({ characters: command, prompt: '>' }),
-                    ],
-                }),
-            ]);
+    const handleCommand = async () => {
+        try {
+            const apiKey = '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';
+            const apiUrl = 'https://api.openai.com/v1/chat/completions';
+
+            const messages = [
+                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'user', content: input },
+            ];
+
+            const apiResponse = await axios.post(apiUrl, {
+                messages,
+                max_tokens: 100,
+                model: 'gpt-3.5-turbo',
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                },
+            });
+
+            const gpt3Response = apiResponse.data.choices[0]?.message?.content;
+
+            setOutput(gpt3Response);
+        } catch (error) {
+            console.error('Erreur lors de la requête à l\'API GPT-3 :', error.message);
+            console.error('Réponse détaillée de l\'API:', error.response.data);
         }
     };
 
@@ -56,7 +57,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         <>
             <Rnd
                 style={{
-                    fontFamily: "Arial, sans-serif",
+                    fontFamily: 'Arial, sans-serif',
                     zIndex: zIndex,
                 }}
                 default={{
@@ -84,15 +85,22 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                 <GitHubCalendar username="EnioSAF" />
 
+                    <div>
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Enter your command..."
+                        />
+                        <button onClick={handleCommand}>Send Command</button>
+                    </div>
+                    <div>
+                        <p>Output:</p>
+                        <p>{output}</p>
+                    </div>
 
-                    {/* Intégration du terminal CRT avec la nouvelle logique de question-réponse */}
-                    <Terminal
-                        queue={eventQueue}
-                        banner={[textLine({ words: [textWord({ characters: 'En attente du message de : USER-5304' })] })]}
-                        onCommand={handleCommand}
-                    />
+
                 </div>
-
 
                 <div className="status-bar">
                     <p className="status-bar-field">AboutMe</p>
