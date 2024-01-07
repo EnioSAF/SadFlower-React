@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Rnd } from 'react-rnd';
 
 import axios from 'axios';
+import TypeIt from "typeit-react";
 import GitHubCalendar from 'react-github-calendar';
 
 import "98.css";
@@ -95,8 +96,9 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                         <button onClick={handleCommand}>Send Command</button>
                     </div>
                     <div>
+                    
                         <p>Output:</p>
-                        <p>{output}</p>
+                        <TypeIt><p>{output}</p></TypeIt>
                     </div>
 
 
