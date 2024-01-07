@@ -26,7 +26,7 @@ const RootLayout = ({ children }) => {
 
 	return (
 		<html lang="fr">
-			<SpeedInsights/>
+			<SpeedInsights />
 			<body
 				className={`${openSans.className} ${openSans.variable} ${lato.variable}`}
 			>
