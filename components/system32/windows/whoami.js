@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Rnd } from 'react-rnd';
 
 import axios from 'axios';
@@ -16,6 +16,8 @@ import "/styles/system32/windows/whoami.sass";
 
 
 const Whoami = ({ closeWindow, onClick, zIndex }) => {
+
+    //Pour l'écran et la position des fenêtres
     const isMobileScreen = () => window.innerWidth <= 600;
 
     const getRandomPosition = () => {
@@ -31,6 +33,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
     const [output, setOutput] = useState('');
     const [input, setInput] = useState('');
 
+    //Pour ChatGPT et la Q&A
     const handleCommand = async () => {
         try {
             console.log('Clé API OpenAI après handlecommand:', process.env.OPENAI_KEY);
@@ -62,6 +65,42 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         }
     };
 
+
+    //Pour l'avatar de ChatGPT
+    const [isInputFocused, setInputFocused] = useState(false);
+    const [gifVisible, setGifVisible] = useState(false);
+
+    const handleInputFocus = () => {
+        setInputFocused(true);
+        setGifVisible(false);
+    };
+
+    const handleInputBlur = () => {
+        setInputFocused(false);
+    };
+
+    const handleOutputDisplay = async () => {
+        setGifVisible(true);
+
+        // Le nombre de mots dans l'output multiplié par 2 pour obtenir le temps en secondes
+        const wordsCount = output.split(' ').length;
+        const displayTimeInSeconds = wordsCount * 1;
+
+        await new Promise(resolve => setTimeout(resolve, displayTimeInSeconds * 1000));
+
+        setGifVisible(false);
+    };
+
+    useEffect(() => {
+        // Déclenche la fonction handleOutputDisplay lorsque l'output change
+        if (output) {
+            handleOutputDisplay();
+        }
+    }, [output]);
+
+
+
+
     return (
         <>
             <Rnd
@@ -76,7 +115,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                 }}
                 minWidth={350}
                 minHeight={380}
-                className="window"
+                className={`window ${output ? 'output-visible' : ''} ${input ? 'input-focus' : ''}`}
                 onClick={onClick}
                 position={isMobileScreen()}
                 disableDragging={isMobileScreen()}
@@ -96,21 +135,33 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                     <GitHubCalendar username="EnioSAF" year={2024} />
 
                     <div className="command-section">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Enter your command..."
-                        />
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Enter your command..."
+                                onFocus={handleInputFocus}
+                                onBlur={handleInputBlur}
+                            />
+                        </div>
                         <button onClick={handleCommand}>Send Command</button>
                     </div>
 
                     <div className="output-section">
                         <p>Output:</p>
-                        <img src='/Gif/EnioHead.gif'></img><p>{output}</p>
+                        <div className="image-container">
+                            {/* Utilise une balise img pour le PNG initial */}
+                            {(!isInputFocused && !gifVisible) && <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />}
+
+                            {/* Utilise une balise img pour le GIF, mais initialement cachée */}
+                            {gifVisible && <img src='/Gif/EnioHead.gif' alt="EnioHeadGif" />}
+
+                            {/* Utilise une balise img pour le PNG lorsqu'on clique dans l'input, initialement cachée */}
+                            {isInputFocused && <img src='/Gif/EnioHeadstill.png' alt="EnioHeadstill" />}
+                        </div>
+                        <p>{output}</p>
                     </div>
-
-
                 </div>
 
                 <div className="status-bar">
