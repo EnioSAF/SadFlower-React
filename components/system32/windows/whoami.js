@@ -7,7 +7,6 @@ import GitHubCalendar from 'react-github-calendar';
 
 import dotenv from 'dotenv';
 require('dotenv').config();
-console.log('Clé API OpenAI:', process.env.OPENAI_KEY);
 console.log('Chargement dotenv réussi');
 
 import "98.css";
@@ -36,7 +35,6 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
     //Pour ChatGPT et la Q&A
     const handleCommand = async () => {
         try {
-            console.log('Clé API OpenAI après handlecommand:', process.env.OPENAI_KEY);
             const apiKey = process.env.OPENAI_KEY;
             const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
