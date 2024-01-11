@@ -14,6 +14,17 @@
             height: auto
             margin-right: 10px // pour un peu d'espace entre le GIF et le texte
 
+// General Grid
 
-    //Style pour l'avatar
+.container
+    display: grid
+    grid-template-columns: 1fr
+    grid-template-rows: 1fr 1fr 1fr
+    gap: 20px 0px
+    grid-auto-flow: row
+    align-content: center
+    grid-template-areas: "Presentations" "Skills" "Parcours"
+    width: 100%
+    height: 100%
 
+// Style pour l'avatar

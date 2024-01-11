@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import fetchBlogs from '@/src/app/helpers/fetch-blogs';
+import fetchBlogs from '@/components/Tools/fetch-blogs';
 import Image from 'next/image';
 
-import Window from '@/components/system32/windows/simplewindow';
-import FeaturedWindow from '@/components/system32/windows/featuredwindow';
+import SignIn from '@/pages/login';
+import SignUp from '@/pages/register';
+import Profiles from '@/pages/profiles';
 import Whoami from '@/components/system32/windows/whoami';
 import ArticleExe from '@/components/system32/windows/articlewindow';
+import Window from '@/components/system32/windows/simplewindow';
+import FeaturedWindow from '@/components/system32/windows/featuredwindow';
 import TwitchWindow from '@/components/system32/windows/twitchwindow';
 
 import Icon from '@/components/system32/applications/icon';
@@ -22,6 +25,7 @@ function Index() {
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
     const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
     const [isWhoamiOpen, setWhoamiOpen] = useState(false);
+    const [isSignIniOpen, setSignInOpen] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
     // Fonction pour gérer les élements dynamique côté client
@@ -50,6 +54,8 @@ function Index() {
             setIsTwitchWindowOpen(true);
         } else if (iconName === "Whoami") {
             setWhoamiOpen(true);
+        } else if (iconName === "SignIn") {
+            setSignInOpen(true);
         }
     };
 
@@ -61,53 +67,56 @@ function Index() {
     console.log("BootsScreen is mounting:", isClient);
 
     return (
-                <div className='pinchbulgewrapper'>
-                    <div className="scanlines">
-                        <div className="crt">
-                            <div className="desktop">
-                                <Image
-                                    className="overlaycrt-image"
-                                    src='/Overlay/overlaycrt.png'
-                                    alt="Overlay Image"
-                                    width={1920}
-                                    height={1080}
-                                />
-                                <BootsScreen />
-                                <Icon
-                                    title="WhoAmI.exe"
-                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                                    onClick={() => handleIconClick("Whoami")}
-                                />
-                                <Icon
-                                    title="Articles.exe"
-                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                                    onClick={() => handleIconClick("Articles")}
-                                />
-                                {/* Nouvel icône pour Twitch */}
-                                <Icon
-                                    title="Twitch.exe"
-                                    iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                                    onClick={() => handleIconClick("TwitchWindow")}
-                                />
-                                {/* Ajoute d'autres icônes ici si nécessaire */}
-                            </div>
-
-                            {isClient && (
-                                <>
-                                    {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
-                                    {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
-                                    {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
-                                </>
-                            )}
-
-                            {isClient && (
-                                <div className="taskbar">
-                                    <TaskBar />
-                                </div>
-                            )}
-                        </div>
+        <div className='pinchbulgewrapper'>
+            <div className="scanlines">
+                <div className="crt">
+                    <div className="desktop">
+                        <Image
+                            className="overlaycrt-image"
+                            src='/Overlay/overlaycrt.png'
+                            alt="Overlay Image"
+                            width={1920}
+                            height={1080}
+                        />
+                        <BootsScreen />
+                        <Icon
+                            title="WhoAmI.exe"
+                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                            onClick={() => handleIconClick("Whoami")}
+                        />
+                        <Icon
+                            title="Articles.exe"
+                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                            onClick={() => handleIconClick("Articles")}
+                        />
+                        <Icon
+                            title="Twitch.exe"
+                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                            onClick={() => handleIconClick("TwitchWindow")}
+                        />
+                        <Icon
+                            title="SignIn.exe"
+                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
+                            onClick={() => handleIconClick("SignIn")}
+                        />
                     </div>
+
+                    {isClient && (
+                        <>
+                            {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
+                            {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
+                            {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
+                        </>
+                    )}
+
+                    {isClient && (
+                        <div className="taskbar">
+                            <TaskBar />
+                        </div>
+                    )}
                 </div>
+            </div>
+        </div>
     );
 }
 

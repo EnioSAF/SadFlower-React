@@ -1,6 +1,7 @@
 {
-  "name": "blog",
-  "version": "0.1.0",
+  "name": "SadFlower HUB",
+  "description": "Le HUB de la SadFlower Corp. où vous pouvez retrouver toutes les informations sur Enio, ses projets, sa musiques... Dans un style inspiré de Windows95 ! SadFlower GANG !",
+  "version": "0.1.5",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -18,6 +19,7 @@
     "eslint-config-next": "^13.4.19",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.6.4",
+    "html-react-parser": "^5.1.0",
     "next": "^13.4.19",
     "normalize.css": "^8.0.1",
     "postcss": "^8.4.31",

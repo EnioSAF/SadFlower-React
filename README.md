@@ -1,39 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SadFlower HUB
 
-## Getting Started
+Le HUB de la SadFlower Corp. où vous pouvez retrouver toutes les informations sur Enio, ses projets, sa musiques... Dans un style inspiré de Windows95 ! SadFlower GANG !
 
-First, run the development server:
+## Description
+
+Ce projet Next.js est un HUB permettant de suivre les dernières informations sur Enio, ses projets et sa musique. Il est conçu dans le style inspiré de Windows 95 et utilise des composants React pour construire une interface utilisateur riche et interactive.
+
+## Fonctionnalités
+
+- Page d'accueil avec une présentation de l'application, des dernières actualités et des liens vers les autres pages
+- Page de présentation de Enio avec une biographie, des photos et des liens vers ses différents projets
+- Page de présentation de ses derniers projets avec une description, des photos et des liens vers les sources externes
+- Page de musique avec une playlist de ses musiques disponibles en streaming et des liens pour télécharger ses albums
+- Page de contact avec un formulaire pour envoyer un message à Enio
+
+## Technologie
+
+Ce projet utilise les technologies suivantes :
+
+- **Next.js** - Un framework React pour construire des applications web dynamiques et évolutives
+- **Bootstrap** - Un framework CSS pour construire des interfaces utilisateur responsives
+- **Sass** - Un préprocesseur CSS pour améliorer la modularité et la maintenabilité du code
+- **Tailwind CSS** - Un framework CSS prêt-à-utiliser qui fournit une variété de classes pré-construites pour une mise en forme rapide et efficace
+- **Flowbite** - Un kit de composants React pour construire des interfaces utilisateur plus rapidement et efficacement
+
+## Installation
+
+Pour installer ce projet, vous devez avoir Node.js version 16 ou supérieure installé sur votre ordinateur. Ensuite, suivez les étapes suivantes :
+
+1. Clonez le dépôt GitHub :
+
+```bash
+git clone https://github.com/your-username/sadflower-hub.git
+```
+
+2. Accédez à la racine du projet :
+
+```bash
+cd sadflower-hub
+```
+
+3. Installez les dépendances :
+
+```bash
+npm install
+```
+
+4. Démarrez le développement :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## License
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Ce projet est disponible sous la licence MIT. Pour en savoir plus, consultez le fichier LICENSE dans le répertoire racine du projet.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Auteur
 
-## Learn More
+Ce projet a été réalisé par Enio.
 
-To learn more about Next.js, take a look at the following resources:
+## Remerciements
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Nous remercions nos contributeurs, notamment Arnauze, pour leur contribution à ce projet.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-
-Made with the tutorial : https://www.youtube.com/watch?v=NNWX2flw5mg
-
-FAST REACT COMPONENT : rfce
+Nous espérons que vous apprécierez l'application SadFlower HUB. Si vous avez des questions ou des commentaires, n'hésitez pas à nous les faire parvenir.
