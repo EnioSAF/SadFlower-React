@@ -31,7 +31,6 @@ const ArticleExe = ({ onClose }) => {
     const isMobileScreen = () => window.innerWidth <= 600
 
     const handleIconClick = (articleTitle, section) => {
-        console.log(`Icon clicked: ${articleTitle}`);
         const newWindow = { title: articleTitle, section };
         if (section === "upper") {
             setUpperSectionWindows(prevWindows => [...prevWindows, newWindow]);

@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { AuthContext } from "/context/AuthContext"; ;
-import { message } from "antd";
-import { API, BEARER } from "./constants";
-import { useEffect } from "react";
-import { getToken } from "./strapiServices";
+import { AuthContext } from "/context/AuthContext";
+import { API, BEARER } from "@/components/Tools/constant";
+import { getToken } from "@/components/Tools/strapitoken";
 
 const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState();
     const [isLoading, setIsLoading] = useState(false);
-
     const authToken = getToken();
 
     const fetchLoggedInUser = async (token) => {
@@ -22,7 +19,6 @@ const AuthProvider = ({ children }) => {
             setUserData(data);
         } catch (error) {
             console.error(error);
-            message.error("Error While Getting Logged In User Details");
         } finally {
             setIsLoading(false);
         }
@@ -32,11 +28,11 @@ const AuthProvider = ({ children }) => {
         setUserData(user);
     };
 
-    useEffect(() => {
-        if (authToken) {
-            fetchLoggedInUser(authToken);
-        }
-    }, [authToken]);
+    // useEffect(() => {
+    //     if (authToken) {
+    //         fetchLoggedInUser(authToken);
+    //     }
+    // }, [authToken]);
 
     return (
         <AuthContext.Provider

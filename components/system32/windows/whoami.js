@@ -7,7 +7,6 @@ import GitHubCalendar from 'react-github-calendar';
 
 import dotenv from 'dotenv';
 require('dotenv').config();
-console.log('Chargement dotenv réussi');
 
 import "98.css";
 import "/styles/system32/windows/window.sass";

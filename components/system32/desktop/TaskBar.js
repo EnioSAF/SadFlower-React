@@ -16,7 +16,7 @@ const TaskBar = () => {
 	return (
 		<div className="footer">
 			<button className="start-button">
-				<span className="logo">👁</span>
+				<span className="logo">🌸</span>
 				<span className="start-text">Start</span>
 			</button>
 			<div className="separator">|</div>
