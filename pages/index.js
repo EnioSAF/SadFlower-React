@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getToken, getUser } from '@/components/Tools/strapitoken';
 import fetchBlogs from '@/components/Tools/fetch-blogs';
 import Image from 'next/image';
+import { Analytics } from '@vercel/analytics/react'
 
 import SignIn from '@/components/system32/windows/SignInSignOut/signin';
 import SignUp from '@/components/system32/windows/SignInSignOut/signup';
@@ -163,6 +164,7 @@ function HomePage() {
                     )}
                 </div>
             </div>
+            <Analytics />
         </div>
     );
 }
