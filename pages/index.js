@@ -3,10 +3,10 @@ import { getToken, getUser } from '@/components/Tools/strapitoken';
 import fetchBlogs from '@/components/Tools/fetch-blogs';
 import Image from 'next/image';
 
-import SignIn from '@/pages/signin';
-import SignUp from '@/pages/signup';
-import EditProfile from '@/pages/editprofile';
-import UserInfo from '@/pages/userinfo';
+import SignIn from '@/components/system32/windows/SignInSignOut/signin';
+import SignUp from '@/components/system32/windows/SignInSignOut/signup';
+import EditProfile from '@/components/system32/windows/SignInSignOut/editprofile';
+import UserInfo from '@/components/system32/windows/SignInSignOut/userinfo';
 import Whoami from '@/components/system32/windows/whoami';
 import ArticleExe from '@/components/system32/windows/articlewindow';
 import Window from '@/components/system32/windows/simplewindow';
