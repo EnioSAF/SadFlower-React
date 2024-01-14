@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { setToken, removeToken, removeUser } from '/components/Tools/strapitoken';
+import EditProfile from "./editprofile";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
-const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus }) => {
+
+const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus, onEditProfileClick }) => {
 
     //Fonction pour se déconnecter
     const handleLogout = () => {
@@ -49,38 +51,31 @@ const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus }) => {
                 </div>
             </div>
             <div className="window-body">
-        <div className="header_space">
-            <h2>USER</h2>
-            <div className="auth_buttons">
-                {user ? (
-                    <>
-                        <a className="auth_button_login" href="/profile">
+                <div className="header_space">
+                    <h2>USER</h2>
+                    <div className="auth_buttons">
+                        <p>
                             {user.username}
-                        </a>
+                        </p>
+                        <button
+                            className="auth_button_logout"
+                            onClick={onEditProfileClick}
+                        >
+                            Edit Profile
+                        </button>
                         <button
                             className="auth_button_logout"
                             onClick={handleLogout}
                         >
                             Logout
                         </button>
-                    </>
-                ) : (
-                    <>
-                        <a className="auth_button_login" href="/login">
-                            Login
-                        </a>
-                        <a className="auth_button_signUp" href="/register">
-                            SignUp
-                        </a>
-                    </>
-                )}
-        </div>
+                    </div>
                 </div>
-                <div className="status-bar">
-                    <p className="status-bar-field">AboutMe</p>
-                    <p className="status-bar-field">Slide 1</p>
-                    <p className="status-bar-field">CPU Usage: 14%</p>
-                </div>
+            </div>
+            <div className="status-bar">
+                <p className="status-bar-field">AboutMe</p>
+                <p className="status-bar-field">Slide 1</p>
+                <p className="status-bar-field">CPU Usage: 14%</p>
             </div>
         </Rnd>
     );
