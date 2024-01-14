@@ -74,6 +74,10 @@ function HomePage() {
         setIsSignUpOpen(true);
     };
 
+    const openEditProfile = () => {
+        setIsEditProfileOpen(true);
+    };
+
     const closeAllModals = () => {
         setIsSignInOpen(false);
         setIsSignUpOpen(false);
@@ -145,7 +149,10 @@ function HomePage() {
                             {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
                             {!user && isSignInOpen && !isSignUpOpen && <SignIn switchToSignUp={openSignUp} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
                             {!user && isSignUpOpen && !isSignInOpen && <SignUp switchToSignIn={openSignIn} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
-                            {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} />}
+                            {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} onEditProfileClick={openEditProfile} />}
+                            {isEditProfileOpen && (
+                                <EditProfile closeWindow={() => setIsEditProfileOpen(false)} />
+                            )}
                         </>
                     )}
 
