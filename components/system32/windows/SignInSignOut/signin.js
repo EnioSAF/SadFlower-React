@@ -72,7 +72,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
             disableDragging={isMobileScreen()}
         >
             <div className="title-bar">
-                <div className="title-bar-text">Twitch.tv</div>
+                <div className="title-bar-text">SignIn.exe</div>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />

@@ -43,7 +43,7 @@ const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus, onEditProfil
             disableDragging={isMobileScreen()}
         >
             <div className="title-bar">
-                <div className="title-bar-text">Twitch.tv</div>
+                <div className="title-bar-text">UserInfo.exe</div>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />

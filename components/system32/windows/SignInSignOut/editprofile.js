@@ -67,7 +67,7 @@ const EditProfile = ({ closeWindow }) => {
             disableDragging={isMobileScreen()}
         >
             <div className="title-bar">
-                <div className="title-bar-text">Twitch.tv</div>
+                <div className="title-bar-text">EditProfile.exe</div>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />
