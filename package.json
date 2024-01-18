@@ -37,6 +37,7 @@
     "typeit-react": "^2.7.0"
   },
   "devDependencies": {
+    "@wixc3/react-board": "^2.3.0",
     "dotenv": "^16.3.1"
   }
 }
