@@ -37,11 +37,9 @@ const EditProfile = ({ closeWindow }) => {
                 alert("Profil mis à jour avec succès !");
                 // Ici, tu ne tentes pas de parser la réponse en JSON
             } else {
-                console.log("Erreur lors de la mise à jour :", await response.text());
                 alert("Erreur lors de la mise à jour du profil.");
             }
         } catch (error) {
-            console.error("Erreur lors de la mise à jour : ", error);
             alert("Erreur serveur lors de la mise à jour.");
         }
     };
