@@ -71,7 +71,7 @@ const Window = ({ articleData, closeWindow, onClick, zIndex }) => {
                                 <hr />
                                 <Image
                                     className={`${styles.stylepourdetails} mb-50`}
-                                    src={`${config.api}${articleData.attributes.FeaturedImage.data.attributes.url}`}
+                                    src={`${articleData.attributes.FeaturedImage.data.attributes.url}`}
                                     alt="6"
                                     width="1050"
                                     height="387" />

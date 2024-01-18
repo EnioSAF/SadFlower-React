@@ -69,8 +69,6 @@ const ArticleExe = ({ onClose }) => {
         }
     };
 
-    const strapiBaseUrl = 'https://sadflower-server-3c85453c8087.herokuapp.com';
-
     return (
         <>
             <Rnd
@@ -100,7 +98,7 @@ const ArticleExe = ({ onClose }) => {
                             <div key={blog.attributes.Title} className="icon-container">
                                 <Icon
                                     title={blog.attributes.Title}
-                                    iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
+                                    iconPath={`${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "upper")}
                                     onTouchStart={() => handleIconClick(blog.attributes.Title, "upper")}
                                 />
@@ -116,7 +114,7 @@ const ArticleExe = ({ onClose }) => {
                             <div key={blog.attributes.Title} className="icon-container">
                                 <Icon
                                     title={blog.attributes.Title}
-                                    iconPath={`${strapiBaseUrl}${blog.attributes.Icon.data.attributes.url}`}
+                                    iconPath={`${blog.attributes.Icon.data.attributes.url}`}
                                     onClick={() => handleIconClick(blog.attributes.Title, "lower")}
                                     onTouchStart={() => handleIconClick(blog.attributes.Title, "lower")}
                                 />

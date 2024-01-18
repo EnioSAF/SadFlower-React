@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { APP_VERSION } from '@/version';
 import TypeIt from "typeit-react";
 
 import styles from '@/styles/system32/windows/bootscreen.module.sass';
+
+const packageJson = require('/package.json');
 
 const BootsScreen = () => {
     const [showScreen, setShowScreen] = useState(true);
@@ -16,8 +17,8 @@ const BootsScreen = () => {
             if (isFirstVisitEnabled) {
                 const storedVersion = localStorage.getItem('version');
 
-                if (storedVersion !== APP_VERSION) {
-                    localStorage.setItem('version', APP_VERSION);
+                if (storedVersion !== packageJson.version) { // Utilisez la version à partir de package.json
+                    localStorage.setItem('version', packageJson.version); // Stockez la version à partir de package.json
                     localStorage.removeItem('hasVisited');
                 }
 
@@ -137,7 +138,7 @@ const BootsScreen = () => {
                                 .break()
                                 .type(" 1.0.3 : -Even Better BootScreen")
                                 .break()
-                                .type(" 1.0.4 : -Phone version updated + CRT shaders") 
+                                .type(" 1.0.4 : -Phone version updated + CRT shaders")
                                 .pause(2000)
                                 .delete(null, { instant: true })
                                 .type("■□□□□□□□□□ 01%", { instant: true })
