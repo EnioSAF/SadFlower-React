@@ -5,9 +5,6 @@ import axios from 'axios';
 import TypeIt from "typeit-react";
 import GitHubCalendar from 'react-github-calendar';
 
-import dotenv from 'dotenv';
-require('dotenv').config();
-
 import "98.css";
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
@@ -40,7 +37,6 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
     const handleCommand = async () => {
         try {
-            const apiKey = process.env.OPENAI_KEY;
             const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
             const messages = [
@@ -55,7 +51,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
+                    'Authorization': `Bearer ${process.env.OPENAI_KEY}`,
                 },
             });
 
