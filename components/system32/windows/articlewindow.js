@@ -21,6 +21,8 @@ const ArticleExe = ({ onClose }) => {
                 fetchBlogs("filters[IsFeatured][$eq]=true"),
                 fetchBlogs("filters[IsFeatured][$eq]=false")
             ]);
+            console.log("Featured Blogs Data: ", featuredBlogsData);
+            console.log("Blogs Data: ", blogsData);
             setFeaturedBlogs(featuredBlogsData);
             setBlogs(blogsData);
         }
@@ -78,7 +80,7 @@ const ArticleExe = ({ onClose }) => {
                     fontFamily: "Arial, sans-serif",
                     zIndex: articleExeZIndex,
                 }}
-                position= {isMobileScreen()}
+                position={isMobileScreen()}
                 minWidth={350}
                 minHeight={380}
                 className="window"
@@ -96,7 +98,7 @@ const ArticleExe = ({ onClose }) => {
                 <div className="window-body">
                     <h3>La Crème</h3>
                     <div className="upper-section">
-                        {featuredBlogs && featuredBlogs.data.map((blog) => (
+                        {featuredBlogs && featuredBlogs.data && featuredBlogs.data.map((blog) => (
                             <div key={blog.attributes.Title} className="icon-container">
                                 <Icon
                                     title={blog.attributes.Title}
@@ -112,7 +114,7 @@ const ArticleExe = ({ onClose }) => {
 
                     <h3>Les Articles</h3>
                     <div className="lower-section">
-                        {blogs && blogs.data.map((blog) => (
+                        {blogs && blogs.data && blogs.data.map((blog) => (
                             <div key={blog.attributes.Title} className="icon-container">
                                 <Icon
                                     title={blog.attributes.Title}

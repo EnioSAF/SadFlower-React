@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    OPENAI_KEY: process.env.REACT_APP_OPENAI_API_KEY
+    OPENAI_KEY: process.env.REACT_APP_OPENAI_API_KEY,
+    STRAPI_KEY : process.env.REACT_APP_STRAPI_API_KEY,
   },
   images: {
     domains: ['sadflower-server-3c85453c8087.herokuapp.com'],

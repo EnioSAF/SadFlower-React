@@ -1,44 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
-import { useAuthContext } from '/context/AuthContext';
-import { API } from '/components/Tools/constant';
-import { getToken } from '/components/Tools/strapitoken';
+import { useAuthContext } from "@/context/AuthContext";
+import { API, BEARER } from "@/components/Tools/constant";
+import { getToken } from "@/components/Tools/strapitoken";
+
+
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
 const EditProfile = ({ closeWindow }) => {
-    const [loading, setLoading] = useState(false);
-    const { user, isLoading, setUser } = useAuthContext();
+    const { user, setUser } = useAuthContext();
+    const [formData, setFormData] = useState({ username: '', email: '' });
 
-    const handleProfileUpdate = async (data) => {
-        setLoading(true);
+    useEffect(() => {
+        if (user) {
+            setFormData({ username: user.username, email: user.email });
+        }
+    }, [user]);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const updateUserData = async (updatedData) => {
         try {
-            const response = await fetch(`${API}/users/${user.id}`, {
-                method: "PUT",
+            const response = await fetch(`${API}/users/me`, {
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
-                    // set the auth token to the user's jwt
-                    Authorization: `Bearer ${getToken()}`,
+                    'Content-Type': 'application/json',
+                    'Authorization': `${BEARER} ${getToken()}`
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(updatedData)
             });
-            const responseData = await response.json();
-
-            setUser(responseData);
-            alert("Data saved successfully!");
+            if (response.ok) {
+                const updatedUser = await response.json();
+                setUser(updatedUser);
+                alert("Profil mis à jour avec succès !");
+            } else {
+                alert("Erreur lors de la mise à jour du profil.");
+            }
         } catch (error) {
-            console.error(Error);
-            alert("Error While Updating the Profile!");
-        } finally {
-            setLoading(false);
+            console.error("Erreur lors de la mise à jour : ", error);
+            alert("Erreur serveur lors de la mise à jour.");
         }
     };
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await updateUserData(formData);
+    };
 
     // Fonction pour vérifier la taille de l'écran
     const isMobileScreen = () => window.innerWidth <= 600;
@@ -76,109 +87,23 @@ const EditProfile = ({ closeWindow }) => {
             </div>
             <div className="window-body">
                 <div className="profile_page">
-                    <form
-                        className="profile_form"
-                        initialValues={{
-                            username: user?.username,
-                            email: user?.email,
-                            twitter_username: user?.twitter_username,
-                            linkedin_username: user?.linkedin_username,
-                            github_username: user?.github_username,
-                            avatar_url: user?.avatar_url,
-                            website_url: user?.website_url,
-                            about: user?.about,
-                        }}
-                        onSubmit={handleProfileUpdate}
-                    >
-                        <div className="form_group">
-                            <label className="form_label">Username</label>
-                            <input
-                                className="form_input"
-                                type="text"
-                                name="username"
-                                required
-                                placeholder="Username"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">Email</label>
-                            <input
-                                className="form_input"
-                                type="email"
-                                name="email"
-                                required
-                                placeholder="Email"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">Avatar Url</label>
-                            <input
-                                className="form_input"
-                                type="url"
-                                name="avatar_url"
-                                placeholder="Avatar Url"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">About</label>
-                            <textarea
-                                className="form_textarea"
-                                name="about"
-                                required
-                                maxLength="120"
-                                placeholder="About"
-                                rows="6"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">Twitter Username</label>
-                            <input
-                                className="form_input"
-                                type="text"
-                                name="twitter_username"
-                                placeholder="Twitter Username"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">LinkedIn Username</label>
-                            <input
-                                className="form_input"
-                                type="text"
-                                name="linkedin_username"
-                                placeholder="LinkedIn Username"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">Github Username</label>
-                            <input
-                                className="form_input"
-                                type="text"
-                                name="github_username"
-                                placeholder="Github Username"
-                            />
-                        </div>
-                        <div className="form_group">
-                            <label className="form_label">Website Url</label>
-                            <input
-                                className="form_input"
-                                type="url"
-                                name="website_url"
-                                placeholder="Website Url"
-                            />
-                        </div>
-                        <button
-                            className="profile_save_btn"
-                            type="submit"
-                            disabled={loading}
-                        >
-                            {loading ? (
-                                <>
-                                    <span className="small_spinner" /> Saving
-                                </>
-                            ) : (
-                                "Save"
-                            )}
-                        </button>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            placeholder="Username"
+                        />
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email"
+                        />
+                        {/* Ajoute d'autres champs si nécessaire */}
+                        <button type="submit">Mettre à jour</button>
                     </form>
                     <div className="status-bar">
                         <p className="status-bar-field">AboutMe</p>
