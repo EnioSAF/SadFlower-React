@@ -1,0 +1,17 @@
+{  
+    "$schema": "https://wixplosives.github.io/codux-config-schema/codux.config.schema.json",
+    "sassCompilation": {
+        "modules": {
+            "include": [
+                "**/*.module.scss",
+                "**/*.sass"
+            ],
+            "ignore": []
+        },
+        "compilerRuntime": "auto",
+        "resolveUrls": true,
+        "includePaths": [
+            "src/modules"
+        ]
+    }
+}  

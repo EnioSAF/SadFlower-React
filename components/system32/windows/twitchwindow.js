@@ -2,8 +2,12 @@ import React, { useState, useRef, useMemo } from 'react';
 import { TwitchPlayer } from 'react-twitch-embed';
 import { TwitchChat } from 'react-twitch-embed';
 import { Rnd } from 'react-rnd';
+
+
 import styles from '@/styles/utils/style.module.sass';
-import twitchwindow from '@/styles/system32/windows/twitchwindow.sass'
+import "98.css";
+import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/twitchwindow.sass"
 
 const TwitchWindow = ({ closeWindow }) => {
     const [zIndex, setZIndex] = useState(1);
@@ -50,9 +54,6 @@ const TwitchWindow = ({ closeWindow }) => {
                 minWidth={1337}
                 minHeight={656}
                 className="window"
-                onMouseDownCapture={bringToFront}
-                onDragStart={bringToFront}
-                onTouchStart={bringToFront}
             >
                 <div className="title-bar">
                     <div className="title-bar-text">Twitch.tv</div>

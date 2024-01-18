@@ -6,9 +6,4 @@ export default createBoard({
     name: 'Whoami',
     Board: () => <Whoami />,
     isSnippet: true,
-    environmentProps: {
-windowHeight: 678,
-canvasWidth: 53,
-canvasHeight: 5
-}
 });

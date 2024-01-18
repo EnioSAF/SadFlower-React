@@ -67,6 +67,7 @@ const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) =>
             minWidth={350}
             minHeight={380}
             className="window"
+            position={isMobileScreen()}
             disableDragging={isMobileScreen()}
         >
             <div className="title-bar">
