@@ -35,8 +35,6 @@ const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    console.log("User dans AuthProvider :", userData); // Vérifie les infos ici
-
     return (
         <AuthContext.Provider
             value={{ user: userData, setUser: handleUser, isLoading }}

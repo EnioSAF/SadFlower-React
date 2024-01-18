@@ -29,6 +29,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
             });
 
             const data = await response.json();
+            console.log(data);
             if (data?.error) {
                 throw data?.error;
             } else {
