@@ -6,11 +6,6 @@ const fetchBlogs = async (params) => {
 			Authorization: `Bearer ${process.env.STRAPI_KEY}`
 		}
 	};
-
-	console.log("URL: ", `${config.api}/api/blogs?populate=*&${params}`);
-	console.log("Headers: ", reqOptions.headers);
-	console.log("API Key: ", process.env.STRAPI_KEY);
-
 	const request = await fetch(
 		`${config.api}/api/blogs?populate=*&${params}`,
 		reqOptions
