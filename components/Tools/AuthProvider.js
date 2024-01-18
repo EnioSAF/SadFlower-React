@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AuthContext } from "/context/AuthContext";
 import { API, BEARER } from "@/components/Tools/constant";
 import { getToken } from "@/components/Tools/strapitoken";
@@ -28,11 +28,14 @@ const AuthProvider = ({ children }) => {
         setUserData(user);
     };
 
-    // useEffect(() => {
-    //     if (authToken) {
-    //         fetchLoggedInUser(authToken);
-    //     }
-    // }, [authToken]);
+    useEffect(() => {
+        const token = getToken();
+        if (token) {
+            fetchLoggedInUser(token);
+        }
+    }, []);
+
+    console.log("User dans AuthProvider :", userData); // Vérifie les infos ici
 
     return (
         <AuthContext.Provider
@@ -42,5 +45,7 @@ const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+
 
 export default AuthProvider;

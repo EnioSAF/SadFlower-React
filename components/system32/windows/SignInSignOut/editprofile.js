@@ -4,14 +4,16 @@ import { useAuthContext } from "@/context/AuthContext";
 import { API, BEARER } from "@/components/Tools/constant";
 import { getToken } from "@/components/Tools/strapitoken";
 
-
-
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
 const EditProfile = ({ closeWindow }) => {
     const { user, setUser } = useAuthContext();
     const [formData, setFormData] = useState({ username: '', email: '' });
+
+    useEffect(() => {
+        console.log("Infos actuelles du user :", user);
+    }, [user]);
 
     useEffect(() => {
         if (user) {

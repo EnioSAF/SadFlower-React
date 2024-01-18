@@ -21,8 +21,6 @@ const ArticleExe = ({ onClose }) => {
                 fetchBlogs("filters[IsFeatured][$eq]=true"),
                 fetchBlogs("filters[IsFeatured][$eq]=false")
             ]);
-            console.log("Featured Blogs Data: ", featuredBlogsData);
-            console.log("Blogs Data: ", blogsData);
             setFeaturedBlogs(featuredBlogsData);
             setBlogs(blogsData);
         }
