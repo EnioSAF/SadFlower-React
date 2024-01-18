@@ -12,10 +12,6 @@ const EditProfile = ({ closeWindow }) => {
     const [formData, setFormData] = useState({ username: '', email: '' });
 
     useEffect(() => {
-        console.log("Infos actuelles du user :", user);
-    }, [user]);
-
-    useEffect(() => {
         if (user) {
             setFormData({ username: user.username, email: user.email });
         }
@@ -27,7 +23,7 @@ const EditProfile = ({ closeWindow }) => {
 
     const updateUserData = async (updatedData) => {
         try {
-            const response = await fetch(`${API}/users/me`, {
+            const response = await fetch(`${API}/user/me`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -35,11 +31,13 @@ const EditProfile = ({ closeWindow }) => {
                 },
                 body: JSON.stringify(updatedData)
             });
+    
             if (response.ok) {
-                const updatedUser = await response.json();
-                setUser(updatedUser);
+                setUser({ ...user, ...updatedData });
                 alert("Profil mis à jour avec succès !");
+                // Ici, tu ne tentes pas de parser la réponse en JSON
             } else {
+                console.log("Erreur lors de la mise à jour :", await response.text());
                 alert("Erreur lors de la mise à jour du profil.");
             }
         } catch (error) {
@@ -47,6 +45,7 @@ const EditProfile = ({ closeWindow }) => {
             alert("Erreur serveur lors de la mise à jour.");
         }
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();

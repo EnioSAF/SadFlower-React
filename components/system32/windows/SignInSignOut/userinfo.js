@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { setToken, removeToken, removeUser } from '/components/Tools/strapitoken';
+import { useAuthContext } from "@/context/AuthContext";
+
 import EditProfile from "./editprofile";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
 
-const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus, onEditProfileClick }) => {
+const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick }) => {
+    const { user } = useAuthContext();
 
     //Fonction pour se déconnecter
     const handleLogout = () => {
@@ -55,7 +58,7 @@ const UserInfo = ({ closeWindow, user, setLoginStatus, loginStatus, onEditProfil
                     <h2>USER</h2>
                     <div className="auth_buttons">
                         <p>
-                            {user.username}
+                            {user ? user.username : 'Chargement...'}
                         </p>
                         <button
                             className="auth_button_logout"
