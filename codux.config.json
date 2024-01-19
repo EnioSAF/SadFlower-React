@@ -1,17 +1,25 @@
 {  
     "$schema": "https://wixplosives.github.io/codux-config-schema/codux.config.schema.json",
+    "styling": {
+        "solution": "sass"
+    },
+    "newComponent": {
+        "componentsPath": "src/_codux/components"
+    },
     "sassCompilation": {
         "modules": {
             "include": [
-                "**/*.module.scss",
-                "**/*.sass"
+                "*.sass",
+                "*.module.sass"
             ],
             "ignore": []
         },
         "compilerRuntime": "auto",
         "resolveUrls": true,
         "includePaths": [
-            "src/modules"
+            "styles/system32/windows",
+            "styles",
+            "./styles/system32/windows"
         ]
     }
-}  
+}
