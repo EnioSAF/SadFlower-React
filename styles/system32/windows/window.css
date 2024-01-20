@@ -1,0 +1,23 @@
+.window {
+  position: relative;
+  /* Empêche le contenu de déborder de la fenêtre */
+  overflow: hidden;
+}
+
+.window-body {
+  height: calc(100% - 30px);
+  /* Permet de scroll dans la fenêtre */
+  overflow: auto;
+}
+
+.status-bar {
+  position: absolute;
+  bottom: 5px;
+  width: 89%;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  z-index: 0;
+  background-color: #c0c0c0;
+  margin-bottom: 15px;
+}

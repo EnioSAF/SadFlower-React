@@ -6,7 +6,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import EditProfile from "./editprofile";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/window.css";
 
 
 const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick }) => {

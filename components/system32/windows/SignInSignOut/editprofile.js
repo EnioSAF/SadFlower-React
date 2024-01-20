@@ -5,7 +5,7 @@ import { API, BEARER } from "@/components/Tools/constant";
 import { getToken } from "@/components/Tools/strapitoken";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/window.css";
 
 const EditProfile = ({ closeWindow }) => {
     const { user, setUser } = useAuthContext();

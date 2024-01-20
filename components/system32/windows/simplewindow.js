@@ -5,7 +5,7 @@ import { Rnd } from "react-rnd";
 import styles from '@/styles/utils/style.module.sass'
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/window.css";
 
 const Window = ({ articleData, closeWindow, onClick, zIndex }) => {
 

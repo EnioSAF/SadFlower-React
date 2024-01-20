@@ -4,7 +4,7 @@ import { API } from '/components/Tools/constant';
 import { setToken, setUser } from '/components/Tools/strapitoken';
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/window.css";
 
 const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) => {
     const [isLoading, setIsLoading] = useState(false);

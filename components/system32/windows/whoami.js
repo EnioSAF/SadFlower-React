@@ -6,8 +6,8 @@ import TypeIt from "typeit-react";
 import GitHubCalendar from 'react-github-calendar';
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/whoami.sass";
+import "../../../styles/system32/windows/window.css";
+import "../../../styles/system32/windows/whoami.css";
 
 
 const Whoami = ({ closeWindow, onClick, zIndex }) => {
