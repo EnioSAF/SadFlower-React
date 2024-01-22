@@ -30,6 +30,12 @@ function HomePage() {
     const [isClient, setIsClient] = useState(false);
     const [loginStatus, setLoginStatus] = useState(false);
 
+    // Fonction pour vérifier si nous sommes sur PC ou Tablette/téléphone :
+    const isMobileDevice = () => {
+        return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+    };
+
+
     // Fonction pour gérer les élements dynamique côté client
     useEffect(() => {
         setIsClient(true);
@@ -91,7 +97,11 @@ function HomePage() {
                 setIsArticleExeOpen(true);
                 break;
             case "TwitchWindow":
-                setIsTwitchWindowOpen(true);
+                if (isMobileDevice()) {
+                    window.location.href = `twitch://stream/eniosadflower`; // Ça ouvre l'app Twitch direct
+                } else {
+                    setIsTwitchWindowOpen(true); // Sinon, ça ouvre la fenêtre normalement
+                }
                 break;
             case "Whoami":
                 setWhoamiOpen(true);
@@ -136,11 +146,6 @@ function HomePage() {
                             iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
                             onClick={() => handleIconClick("TwitchWindow")}
                         />
-                        <Icon
-                            title={user ? "UserInfo.exe" : "SignIn.exe"}
-                            iconPath="/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico"
-                            onClick={() => handleIconClick("SignIn")}
-                        />
                     </div>
 
                     {isClient && (
@@ -159,7 +164,12 @@ function HomePage() {
 
                     {isClient && (
                         <div className="taskbar">
-                            <TaskBar />
+                            <TaskBar
+                                user={user}
+                                onSignInClick={() => setIsSignInOpen(true)}
+                                onSignUpClick={() => setIsSignUpOpen(true)}
+                                onUserInfoClick={() => setIsUserInfoOpen(true)}
+                            />
                         </div>
                     )}
                 </div>

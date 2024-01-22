@@ -16,15 +16,7 @@
     height: 70px  // Ajuste cette valeur pour agrandir le bas du background
 
 
-.taskbar
-    position: fixed
-    bottom: 0
-    width: 100%
-    z-index: 9998
-    display: flex
-    gap: 8px
-    margin-right: 5px
-
+// Start Button
 .start-button
     background-color: #ffffff
     border: none
@@ -45,6 +37,60 @@
     font-size: 24px
     vertical-align: middle
     margin-right: 5px
+
+
+// Start-Menu
+.start-menu
+    position: absolute
+    bottom: 100% // Ça place la fenêtre juste au-dessus du footer
+    left: 30px   // Aligné avec ton bouton Start
+    width: 200px // Taille de la fenêtre
+    background: #c0c0c0 // Couleur gris Windows 95
+    border: 1px solid black
+    z-index: 10  // S'assurer qu'elle passe au-dessus des autres éléments
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5) // Un peu d'ombre pour le style
+
+
+// Start-Menu buttons
+
+    // SignIn/Out Button
+
+.auth-buttons, .user-info
+    display: flex
+    align-items: center
+
+.auth-icon
+    width: 20px
+    height: 20px
+    margin-right: 10px
+
+
+.sign-in-button
+    width: 100%
+    padding: 10px 0
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    padding-left: 10px
+    margin-top: 5px
+    background: #808080
+    border: none
+    color: white
+    cursor: pointer
+    font-size: 18px
+
+.user-info-button
+    width: 100% // Prend toute la largeur de la fenêtre
+    padding: 10px 0
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    padding-left: 10px
+    background: #808080 // Couleur de ton choix
+    border: none
+    color: white
+    cursor: pointer
+    font-size: 18px
 
 .time-zone
     color: #000000

@@ -6,6 +6,7 @@ import TypeIt from "typeit-react";
 import GitHubCalendar from 'react-github-calendar';
 
 import "98.css";
+
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
 
@@ -29,7 +30,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
     const [output, setOutput] = useState('');
     const [input, setInput] = useState('');
     const [tokensUsed, setTokensUsed] = useState(null);
-    const [maxTokens, setMaxTokens] = useState(50);
+    const [maxTokens, setMaxTokens] = useState(600); //Change ici le nombre de token par session
     const [messageHistory, setMessageHistory] = useState([]);
     const clearInput = () => {
         setInput('');
@@ -137,61 +138,78 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                 </div>
 
                 <div className="window-body">
-                    <div className="container">
-                        <div className="Presentations">
-                            <div className="AboutMe">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam, mauris eu eleifend laoreet, odio nunc consectetur arcu, a iaculis odio mi ut erat.</p>
+
+                    <div className="sections-container">
+                        <div className="section-left">
+                            <div className="Presentations">
+                                <div className="ProfilePicture">
+                                    {/* Insérer un gif qui s'anime quand on passe la sourie dessus ici */}
+
+                                    <div className="AboutMe">
+                                        <h2>Who Am I ?</h2>
+                                        <p>Je m'appelle Antoine MORET-MICHEL, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
+                                            passionné d'informatique et d'arts depuis tout petit, je suis également musicien (6 années
+                                            de conservatoire et quelques concerts à mon actif [au FIL de Saint Etienne par exemple]).
+                                            Sociable, jʼaime travailler dans la bonne humeur et dans l'entente de tous. Je sais être force
+                                            de proposition si l'on me le demande et n'hésite pas à collaborer avec mes collègues pour
+                                            atteindre nos objectifs.</p>
+                                    </div>
+                                </div>
+
+                                <div className="ChatGPT">
+                                    <div className="output-section">
+                                        <div className="image-container">
+                                            {(!isInputFocused && !gifVisible) && <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />}
+                                            {gifVisible && <img src='/Gif/EnioHead.gif' alt="EnioHeadGif" />}
+                                            {isInputFocused && <img src='/Gif/EnioHeadstill.png' alt="EnioHeadstill" />}
+                                        </div>
+                                        {tokensUsed >= maxTokens ? (
+                                            <p style={{ color: 'red' }}>ERROR: ALL TOKENS ARE USED</p>
+                                        ) : (
+                                            <div className="message-history">
+                                                {messageHistory.map((message, index) => (
+                                                    <div key={index} className={message.role}>
+                                                        <p>{message.role === 'user' ? 'You' : 'Enio'}: {message.content}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="command-section">
+                                        <div className="input-container">
+                                            <textarea
+                                                type="text"
+                                                value={input}
+                                                onChange={(e) => setInput(e.target.value)}
+                                                placeholder={tokensUsed >= maxTokens ? "No Tokens !" : "Enter your command..."}
+                                                onFocus={handleInputFocus}
+                                                onBlur={handleInputBlur}
+                                                rows="1" // Cette propriété permet à la barre de grandir avec le contenu
+                                                disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
+                                            />
+                                        </div>
+                                        <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
+                                        <div className="information-section">
+                                            {tokensUsed !== null && (
+                                                <p>Nombre de tokens utilisés dans cette interaction : {tokensUsed}/{maxTokens}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+
+                        <div className="section-right">
                             <div className="GitCalendar">
                                 <GitHubCalendar username="EnioSAF" year={2024} />
+                                <a href="https://github.com/EnioSAF/" target="_blank">
+                                    <p color='green'>GitHub</p>
+                                </a>
+                            </div>
+                            <div className="Skills">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam, mauris eu eleifend laoreet, odio nunc consectetur arcu, a iaculis odio mi ut erat.</p>
                             </div>
                         </div>
-
-                        <div className="ChatGPT">
-                            <div className="output-section">
-                                <div className="image-container">
-                                    {(!isInputFocused && !gifVisible) && <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />}
-                                    {gifVisible && <img src='/Gif/EnioHead.gif' alt="EnioHeadGif" />}
-                                    {isInputFocused && <img src='/Gif/EnioHeadstill.png' alt="EnioHeadstill" />}
-                                </div>
-                                <p>Output:</p>
-                                {tokensUsed >= maxTokens ? (
-                                    <p style={{ color: 'red' }}>ERROR: ALL TOKENS ARE USED</p>
-                                ) : (
-                                    <div className="message-history">
-                                        {messageHistory.map((message, index) => (
-                                            <div key={index} className={message.role}>
-                                                <p>{message.role === 'user' ? 'You' : 'Enio'}: {message.content}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="command-section">
-                                <div className="input-container">
-                                    <textarea
-                                        type="text"
-                                        value={input}
-                                        onChange={(e) => setInput(e.target.value)}
-                                        placeholder={tokensUsed >= maxTokens ? "No Tokens !" : "Enter your command..."}
-                                        onFocus={handleInputFocus}
-                                        onBlur={handleInputBlur}
-                                        rows="1" // Cette propriété permet à la barre de grandir avec le contenu
-                                        disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
-                                    />
-                                </div>
-                                <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
-                                <div className="information-section">
-                                    {tokensUsed !== null && (
-                                        <p>Nombre de tokens utilisés dans cette interaction : {tokensUsed}/{maxTokens}</p>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="Skills">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam, mauris eu eleifend laoreet, odio nunc consectetur arcu, a iaculis odio mi ut erat.</p>
                     </div>
 
                     <div className="Parcours">
