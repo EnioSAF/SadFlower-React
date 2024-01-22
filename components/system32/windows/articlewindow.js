@@ -8,7 +8,7 @@ import fetchBlogs from '@/components/Tools/fetch-blogs';
 import '/styles/system32/windows/articlewindow.sass';
 import "98.css";
 
-const ArticleExe = ({ onClose }) => {
+const ArticleExe = ({ onClose, zIndex }) => {
     const [size, setSize] = useState({ width: 400, height: 300 });
     const [featuredBlogs, setFeaturedBlogs] = useState(null);
     const [blogs, setBlogs] = useState(null);
@@ -28,7 +28,15 @@ const ArticleExe = ({ onClose }) => {
     }, []);
 
     // Fonction pour vérifier la taille de l'écran
-    const isMobileScreen = () => window.innerWidth <= 600
+    const isMobileScreen = () => window.innerWidth <= 600;
+    const getRandomPosition = () => {
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        const x = Math.floor(Math.random() * (windowWidth - 350));
+        const y = Math.floor(Math.random() * (windowHeight - 220));
+        return { x, y };
+    };
 
     const handleIconClick = (articleTitle, section) => {
         const newWindow = { title: articleTitle, section };
@@ -54,12 +62,6 @@ const ArticleExe = ({ onClose }) => {
         }
     };
 
-    // Fonction pour centrer la fenêtre
-    const getInitialPosition = () => ({
-        x: isMobileScreen() ? (window.innerWidth - window.innerWidth * 0.9) / 2 : 0,
-        y: isMobileScreen() ? (window.innerHeight - window.innerHeight * 0.9) / 2 : 0,
-    });
-
     // Fonction pour fermer les fenêtres
     const handleCloseWindow = (window, section) => {
         if (section === "upper") {
@@ -73,13 +75,18 @@ const ArticleExe = ({ onClose }) => {
         <>
             <Rnd
                 style={{
-                    fontFamily: "Arial, sans-serif",
-                    zIndex: articleExeZIndex,
+                    fontFamily: 'Arial, sans-serif',
+                    zIndex: zIndex,
                 }}
-                position={isMobileScreen()}
+                default={{
+                    ...getRandomPosition(),
+                    width: 430,
+                    height: 700,
+                }}
                 minWidth={350}
                 minHeight={380}
                 className="window"
+                position={isMobileScreen()}
                 disableDragging={isMobileScreen()}
             >
                 <div className="title-bar">

@@ -4,5 +4,6 @@
         "titleBar.activeBackground": "#2e2433",
         "titleBar.activeForeground": "#d5afeb"
     },
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "deepscan.enable": true
 }

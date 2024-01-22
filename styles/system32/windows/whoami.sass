@@ -1,30 +1,87 @@
 .window-body
     display: flex
     flex-direction: column
+    gap: 10px // Espace entre les colonnes et rangées
+    padding: 10px
 
-    .command-section
-        margin-bottom: 10px
+.sections-container
+    display: flex
+    flex-direction: row
+    gap: 10px
 
-    .output-section
+    // Style section gauche
+
+.section-left
+    flex: 0 0 30%
+    display: flex
+    flex-direction: column
+    border: 2px solid #ffa500
+
+.ChatGPT
+    background: #000
+    color: #fff
+    border: 2px solid #ffffff
+    display: flex
+    flex-direction: column
+    padding: 10px
+
+.message-history
+    display: flex
+    flex-direction: column
+    gap: 5px
+
+    .user, .assistant
         display: flex
-        align-items: flex-start
+        padding: 5px
+        border-radius: 4px
+        margin-bottom: 2px
 
-        img
-            width: 50px // ou la taille que tu veux
-            height: auto
-            margin-right: 10px // pour un peu d'espace entre le GIF et le texte
+    .user
+        justify-content: flex-end
+        background-color: #333 // Un gris foncé pour différencier l'utilisateur
 
-// General Grid
+        p
+            background: #44812c // Encore plus foncé pour le message
+            color: white
+            padding: 5px
+            border-radius: 10px
 
-.container
-    display: grid
-    grid-template-columns: 1fr
-    grid-template-rows: 1fr 1fr 1fr
-    gap: 20px 0px
-    grid-auto-flow: row
-    align-content: center
-    grid-template-areas: "Presentations" "Skills" "Parcours"
-    width: 100%
-    height: 100%
+    .assistant
+        justify-content: flex-start
+        background-color: #222 // Un peu plus clair pour l'assistant
 
-// Style pour l'avatar
+        p
+            background: #5c5c5c // Gris pour le message
+            color: white
+            padding: 5px
+            border-radius: 10px
+
+.output-section
+    img
+        width: 50px // Taille du GIF
+        height: auto
+        margin-right: 10px // Espace entre le GIF et le texte
+
+    // Style section droite
+
+.section-right
+    flex: 0 0 70%
+    display: flex
+    flex-direction: column
+    border: 2px solid #ffa500
+
+.GitCalendar
+    border: 2px solid #000 // Bordure RPG style
+    background: #f4f4f4 // Couleur de fond
+    padding: 10px
+    width: 400px
+    height: 220px
+
+.Skills
+
+    // Style section en bas (timeline)
+
+.Parcours
+    flex: 0 0 100% // Prend toute la largeur
+    flex-direction: column
+    border: 2px solid #ffa500
