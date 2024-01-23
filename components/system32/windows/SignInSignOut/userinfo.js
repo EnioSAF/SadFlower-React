@@ -44,6 +44,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
             minHeight={380}
             className="window"
             disableDragging={isMobileScreen()}
+            position={isMobileScreen()}
         >
             <div className="title-bar">
                 <div className="title-bar-text">UserInfo.exe</div>

@@ -17,7 +17,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
         const formData = new FormData(event.target);
         const email = formData.get('email');
         const password = formData.get('password');
-        
+
 
         setIsLoading(true);
         try {
@@ -70,6 +70,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
             minHeight={380}
             className="window"
             disableDragging={isMobileScreen()}
+            position={isMobileScreen()}
         >
             <div className="title-bar">
                 <div className="title-bar-text">SignIn.exe</div>

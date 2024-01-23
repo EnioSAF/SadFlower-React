@@ -68,6 +68,7 @@ const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) =>
             minHeight={380}
             className="window"
             disableDragging={isMobileScreen()}
+            position={isMobileScreen()}
         >
             <div className="title-bar">
                 <div className="title-bar-text">SignUp.exe</div>
