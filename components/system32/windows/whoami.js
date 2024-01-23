@@ -5,8 +5,9 @@ import axios from 'axios';
 import TypeIt from "typeit-react";
 import GitHubCalendar from 'react-github-calendar';
 
-import "98.css";
+import chatGptConfig from "@/components/system32/applications/chatgptconfig"
 
+import "98.css";
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
 
@@ -26,22 +27,27 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
     };
 
     // Pour ChatGPT
-
     const [output, setOutput] = useState('');
     const [input, setInput] = useState('');
-    const [tokensUsed, setTokensUsed] = useState(null);
-    const [maxTokens, setMaxTokens] = useState(600); //Change ici le nombre de token par session
+    const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
     const [messageHistory, setMessageHistory] = useState([]);
+    const [tokensUsed, setTokensUsed] = useState(null);
+    const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
+
     const clearInput = () => {
         setInput('');
     };
 
     const handleCommand = async () => {
+        setMessageHistory(prevHistory => [
+            ...prevHistory,
+            { role: 'user', content: input }
+        ]);
         try {
             const apiUrl = 'https://api.openai.com/v1/chat/completions';
 
             const messages = [
-                { role: 'system', content: 'You are a helpful assistant.' },
+                { role: 'system', content: chatGptConfig },
                 { role: 'user', content: input },
             ];
 
@@ -55,14 +61,11 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                     'Authorization': `Bearer ${process.env.OPENAI_KEY}`,
                 },
             });
-
             const gpt3Response = apiResponse.data.choices[0]?.message?.content;
             const usedTokens = apiResponse.data.usage?.total_tokens;
-
             setOutput(gpt3Response);
             setMessageHistory(prevHistory => [
                 ...prevHistory,
-                { role: 'user', content: input },
                 { role: 'assistant', content: gpt3Response },
             ]);
 
@@ -113,7 +116,6 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         <>
             <Rnd
                 style={{
-                    fontFamily: 'Arial, sans-serif',
                     zIndex: zIndex,
                 }}
                 default={{
@@ -121,8 +123,8 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                     width: 350,
                     height: 220,
                 }}
-                minWidth={350}
-                minHeight={380}
+                minWidth={710}
+                minHeight={750}
                 className={`window ${output ? 'output-visible' : ''} ${input ? 'input-focus' : ''}`}
                 onClick={onClick}
                 position={isMobileScreen()}
@@ -146,7 +148,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                     {/* Insérer un gif qui s'anime quand on passe la sourie dessus ici */}
 
                                     <div className="AboutMe">
-                                        <h2>Who Am I ?</h2>
+                                        <h2>Who Am I</h2>
                                         <p>Je m'appelle Antoine MORET-MICHEL, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
                                             passionné d'informatique et d'arts depuis tout petit, je suis également musicien (6 années
                                             de conservatoire et quelques concerts à mon actif [au FIL de Saint Etienne par exemple]).
@@ -158,22 +160,39 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                                 <div className="ChatGPT">
                                     <div className="output-section">
-                                        <div className="image-container">
-                                            {(!isInputFocused && !gifVisible) && <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />}
-                                            {gifVisible && <img src='/Gif/EnioHead.gif' alt="EnioHeadGif" />}
-                                            {isInputFocused && <img src='/Gif/EnioHeadstill.png' alt="EnioHeadstill" />}
+                                        <div className="message-history">
+                                            {tokensUsed >= maxTokens ? (
+                                                <p style={{ color: 'red' }}>ERROR: ALL TOKENS ARE USED</p>
+                                            ) : (
+                                                <div className="message-history">
+                                                    {messageHistory.map((message, index) => (
+                                                        <div key={index} className={message.role}>
+                                                            {message.role === 'user' && (
+                                                                <p>You: {message.content}</p>
+                                                            )}
+                                                            {message.role === 'assistant' && (
+                                                                <div className="avatar-message">
+                                                                    <div className="avatar-image">
+                                                                        {index === messageHistory.length - 1 ? (
+                                                                            // Utilise l'avatar "/Gif/EnioHeadstill.png" pour le dernier message
+                                                                            <>
+                                                                                {(!isInputFocused && !gifVisible) && <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />}
+                                                                                {gifVisible && <img src='/Gif/EnioHead.gif' alt="EnioHeadGif" />}
+                                                                                {isInputFocused && <img src='/Gif/EnioHeadstill.png' alt="EnioHeadstill" />}
+                                                                            </>
+                                                                        ) : (
+                                                                            // Utilise l'avatar "/Gif/EnioHeadsleepin.png" pour les anciens messages
+                                                                            <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />
+                                                                        )}
+                                                                    </div>
+                                                                    <p>Enio: {message.content}</p>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
                                         </div>
-                                        {tokensUsed >= maxTokens ? (
-                                            <p style={{ color: 'red' }}>ERROR: ALL TOKENS ARE USED</p>
-                                        ) : (
-                                            <div className="message-history">
-                                                {messageHistory.map((message, index) => (
-                                                    <div key={index} className={message.role}>
-                                                        <p>{message.role === 'user' ? 'You' : 'Enio'}: {message.content}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
                                     <div className="command-section">
                                         <div className="input-container">
@@ -198,16 +217,58 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                 </div>
                             </div>
                         </div>
-
                         <div className="section-right">
                             <div className="GitCalendar">
-                                <GitHubCalendar username="EnioSAF" year={2024} />
+                                <GitHubCalendar
+                                    username="EnioSAF"
+                                    year={2024}
+                                    showWeekdayLabels="true"
+                                    weekStart="1"
+                                    maxLevel="4"
+                                    colorScheme="dark"
+                                />
                                 <a href="https://github.com/EnioSAF/" target="_blank">
                                     <p color='green'>GitHub</p>
                                 </a>
                             </div>
-                            <div className="Skills">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam aliquam, mauris eu eleifend laoreet, odio nunc consectetur arcu, a iaculis odio mi ut erat.</p>
+                            <div className="Stats">
+                                <h2>Skills</h2>
+                                <div className="skill">
+                                    <p>Social :</p>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '90%' }}>90%</div>
+                                </div>
+
+                                <div className="skill">
+                                    <p>Anglais :</p>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '90%' }}>90%</div>
+                                </div>
+
+                                <h4>Informatique</h4>
+                                <div className="skill">
+                                    <p>HTML :</p>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '90%' }}>90%</div>
+                                </div>
+
+                                <div className="skill">
+                                    <p>CSS :</p>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '65%' }}>65%</div>
+                                </div>
+
+                                <div className="skill">
+                                    <p>JAVASCRIPT :</p>
+                                </div>
+                                <div className="progress-bar">
+                                    <div className="progress" style={{ width: '50%' }}>50%</div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

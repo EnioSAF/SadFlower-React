@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image'
 import '/styles/system32/desktop/taskbar.sass';
 
 const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick }) => {
@@ -30,7 +31,13 @@ const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick }) => {
 						<>
 							<div className="auth-buttons">
 								<button className="sign-in-button" onClick={onSignInClick}>
-								<img src="Icon\Windows95\Sort by Category [Without duplicates]\People\User program.ico" className="auth-icon" />
+									<Image
+										src="/Icon/Windows95/Sort by Category [Without duplicates]/People/User program.ico"
+										alt="SignIn"
+										width={32}
+										height={32}
+										className="auth-icon"
+									/>
 									SignIn
 								</button>
 							</div>
@@ -38,7 +45,13 @@ const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick }) => {
 					) : (
 						<div className="user-info">
 							<button className="user-info-button" onClick={onUserInfoClick}>
-							<img src="Icon/Windows95/Sort by Category [Without duplicates]/People/Agent.ico" className="auth-icon" />
+							<Image
+										src="/Icon/Windows95/Sort by Category [Without duplicates]/People/Agent.ico"
+										alt="SignIn"
+										width={32}
+										height={32}
+										className="auth-icon"
+									/>
 								UserInfo
 							</button>
 						</div>
