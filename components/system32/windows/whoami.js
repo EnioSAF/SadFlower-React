@@ -115,7 +115,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         if (output) {
             handleOutputDisplay();
         }
-    }, [output, handleOutputDisplay]);
+    }, [output]);
 
     return (
         <>
