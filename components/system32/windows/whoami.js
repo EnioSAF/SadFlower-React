@@ -29,7 +29,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
     // Pour ChatGPT
     const [output, setOutput] = useState('');
     const [input, setInput] = useState('');
-    const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
     const [messageHistory, setMessageHistory] = useState([]);
     const [tokensUsed, setTokensUsed] = useState(null);
     const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
@@ -51,6 +51,8 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                 { role: 'user', content: input },
             ];
 
+            setIsTyping(true);
+
             const apiResponse = await axios.post(apiUrl, {
                 messages,
                 max_tokens: maxTokens - tokensUsed,  // Limite le nombre de tokens restants
@@ -61,6 +63,9 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                     'Authorization': `Bearer ${process.env.OPENAI_KEY}`,
                 },
             });
+
+            setIsTyping(false);
+
             const gpt3Response = apiResponse.data.choices[0]?.message?.content;
             const usedTokens = apiResponse.data.usage?.total_tokens;
             setOutput(gpt3Response);
@@ -110,7 +115,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
         if (output) {
             handleOutputDisplay();
         }
-    }, [output]);
+    }, [output, handleOutputDisplay]);
 
     return (
         <>
@@ -207,7 +212,12 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                                 disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
                                             />
                                         </div>
-                                        <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
+                                        {isTyping && (
+                                            <p>Enio is typing...</p>
+                                        )}
+                                        {!isTyping && (
+                                            <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
+                                        )}
                                         <div className="information-section">
                                             {tokensUsed !== null && (
                                                 <p>Nombre de tokens utilisés dans cette interaction : {tokensUsed}/{maxTokens}</p>
