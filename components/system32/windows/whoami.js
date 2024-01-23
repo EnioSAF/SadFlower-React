@@ -154,12 +154,12 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
 
                                     <div className="AboutMe">
                                         <h2>Who Am I</h2>
-                                        <p>Je m'appelle Antoine MORET-MICHEL, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
+                                        <p>{`Je m'appelle Antoine MORET-MICHEL, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
                                             passionné d'informatique et d'arts depuis tout petit, je suis également musicien (6 années
                                             de conservatoire et quelques concerts à mon actif [au FIL de Saint Etienne par exemple]).
                                             Sociable, jʼaime travailler dans la bonne humeur et dans l'entente de tous. Je sais être force
                                             de proposition si l'on me le demande et n'hésite pas à collaborer avec mes collègues pour
-                                            atteindre nos objectifs.</p>
+                                            atteindre nos objectifs.`}</p>
                                     </div>
                                 </div>
 
