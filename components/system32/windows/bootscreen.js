@@ -9,6 +9,13 @@ const BootsScreen = () => {
     const [showScreen, setShowScreen] = useState(true);
     const [allowKeyPress, setAllowKeyPress] = useState(false);
     const bootsScreenRef = useRef(null);
+    const initMusic = useRef(null);
+    const initSound = useRef(null);
+
+    useEffect(() => {
+        initMusic.current = new Audio('/Sound/Music/sadflower-initialisation(withvoice).mp3');
+        initSound.current = new Audio('/Sound/Fx/startupsound.mp3');
+    }, []);
 
     useEffect(() => {
         const checkFirstVisit = () => {
@@ -75,32 +82,32 @@ const BootsScreen = () => {
                 >
                     <pre className={styles.asciiLogo}>
                         {`
-             --:=#**+-==     ===#==-    --+#%*-=:              
-          =:%-=:.   .-=-%*-+@=:.  -=*=%#=:    .-+%=             
-        .#*=             -+%   -    =@=      .   -%@            
-       -#%                 +*===--==*-  -   :+     %@           
-       @%     .    =  :+-+*+--:-=-:--+#+=-=:=      *@           
-      =%       :+. =*++-=:             :====-=     @@           
-      #%         =*++=                     =+-==  #@            
-      :*=    .. *=#:   +++*.          %:-++  :#.%%= .-=+@-=     
-       %#:     @:+    -+:-:@         @@+=+*    +-#.      :=++   
-        *%=   #.%      @@@@+          =@@%.     #.@        =**. 
-     .=@--=#= @%      +=                         @*          @% 
-   :#%-     --%@     #@     ==#@+*#%+=           @=.-=--.    -+ 
-  =@=         @--    +@@  =#=:       =@*         #%      .    * 
- +@=       :--=-@        #*            =%       @ @.         ++ 
- @@     -==: :=+=%                             %.@          :#@ 
- #@    :.       ====                         =+==%*.       ==@  
- #@             # ====-                    =+++:  =%=    =*==   
- =+%.          #@   =++====.          .=-+#+=      =**-#*--     
-  -++==        @%   .- ===+**++-=*=*##*+=- -*       @=:         
-    .=-*%##**#:@@         -- :#==:-:  +*+   =*       *@         
-               @@         *   +       %%-    #.      %@         
-               :##        #           @%      .     .*#         
-                =##       :          @@             @%          
-                 :#*=              -@**           :##.          
-                  =-@==-      ==:%*- =@+==.   -=##=             
-                     :=:*#*##+:-=      :--=+++:=. 
+             --:=#**+-==     ===#==-    --+#%*-=:
+          =:%-=:.   .-=-%*-+@=:.  -=*=%#=:    .-+%=
+        .#*=             -+%   -    =@=      .   -%@
+       -#%                 +*===--==*-  -   :+     %@
+       @%     .    =  :+-+*+--:-=-:--+#+=-=:=      *@
+      =%       :+. =*++-=:             :====-=     @@
+      #%         =*++=                     =+-==  #@
+      :*=    .. *=#:   +++*.          %:-++  :#.%%= .-=+@-=
+       %#:     @:+    -+:-:@         @@+=+*    +-#.      :=++
+        *%=   #.%      @@@@+          =@@%.     #.@        =**.
+     .=@--=#= @%      +=                         @*          @%
+   :#%-     --%@     #@     ==#@+*#%+=           @=.-=--.    -+
+  =@=         @--    +@@  =#=:       =@*         #%      .    *
+ +@=       :--=-@        #*            =%       @ @.         ++
+ @@     -==: :=+=%                             %.@          :#@
+ #@    :.       ====                         =+==%*.       ==@
+ #@             # ====-                    =+++:  =%=    =*==
+ =+%.          #@   =++====.          .=-+#+=      =**-#*--
+  -++==        @%   .- ===+**++-=*=*##*+=- -*       @=:
+    .=-*%##**#:@@         -- :#==:-:  +*+   =*       *@
+               @@         *   +       %%-    #.      %@
+               :##        #           @%      .     .*#
+                =##       :          @@             @%
+                 :#*=              -@**           :##.
+                  =-@==-      ==:%*- =@+==.   -=##=
+                     :=:*#*##+:-=      :--=+++:=.
                      `}
                     </pre>
                 </TypeIt>
@@ -120,6 +127,14 @@ const BootsScreen = () => {
                         }}
                         getBeforeInit={(instance) => {
                             instance
+                            .exec(() => {
+                                console.log("Attempting to play audio");
+                                if (initSound.current) {
+                                    console.log("Sound is ready, playing...");
+                                    initSound.current.volume = 0.2; // Baisser le volume de 50%
+                                    initSound.current.play();
+                                }
+                            })
                                 .options({ speed: 50, lifeLike: true })
                                 .type("INITIALISATION CORE 1.0.4", { lifeLike: true })
                                 .break()
@@ -154,6 +169,14 @@ const BootsScreen = () => {
                                 .pause(69)
                                 .delete(null, { instant: true })
                                 .type("■■■■■■■■■■ 100%", { instant: true })
+                                .exec(() => {
+                                    console.log("Attempting to play audio");
+                                    if (initMusic.current) {
+                                        console.log("Audio is ready, playing...");
+                                        initMusic.current.volume = 0.2; // Baisser le volume de 50%
+                                        initMusic.current.play();
+                                    }
+                                })
                                 .pause(1500)
                                 .delete(null, { instant: true })
                                 .options({ speed: 1, lifeLike: false, instant: true })
