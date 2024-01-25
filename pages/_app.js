@@ -1,4 +1,4 @@
-import AuthProvider from "@/components/Tools/AuthProvider";
+import AuthProvider from "@/components/Tools/SignInOut/AuthProvider";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     return (

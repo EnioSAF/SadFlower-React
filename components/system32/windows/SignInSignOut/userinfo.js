@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
-import { setToken, removeToken, removeUser } from '/components/Tools/strapitoken';
+import { setToken, removeToken, removeUser } from '/components/Tools/SignInOut/strapitoken';
 import { useAuthContext } from "@/context/AuthContext";
 
 import EditProfile from "./editprofile";

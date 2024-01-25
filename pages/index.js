@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getToken, getUser } from '@/components/Tools/strapitoken';
-import fetchBlogs from '@/components/Tools/fetch-blogs';
+import { getToken, getUser } from '@/components/Tools/SignInOut/strapitoken';
+import fetchBlogs from '@/components/Tools/Blog/fetch-blogs';
 import Image from 'next/image';
 import { Analytics } from '@vercel/analytics/react'
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { useAuthContext } from '/context/AuthContext';
-import { API } from '/components/Tools/constant';
-import { setToken, setUser } from '/components/Tools/strapitoken';
+import { API } from '/components/Tools/SignInOut/constant';
+import { setToken, setUser } from 'components/Tools/SignInOut/strapitoken';
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
