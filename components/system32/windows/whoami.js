@@ -12,7 +12,7 @@ import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
 
 
-const Whoami = ({ closeWindow, onClick, zIndex }) => {
+const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
 
     // Pour la position de la fenêtre
 
@@ -145,7 +145,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                 </div>
 
                 <div className="window-body">
-
+                    <h2>Who Am I</h2>
                     <div className="sections-container">
                         <div className="section-left">
                             <div className="Presentations">
@@ -153,7 +153,7 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                     {/* Insérer un gif qui s'anime quand on passe la sourie dessus ici */}
 
                                     <div className="AboutMe">
-                                        <h2>Who Am I</h2>
+
                                         <p>{`Je m'appelle Antoine MORET-MICHEL, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
                                             passionné d'informatique et d'arts depuis tout petit, je suis également musicien (6 années
                                             de conservatoire et quelques concerts à mon actif [au FIL de Saint Etienne par exemple]).
@@ -173,7 +173,10 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                                     {messageHistory.map((message, index) => (
                                                         <div key={index} className={message.role}>
                                                             {message.role === 'user' && (
-                                                                <p>You: {message.content}</p>
+                                                                <>
+                                                                    <p><u><b>{username ? username : "You"}</b></u>:</p>
+                                                                    <p>{message.content}</p>
+                                                                </>
                                                             )}
                                                             {message.role === 'assistant' && (
                                                                 <div className="avatar-message">
@@ -190,7 +193,10 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                                                             <img src='/Gif/EnioHeadsleepin.png' alt="EnioHeadsleepin" />
                                                                         )}
                                                                     </div>
-                                                                    <p>Enio: {message.content}</p>
+                                                                    <p><u><b>Enio</b></u>:</p>
+                                                                    <TypeIt>
+                                                                        <p>{message.content}</p>
+                                                                    </TypeIt>
                                                                 </div>
                                                             )}
                                                         </div>
@@ -199,25 +205,25 @@ const Whoami = ({ closeWindow, onClick, zIndex }) => {
                                             )}
                                         </div>
                                     </div>
+                                    {isTyping && (
+                                        <p>Enio is typing...</p>
+                                    )}
+                                    {!isTyping && (
+                                        <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
+                                    )}
                                     <div className="command-section">
-                                        <div className="input-container">
-                                            <textarea
-                                                type="text"
-                                                value={input}
-                                                onChange={(e) => setInput(e.target.value)}
-                                                placeholder={tokensUsed >= maxTokens ? "No Tokens !" : "Enter your command..."}
-                                                onFocus={handleInputFocus}
-                                                onBlur={handleInputBlur}
-                                                rows="1" // Cette propriété permet à la barre de grandir avec le contenu
-                                                disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
-                                            />
-                                        </div>
-                                        {isTyping && (
-                                            <p>Enio is typing...</p>
-                                        )}
-                                        {!isTyping && (
-                                            <button onClick={() => { handleCommand(); clearInput(); }}>Send Command</button>
-                                        )}
+                                    </div>
+                                    <div className="input-container">
+                                        <textarea
+                                            type="text"
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                            placeholder={tokensUsed >= maxTokens ? "No Tokens !" : "Enter your command..."}
+                                            onFocus={handleInputFocus}
+                                            onBlur={handleInputBlur}
+                                            rows="1" // Cette propriété permet à la barre de grandir avec le contenu
+                                            disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
+                                        />
                                         <div className="information-section">
                                             {tokensUsed !== null && (
                                                 <p>Nombre de tokens utilisés dans cette interaction : {tokensUsed}/{maxTokens}</p>

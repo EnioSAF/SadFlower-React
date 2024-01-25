@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import { setToken, removeToken, removeUser } from '/components/Tools/strapitoken';
 import { useAuthContext } from "@/context/AuthContext";
@@ -11,6 +11,13 @@ import "/styles/system32/windows/window.sass";
 
 const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick }) => {
     const { user } = useAuthContext();
+    const [username, setUsername] = useState('Chargement...');
+
+    useEffect(() => {
+        if (user && user.username) {
+          setUsername(user.username);
+        }
+      }, [user]);
 
     //Fonction pour se déconnecter
     const handleLogout = () => {
@@ -59,7 +66,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
                     <h2>USER</h2>
                     <div className="auth_buttons">
                         <p>
-                            {user ? user.username : 'Chargement...'}
+                            {username}
                         </p>
                         <button
                             className="auth_button_logout"

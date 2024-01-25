@@ -5,5 +5,7 @@
         "titleBar.activeForeground": "#d5afeb"
     },
     "cmake.configureOnOpen": false,
-    "deepscan.enable": true
+    "deepscan.enable": true,
+    "todo-tree.tree.showBadges": true,
+    "todo-tree.tree.disableCompactFolders": true
 }

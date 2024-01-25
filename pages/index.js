@@ -63,9 +63,7 @@ function HomePage() {
     const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
     const [isWhoamiOpen, setWhoamiOpen] = useState(false);
 
-
     // Fonction pour le SignIn et SignUp et EditProfile
-
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
     const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
@@ -75,16 +73,13 @@ function HomePage() {
         setIsSignInOpen(true);
         setIsSignUpOpen(false);
     };
-
     const openSignUp = () => {
         setIsSignInOpen(false);
         setIsSignUpOpen(true);
     };
-
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
     };
-
     const closeAllModals = () => {
         setIsSignInOpen(false);
         setIsSignUpOpen(false);
@@ -152,7 +147,7 @@ function HomePage() {
                         <>
                             {isArticleExeOpen && <ArticleExe onClose={handleArticleExeClose} />}
                             {isTwitchWindowOpen && <TwitchWindow closeWindow={() => setIsTwitchWindowOpen(false)} />}
-                            {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} />}
+                            {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} username={user?.username} />}
                             {!user && isSignInOpen && !isSignUpOpen && <SignIn switchToSignUp={openSignUp} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
                             {!user && isSignUpOpen && !isSignInOpen && <SignUp switchToSignIn={openSignIn} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
                             {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} onEditProfileClick={openEditProfile} />}
