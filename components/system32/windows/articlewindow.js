@@ -3,7 +3,7 @@ import { Rnd } from 'react-rnd';
 import Icon from '../applications/icon';
 import FeaturedWindow from './featuredwindow';
 import SimpleWindow from './simplewindow';
-import fetchBlogs from '@/components/Tools/fetch-blogs';
+import fetchBlogs from '@/components/Tools/Blog/fetch-blogs';
 
 import '/styles/system32/windows/articlewindow.sass';
 import "98.css";

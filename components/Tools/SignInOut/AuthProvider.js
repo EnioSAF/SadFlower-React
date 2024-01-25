@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AuthContext } from "/context/AuthContext";
-import { API, BEARER } from "@/components/Tools/constant";
-import { getToken } from "@/components/Tools/strapitoken";
+import { API, BEARER } from "@/components/Tools/SignInOut/constant";
+import { getToken } from "@/components/Tools/SignInOut/strapitoken";
 
 const AuthProvider = ({ children }) => {
     const [userData, setUserData] = useState();
