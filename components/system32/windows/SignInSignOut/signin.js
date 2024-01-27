@@ -36,7 +36,6 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
                 setUser(data.user); // Met à jour l'état de l'utilisateur dans le contexte
                 setLoginStatus(!loginStatus);
                 alert(`Welcome back ${data.user.username}!`);
-                window.location.reload();
             }
         } catch (error) {
             console.error(error);

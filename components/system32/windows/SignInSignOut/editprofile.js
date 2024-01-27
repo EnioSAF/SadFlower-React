@@ -25,7 +25,7 @@ const EditProfile = ({ closeWindow }) => {
 
     const handleSaveAvatar = async (newAvatar) => {
         try {
-            const response = await fetch(`${API}/user/me`, { // Assure-toi que c'est le bon endpoint
+            const response = await fetch(`${API}/user/me`, {
                 method: 'PUT', // Ou PATCH
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,11 +33,24 @@ const EditProfile = ({ closeWindow }) => {
                 },
                 body: JSON.stringify({ avatar: newAvatar })
             });
+
             if (response.ok) {
-                const updatedUser = await response.json(); // Récupère l'user mis à jour
-                setUser(updatedUser); // Mets à jour ton state avec cet user
-                console.log(updatedUser); // Ici, on affiche l'user mis à jour dans la console
-                alert("Avatar mis à jour avec succès !");
+                let updatedUser;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    updatedUser = await response.json(); // Pour le JSON
+                } else {
+                    updatedUser = await response.text(); // Pour le texte brut
+                }
+
+                // Gère la réponse ici, en fonction de si c'est du JSON ou du texte
+                if (typeof updatedUser === 'string' && updatedUser === 'OK') {
+                    console.log("Avatar mis à jour avec succès !");
+                    alert("Avatar mis à jour avec succès !");
+                } else if (typeof updatedUser === 'object') {
+                    setUser(updatedUser); // Mets à jour ton state avec cet user
+                    console.log(updatedUser); // Ici, on affiche l'user mis à jour dans la console
+                }
             } else {
                 alert("Erreur lors de la mise à jour de l'avatar.");
             }
@@ -46,6 +59,7 @@ const EditProfile = ({ closeWindow }) => {
             alert("Erreur serveur lors de la mise à jour de l'avatar.");
         }
     };
+
 
     const updateUserData = async (updatedData) => {
         try {
@@ -112,7 +126,7 @@ const EditProfile = ({ closeWindow }) => {
             </div>
             <div className="window-body">
                 <div className="profile_page">
-                <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
+                    <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
                     <form onSubmit={handleSubmit}>
                         <input
                             type="text"
