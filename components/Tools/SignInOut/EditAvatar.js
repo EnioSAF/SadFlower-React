@@ -70,7 +70,7 @@ const EditAvatar = ({ initialAvatar, onSave }) => {
                     <input type="color" value={avatar.eyesAccessoryColor} onChange={(e) => updateAvatarColor('eyesAccessory', e.target.value)} />
                 </div>
                 <div>
-                    <label>Accessoire d'oreille:</label>
+                    <label>Accessoire oreille:</label>
                     <select onChange={(e) => updateAvatarPart('earAccessory', e.target.value)} value={avatar.earAccessory}>
                         {earAccessoryTypes.map(type => <option key={type} value={type}>{type}</option>)}
                     </select>
