@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image'
 import '/styles/system32/desktop/taskbar.sass';
 
-const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick }) => {
+const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick, onUserListClick }) => {
 	const [currentTime, setCurrentTime] = useState(new Date());
 	const [showStartMenu, setShowStartMenu] = useState(false);
 
@@ -43,18 +43,32 @@ const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick }) => {
 							</div>
 						</>
 					) : (
-						<div className="user-info">
-							<button className="user-info-button" onClick={onUserInfoClick}>
-							<Image
+						<>
+							<div className="user-info">
+								<button className="user-info-button" onClick={onUserInfoClick}>
+									<Image
 										src="/Icon/Windows95/Sort by Category [Without duplicates]/People/Agent.ico"
-										alt="SignIn"
+										alt="UserInfo"
 										width={32}
 										height={32}
 										className="auth-icon"
 									/>
-								UserInfo
-							</button>
-						</div>
+									UserInfo
+								</button>
+							</div>
+							<div className="user-list-button">
+								<button onClick={onUserListClick}> {/* Ajoute ta fonction de gestion ici */}
+									<Image
+										src="/chemin/vers/icone/liste-utilisateurs.ico" // Chemin de l'icône de la liste des utilisateurs
+										alt="UserList"
+										width={32}
+										height={32}
+										className="auth-icon"
+									/>
+									UserList
+								</button>
+							</div>
+						</>
 					)}
 				</div>
 			)}

@@ -8,6 +8,7 @@ import SignIn from '@/components/system32/windows/SignInSignOut/signin';
 import SignUp from '@/components/system32/windows/SignInSignOut/signup';
 import EditProfile from '@/components/system32/windows/SignInSignOut/editprofile';
 import UserInfo from '@/components/system32/windows/SignInSignOut/userinfo';
+import UserList from '@/components/system32/windows/SignInSignOut/userlist';
 import Whoami from '@/components/system32/windows/whoami';
 import ArticleExe from '@/components/system32/windows/articlewindow';
 import Window from '@/components/system32/windows/simplewindow';
@@ -63,11 +64,12 @@ function HomePage() {
     const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
     const [isWhoamiOpen, setWhoamiOpen] = useState(false);
 
-    // Fonction pour le SignIn et SignUp et EditProfile
+    // Fonction pour le SignIn et SignUp et EditProfile et UserList
     const [isSignInOpen, setIsSignInOpen] = useState(false);
     const [isSignUpOpen, setIsSignUpOpen] = useState(false);
     const [isUserInfoOpen, setIsUserInfoOpen] = useState(false);
     const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
+    const [showUserList, setShowUserList] = useState(false);
 
     const openSignIn = () => {
         setIsSignInOpen(true);
@@ -79,6 +81,9 @@ function HomePage() {
     };
     const openEditProfile = () => {
         setIsEditProfileOpen(true);
+    };
+    const handleUserListClick = () => {
+        setShowUserList(true);
     };
     const closeAllModals = () => {
         setIsSignInOpen(false);
@@ -154,6 +159,7 @@ function HomePage() {
                             {isEditProfileOpen && (
                                 <EditProfile closeWindow={() => setIsEditProfileOpen(false)} />
                             )}
+                            {showUserList && <UserList />}
                         </>
                     )}
 
@@ -164,6 +170,7 @@ function HomePage() {
                                 onSignInClick={() => setIsSignInOpen(true)}
                                 onSignUpClick={() => setIsSignUpOpen(true)}
                                 onUserInfoClick={() => setIsUserInfoOpen(true)}
+                                onUserListClick={handleUserListClick}
                             />
                         </div>
                     )}
