@@ -93,13 +93,14 @@ const EditProfile = ({ closeWindow }) => {
         <Rnd
             default={{
                 ...getCenterPosition(),
-                width: 350,
-                height: 220,
+                width: 360,
+                height: 500,
             }}
-            minWidth={350}
-            minHeight={380}
+            minWidth={360}
+            minHeight={500}
             className="window"
             disableDragging={isMobileScreen()}
+            position={isMobileScreen()}
         >
             <div className="title-bar">
                 <div className="title-bar-text">EditProfile.exe</div>
