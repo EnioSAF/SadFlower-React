@@ -150,7 +150,7 @@ function HomePage() {
                             {isWhoamiOpen && <Whoami closeWindow={() => setWhoamiOpen(false)} username={user?.username} />}
                             {!user && isSignInOpen && !isSignUpOpen && <SignIn switchToSignUp={openSignUp} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
                             {!user && isSignUpOpen && !isSignInOpen && <SignUp switchToSignIn={openSignIn} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
-                            {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} onEditProfileClick={openEditProfile} />}
+                            {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} onEditProfileClick={openEditProfile} setIsUserInfoOpen={setIsUserInfoOpen} />}
                             {isEditProfileOpen && (
                                 <EditProfile closeWindow={() => setIsEditProfileOpen(false)} />
                             )}

@@ -61,8 +61,10 @@ const BootsScreen = () => {
 
         return () => {
             document.removeEventListener('keydown', handleInteraction);
-            bootsScreenRef.current.removeEventListener('click', handleInteraction);
-            bootsScreenRef.current.removeEventListener('touchstart', handleInteraction);
+            if (bootsScreenRef.current) {
+                bootsScreenRef.current.removeEventListener('click', handleInteraction);
+                bootsScreenRef.current.removeEventListener('touchstart', handleInteraction);
+            }
         };
     }, [allowKeyPress]);
 
@@ -127,14 +129,14 @@ const BootsScreen = () => {
                         }}
                         getBeforeInit={(instance) => {
                             instance
-                            .exec(() => {
-                                console.log("Attempting to play audio");
-                                if (initSound.current) {
-                                    console.log("Sound is ready, playing...");
-                                    initSound.current.volume = 0.2; // Baisser le volume de 50%
-                                    initSound.current.play();
-                                }
-                            })
+                                .exec(() => {
+                                    console.log("Attempting to play audio");
+                                    if (initSound.current) {
+                                        console.log("Sound is ready, playing...");
+                                        initSound.current.volume = 0.2; // Baisser le volume de 50%
+                                        initSound.current.play();
+                                    }
+                                })
                                 .options({ speed: 50, lifeLike: true })
                                 .type("INITIALISATION CORE 1.0.4", { lifeLike: true })
                                 .break()

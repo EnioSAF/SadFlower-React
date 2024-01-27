@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Rnd } from "react-rnd";
 import { API } from '/components/Tools/SignInOut/constant';
 import { setToken, setUser } from '/components/Tools/SignInOut/strapitoken';
+import generateRandomAvatar from '/components/Tools/SignInOut/AvatarGenerator'
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -14,6 +15,8 @@ const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) =>
         event.preventDefault();
         const formData = new FormData(event.target);
         const values = Object.fromEntries(formData.entries());
+        const avatarInfo = generateRandomAvatar();
+        values.avatar = avatarInfo;
 
         setIsLoading(true);
         try {
@@ -33,6 +36,7 @@ const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) =>
                 setUser(data.user);
                 setLoginStatus(!loginStatus);
                 alert(`Welcome to Social Cards ${data.user.username}!`);
+                window.location.reload();
             }
         } catch (error) {
             console.error(error);

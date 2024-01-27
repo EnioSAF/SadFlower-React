@@ -1,0 +1,42 @@
+.window-body
+    background: darken($color: #c0c0c0, $amount: 5%) // On assombrit un peu pour le style
+    padding: 16px
+
+.header_space
+    text-align: center // Centrage suprême pour USER
+    margin-bottom: 1rem // On respire en dessous du titre
+
+    h2
+        color: #ff72b9 // Rose type "arcade" pour le fun
+        text-shadow: 1px 1px 0 #000 // Petite ombre pour le depth
+
+.userInfo
+    display: flex
+    flex-direction: column
+    border: 2px solid #fff // Cadre blanc pour l'effet "fenêtre"
+    padding: 8px
+    background: darken($color: #808080, $amount: 10%) // Un peu plus sombre pour faire ressortir l'avatar
+
+    .avatar
+        display: flex
+        align-self: center
+
+    .username
+        color: #fff // Blanc, basique, efficace
+        text-align: center // Rien ne bouge, tout est calé
+        margin-top: 1rem // Espace après l'avatar pour pas que ça se touche
+
+
+
+.buttons
+    display: flex
+    flex-direction: column
+    padding: 8px
+    gap: 5px
+
+    .auth_button_logout
+        background-color: #757575 // Orange qui claque pour les boutons
+        border: none // Pas de frontières dans le pixel art
+        color: white
+        padding: 8px 16px // Confortable comme un vieux fauteuil
+        cursor: pointer // Montre-moi ce pointeur pixelisé

@@ -1,11 +1,6 @@
 ## TODO
 
-- [X] RELIER BOUTON EDIT PROFILE A LA PAGE editprofile.js
-- [ ] Editer les informations des pages signin signup userinfo et editprofile
-- [ ] Nettoyez les codes
-
-- [ ] Corriger l'affichage des fenetres
-
-- [ ] Mettre en place la barre de tâches pour la rendre fonctionnelle (au moins le menu démarrer)
-- [ ] Continuer les fenêtres de connexion
-- [ ] Améliorer l'interface de l'IA + IA + Système de limites de jetons (rendre l'IA accessible qu'aux connectés ?)
+- [ ] Corriger affichage avatar + bug déconnexion lié à avatar (voir chatgpt) (à monter à Arnaud) (Solution potentielle temporaire : Raffraichir fenêtre à la deco/reco)
+- [ ] Remettre en page la page de connexion et d'inscription
+- [ ] Continuer page WhoAmI
+- [ ] Modifier BootScreen pour attendre une intéraction avec la page pour pouvoir jouer les sons correctement (bug à vérifier)
