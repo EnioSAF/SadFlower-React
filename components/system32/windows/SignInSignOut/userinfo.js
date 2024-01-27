@@ -3,27 +3,36 @@ import { Rnd } from "react-rnd";
 import { setToken, removeToken, removeUser } from '/components/Tools/SignInOut/strapitoken';
 import { useAuthContext } from "@/context/AuthContext";
 
-import EditProfile from "./editprofile";
+import { PixelArtCard } from 'react-pixelart-face-card'
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/SignInSignOut/userinfo.sass";
 
 
 const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick }) => {
     const { user } = useAuthContext();
     const [username, setUsername] = useState('Chargement...');
+    const [avatar, setAvatar] = useState(null);
 
     useEffect(() => {
-        if (user && user.username) {
-          setUsername(user.username);
+        if (user) {
+            setUsername(user.username);
+            if (user.avatar) {
+                setAvatar(user.avatar);
+            } else {
+                setAvatar(null);
+            }
         }
-      }, [user]);
+    }, [user]);
 
-    //Fonction pour se déconnecter
     const handleLogout = () => {
         removeToken();
         removeUser();
         setLoginStatus(!loginStatus);
+
+        // Rafraîchir la page après la déconnexion
+        window.location.reload();
     };
 
     // Fonction pour vérifier la taille de l'écran
@@ -64,10 +73,30 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
             <div className="window-body">
                 <div className="header_space">
                     <h2>USER</h2>
-                    <div className="auth_buttons">
-                        <p>
-                            {username}
-                        </p>
+                        <div className="userInfo">
+                            <div className="avatar">
+                                {avatar ? (
+                                    <PixelArtCard size={100} color={user.avatar.baseColor}>
+                                        <PixelArtCard.Hair value={user.avatar.hair} color={user.avatar.hairColor} />
+                                        <PixelArtCard.HeadAccessory value={user.avatar.headAccessory} color={user.avatar.headAccessoryColor} />
+                                        <PixelArtCard.Eyes value={user.avatar.eyes} />
+                                        <PixelArtCard.EyesAccessory value={user.avatar.eyesAccessory} color={user.avatar.eyesAccessoryColor} />
+                                        <PixelArtCard.EarAccessory value={user.avatar.earAccessory} color={user.avatar.earAccessoryColor} />
+                                        <PixelArtCard.Nose value={user.avatar.nose} />
+                                        <PixelArtCard.Beard value={user.avatar.beard} />
+                                        <PixelArtCard.Mouth value={user.avatar.mouth} />
+                                        <PixelArtCard.MouthAccessory value={user.avatar.mouthAccessory} color={user.avatar.mouthAccessoryColor} />
+                                        <PixelArtCard.NeckAccessory value={user.avatar.neckAccessory} color={user.avatar.neckAccessoryColor} />
+                                    </PixelArtCard>
+                                ) : null}
+                            </div>
+                            <div className="username">
+                                <p>
+                                    {username}
+                                </p>
+                            </div>
+                        </div>
+                        <div className="buttons">
                         <button
                             className="auth_button_logout"
                             onClick={onEditProfileClick}
@@ -80,7 +109,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
                         >
                             Logout
                         </button>
-                    </div>
+                        </div>
                 </div>
             </div>
             <div className="status-bar">
