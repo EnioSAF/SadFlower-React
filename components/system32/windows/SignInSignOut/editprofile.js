@@ -4,6 +4,8 @@ import { useAuthContext } from "@/context/AuthContext";
 import { API, BEARER } from "@/components/Tools/SignInOut/constant";
 import { getToken } from "@/components/Tools/SignInOut/strapitoken";
 
+import EditAvatar from '@/components/Tools/SignInOut/EditAvatar';
+
 import "98.css";
 import "/styles/system32/windows/window.sass";
 
@@ -21,6 +23,30 @@ const EditProfile = ({ closeWindow }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const handleSaveAvatar = async (newAvatar) => {
+        try {
+            const response = await fetch(`${API}/user/me`, { // Assure-toi que c'est le bon endpoint
+                method: 'PUT', // Ou PATCH
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${BEARER} ${getToken()}`
+                },
+                body: JSON.stringify({ avatar: newAvatar })
+            });
+            if (response.ok) {
+                const updatedUser = await response.json(); // Récupère l'user mis à jour
+                setUser(updatedUser); // Mets à jour ton state avec cet user
+                console.log(updatedUser); // Ici, on affiche l'user mis à jour dans la console
+                alert("Avatar mis à jour avec succès !");
+            } else {
+                alert("Erreur lors de la mise à jour de l'avatar.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de l'envoi de la mise à jour de l'avatar:", error);
+            alert("Erreur serveur lors de la mise à jour de l'avatar.");
+        }
+    };
+
     const updateUserData = async (updatedData) => {
         try {
             const response = await fetch(`${API}/user/me`, {
@@ -31,11 +57,10 @@ const EditProfile = ({ closeWindow }) => {
                 },
                 body: JSON.stringify(updatedData)
             });
-    
+
             if (response.ok) {
                 setUser({ ...user, ...updatedData });
                 alert("Profil mis à jour avec succès !");
-                // Ici, tu ne tentes pas de parser la réponse en JSON
             } else {
                 alert("Erreur lors de la mise à jour du profil.");
             }
@@ -86,6 +111,7 @@ const EditProfile = ({ closeWindow }) => {
             </div>
             <div className="window-body">
                 <div className="profile_page">
+                <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
                     <form onSubmit={handleSubmit}>
                         <input
                             type="text"

@@ -32,4 +32,3 @@ export const removeToken = () => {
 export const removeUser = () => {
     localStorage.removeItem(USER);
 };
-
