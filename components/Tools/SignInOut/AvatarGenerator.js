@@ -1,8 +1,5 @@
-import React from 'react';
-import PixelArtCard from 'react-pixelart-face-card';
-
 // Fonction pour générer une couleur aléatoire
-const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16);
+const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
 
 // Fonction pour sélectionner un élément aléatoire d'un array
 const randomElement = (array) => array[Math.floor(Math.random() * array.length)];
@@ -22,6 +19,7 @@ const generateRandomAvatar = () => {
 
   // Sélection aléatoire des éléments et des couleurs
   return {
+    baseColor: randomColor(),
     hair: randomElement(hairTypes),
     headAccessory: randomElement(headAccessoryTypes),
     eyes: randomElement(eyeTypes),
@@ -33,11 +31,10 @@ const generateRandomAvatar = () => {
     mouthAccessory: randomElement(mouthAccessoryTypes),
     neckAccessory: randomElement(neckAccessoryTypes),
     hairColor: randomColor(),
-    headAccessoryColor: randomColor(),
     eyesColor: randomColor(),
+    headAccessoryColor: randomColor(),
     eyesAccessoryColor: randomColor(),
     earAccessoryColor: randomColor(),
-    beardColor: randomColor(),
     mouthColor: randomColor(),
     mouthAccessoryColor: randomColor(),
     neckAccessoryColor: randomColor(),

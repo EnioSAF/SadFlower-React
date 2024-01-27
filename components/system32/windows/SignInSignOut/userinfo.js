@@ -14,6 +14,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
     const { user } = useAuthContext();
     const [username, setUsername] = useState('Chargement...');
     const [avatar, setAvatar] = useState(null);
+    const [isComponentDying, setIsComponentDying] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -30,8 +31,6 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
         removeToken();
         removeUser();
         setLoginStatus(!loginStatus);
-
-        // Rafraîchir la page après la déconnexion
         window.location.reload();
     };
 
@@ -53,11 +52,11 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
         <Rnd
             default={{
                 ...getCenterPosition(),
-                width: 350,
-                height: 220,
+                width: 359,
+                height: 461,
             }}
-            minWidth={350}
-            minHeight={380}
+            minWidth={359}
+            minHeight={461}
             className="window"
             disableDragging={isMobileScreen()}
             position={isMobileScreen()}
@@ -73,30 +72,30 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
             <div className="window-body">
                 <div className="header_space">
                     <h2>USER</h2>
-                        <div className="userInfo">
-                            <div className="avatar">
-                                {avatar ? (
-                                    <PixelArtCard size={100} color={user.avatar.baseColor}>
-                                        <PixelArtCard.Hair value={user.avatar.hair} color={user.avatar.hairColor} />
-                                        <PixelArtCard.HeadAccessory value={user.avatar.headAccessory} color={user.avatar.headAccessoryColor} />
-                                        <PixelArtCard.Eyes value={user.avatar.eyes} />
-                                        <PixelArtCard.EyesAccessory value={user.avatar.eyesAccessory} color={user.avatar.eyesAccessoryColor} />
-                                        <PixelArtCard.EarAccessory value={user.avatar.earAccessory} color={user.avatar.earAccessoryColor} />
-                                        <PixelArtCard.Nose value={user.avatar.nose} />
-                                        <PixelArtCard.Beard value={user.avatar.beard} />
-                                        <PixelArtCard.Mouth value={user.avatar.mouth} />
-                                        <PixelArtCard.MouthAccessory value={user.avatar.mouthAccessory} color={user.avatar.mouthAccessoryColor} />
-                                        <PixelArtCard.NeckAccessory value={user.avatar.neckAccessory} color={user.avatar.neckAccessoryColor} />
-                                    </PixelArtCard>
-                                ) : null}
-                            </div>
-                            <div className="username">
-                                <p>
-                                    {username}
-                                </p>
-                            </div>
+                    <div className="userInfo">
+                        <div className="avatar">
+                            {avatar ? (
+                                <PixelArtCard size={100} color={user.avatar.baseColor}>
+                                    <PixelArtCard.Hair value={user.avatar.hair} color={user.avatar.hairColor} />
+                                    <PixelArtCard.HeadAccessory value={user.avatar.headAccessory} color={user.avatar.headAccessoryColor} />
+                                    <PixelArtCard.Eyes value={user.avatar.eyes} color={user.avatar.eyesColor} />
+                                    <PixelArtCard.EyesAccessory value={user.avatar.eyesAccessory} color={user.avatar.eyesAccessoryColor} />
+                                    <PixelArtCard.EarAccessory value={user.avatar.earAccessory} color={user.avatar.earAccessoryColor} />
+                                    <PixelArtCard.Nose value={user.avatar.nose} />
+                                    <PixelArtCard.Beard value={user.avatar.beard} />
+                                    <PixelArtCard.Mouth value={user.avatar.mouth} color={user.avatar.mouthColor} />
+                                    <PixelArtCard.MouthAccessory value={user.avatar.mouthAccessory} color={user.avatar.mouthAccessoryColor} />
+                                    <PixelArtCard.NeckAccessory value={user.avatar.neckAccessory} color={user.avatar.neckAccessoryColor} />
+                                </PixelArtCard>
+                            ) : null}
                         </div>
-                        <div className="buttons">
+                        <div className="username">
+                            <p>
+                                {username}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="buttons">
                         <button
                             className="auth_button_logout"
                             onClick={onEditProfileClick}
@@ -109,7 +108,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
                         >
                             Logout
                         </button>
-                        </div>
+                    </div>
                 </div>
             </div>
             <div className="status-bar">
