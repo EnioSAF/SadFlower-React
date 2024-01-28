@@ -56,10 +56,10 @@ const TaskBar = ({ user, onSignInClick, onSignUpClick, onUserInfoClick, onUserLi
 									UserInfo
 								</button>
 							</div>
-							<div className="user-list-button">
-								<button onClick={onUserListClick}> {/* Ajoute ta fonction de gestion ici */}
+							<div className="user-list">
+								<button className='user-list-button' onClick={onUserListClick}>
 									<Image
-										src="/chemin/vers/icone/liste-utilisateurs.ico" // Chemin de l'icône de la liste des utilisateurs
+										src="/Icon/Windows95/Sort by Category [Without duplicates]/People/People.ico" // Chemin de l'icône de la liste des utilisateurs
 										alt="UserList"
 										width={32}
 										height={32}

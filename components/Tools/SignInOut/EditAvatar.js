@@ -28,7 +28,7 @@ const EditAvatar = ({ initialAvatar, onSave }) => {
 
     return (
         <div className="edit-avatar-container">
-            <PixelArtCard size={100} color={avatar.baseColor}>
+            <PixelArtCard size={100} color={avatar.baseColor} hoverColor={avatar.hoverColor}>
                 <PixelArtCard.Hair value={avatar.hair} color={avatar.hairColor} />
                 <PixelArtCard.HeadAccessory value={avatar.headAccessory} color={avatar.headAccessoryColor} />
                 <PixelArtCard.Eyes value={avatar.eyes} color={avatar.eyesColor} />
@@ -41,6 +41,10 @@ const EditAvatar = ({ initialAvatar, onSave }) => {
                 <PixelArtCard.NeckAccessory value={avatar.neckAccessory} color={avatar.neckAccessoryColor} />
             </PixelArtCard>
             <div>
+                <div>
+                    <label>Peau:</label>
+                    <input type="color" value={avatar.baseColor} onChange={(e) => updateAvatarColor('base', e.target.value)} />
+                </div>
                 <div>
                     <label>Cheveux:</label>
                     <select onChange={(e) => updateAvatarPart('hair', e.target.value)} value={avatar.hair}>
