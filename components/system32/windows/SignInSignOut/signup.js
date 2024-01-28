@@ -36,6 +36,7 @@ const SignUp = ({ closeWindow, switchToSignIn, setLoginStatus, loginStatus }) =>
                 setUser(data.user);
                 setLoginStatus(!loginStatus);
                 alert(`Welcome to Social Cards ${data.user.username}!`);
+                window.location.reload();
             }
         } catch (error) {
             console.error(error);
