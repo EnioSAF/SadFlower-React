@@ -31,6 +31,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
         removeToken();
         removeUser();
         setLoginStatus(!loginStatus);
+        window.location.reload();
     };
 
     // Fonction pour vérifier la taille de l'écran
