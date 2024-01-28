@@ -20,6 +20,7 @@ const generateRandomAvatar = () => {
   // Sélection aléatoire des éléments et des couleurs
   return {
     baseColor: randomColor(),
+    hoverColor: randomColor(),
     hair: randomElement(hairTypes),
     headAccessory: randomElement(headAccessoryTypes),
     eyes: randomElement(eyeTypes),

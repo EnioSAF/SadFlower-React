@@ -1,4 +1,4 @@
-import React, { useState, useEffect, closeWindow } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Rnd } from "react-rnd";
 import { API } from '/components/Tools/SignInOut/constant';
 import { PixelArtCard } from 'react-pixelart-face-card';
@@ -7,7 +7,7 @@ import "98.css";
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/SignInSignOut/userlist.sass";
 
-const UserList = () => {
+const UserList = ({ closeWindow }) => {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -67,7 +67,7 @@ const UserList = () => {
                         <div key={user.id} className="user-card">
                             <div className="user-avatar">
                                 {user.avatar && (
-                                    <PixelArtCard size={100} color={user.avatar.baseColor}>
+                                    <PixelArtCard size={100} color={user.avatar.baseColor} hoverColor={user.avatar.hoverColor}>
                                         <PixelArtCard.Hair value={user.avatar.hair} color={user.avatar.hairColor} />
                                         <PixelArtCard.HeadAccessory value={user.avatar.headAccessory} color={user.avatar.headAccessoryColor} />
                                         <PixelArtCard.Eyes value={user.avatar.eyes} color={user.avatar.eyesColor} />

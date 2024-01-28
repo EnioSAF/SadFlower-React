@@ -1,2 +1,32 @@
-.user-avatar
-    position: sticky
+.user-list
+    display: flex
+    flex-wrap: wrap
+    justify-content: center
+    gap: 20px // Pour un peu d'espace entre les cadres, t'sais.
+
+.user-card
+    border: 2px solid #0078D7 // Un bon vieux bleu Windows 95.
+    border-radius: 10px // Les coins arrondis, ça claque.
+    padding: 10px
+    display: flex
+    flex-direction: column
+    align-items: center
+    background: #FFF // Pour que ça ressorte sur le fond.
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) // Un peu d'ombre pour le style.
+
+    .user-avatar
+        position: sticky
+        width: 100px // Taille de l'avatar.
+        height: 100px
+        margin-bottom: 10px // Un peu d'espace avant le username.
+        display: flex
+        justify-content: center
+        align-items: center
+
+    .user-info
+        text-align: center // On centre le texte.
+
+    h3
+        margin: 0
+        color: #333 // Une couleur sobre pour le nom.
+        font-weight: bold // Un peu de gras sur le nom.

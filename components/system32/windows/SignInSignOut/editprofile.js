@@ -23,43 +23,40 @@ const EditProfile = ({ closeWindow }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSaveAvatar = async (newAvatar) => {
-        try {
-            const response = await fetch(`${API}/user/me`, {
-                method: 'PUT', // Ou PATCH
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `${BEARER} ${getToken()}`
-                },
-                body: JSON.stringify({ avatar: newAvatar })
-            });
+const handleSaveAvatar = async (newAvatar) => {
+    try {
+        const response = await fetch(`${API}/user/me`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `${BEARER} ${getToken()}`
+            },
+            body: JSON.stringify({ avatar: newAvatar })
+        });
 
-            if (response.ok) {
-                let updatedUser;
-                const contentType = response.headers.get("content-type");
-                if (contentType && contentType.indexOf("application/json") !== -1) {
-                    updatedUser = await response.json(); // Pour le JSON
-                } else {
-                    updatedUser = await response.text(); // Pour le texte brut
-                }
-
-                // Gère la réponse ici, en fonction de si c'est du JSON ou du texte
-                if (typeof updatedUser === 'string' && updatedUser === 'OK') {
-                    console.log("Avatar mis à jour avec succès !");
-                    alert("Avatar mis à jour avec succès !");
-                } else if (typeof updatedUser === 'object') {
-                    setUser(updatedUser); // Mets à jour ton state avec cet user
-                    console.log(updatedUser); // Ici, on affiche l'user mis à jour dans la console
-                }
+        if (response.ok) {
+            let updatedUser;
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                updatedUser = await response.json(); // Pour le JSON
             } else {
-                alert("Erreur lors de la mise à jour de l'avatar.");
+                updatedUser = await response.text(); // Pour le texte brut
             }
-        } catch (error) {
-            console.error("Erreur lors de l'envoi de la mise à jour de l'avatar:", error);
-            alert("Erreur serveur lors de la mise à jour de l'avatar.");
+            if (typeof updatedUser === 'string' && updatedUser === 'OK') {
+                console.log("Avatar mis à jour avec succès !");
+                alert("Avatar mis à jour avec succès !");
+                window.location.reload();
+            } else if (typeof updatedUser === 'object') {
+                setUser(updatedUser);
+            }
+        } else {
+            alert("Erreur lors de la mise à jour de l'avatar.");
         }
-    };
-
+    } catch (error) {
+        console.error("Erreur lors de l'envoi de la mise à jour de l'avatar:", error);
+        alert("Erreur serveur lors de la mise à jour de l'avatar.");
+    }
+};
 
     const updateUserData = async (updatedData) => {
         try {
@@ -97,8 +94,8 @@ const EditProfile = ({ closeWindow }) => {
         const windowWidth = window.innerWidth;
         const windowHeight = window.innerHeight;
 
-        const x = (windowWidth - 350) / 2; // 350 est la largeur de la fenêtre
-        const y = (windowHeight - 220) / 2; // 220 est la hauteur de la fenêtre
+        const x = (windowWidth - 350) / 2;
+        const y = (windowHeight - 220) / 2;
 
         return { x, y };
     };
@@ -108,10 +105,10 @@ const EditProfile = ({ closeWindow }) => {
             default={{
                 ...getCenterPosition(),
                 width: 360,
-                height: 500,
+                height: 550,
             }}
             minWidth={360}
-            minHeight={500}
+            minHeight={550}
             className="window"
             disableDragging={isMobileScreen()}
             position={isMobileScreen()}
@@ -126,7 +123,7 @@ const EditProfile = ({ closeWindow }) => {
             </div>
             <div className="window-body">
                 <div className="profile_page">
-                    <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
+                <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
                     <form onSubmit={handleSubmit}>
                         <input
                             type="text"

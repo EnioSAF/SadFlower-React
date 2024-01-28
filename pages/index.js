@@ -59,6 +59,11 @@ function HomePage() {
         fetchData();
     }, []);
 
+    // Fontcion pour update les données user
+    const updateUser = (updatedUser) => {
+        setUser(updatedUser);
+    };
+
     // Fonctions des fenetres
     const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
     const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
@@ -157,9 +162,9 @@ function HomePage() {
                             {!user && isSignUpOpen && !isSignInOpen && <SignUp switchToSignIn={openSignIn} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={closeAllModals} />}
                             {user && isUserInfoOpen && <UserInfo user={user} setLoginStatus={setLoginStatus} loginStatus={loginStatus} closeWindow={() => setIsUserInfoOpen(false)} onEditProfileClick={openEditProfile} setIsUserInfoOpen={setIsUserInfoOpen} />}
                             {isEditProfileOpen && (
-                                <EditProfile closeWindow={() => setIsEditProfileOpen(false)} />
+                                <EditProfile updateUser={updateUser} closeWindow={() => setIsEditProfileOpen(false)} />
                             )}
-                            {showUserList && <UserList />}
+                            {showUserList && <UserList closeWindow={() => setShowUserList(false)} />}
                         </>
                     )}
 

@@ -47,6 +47,14 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
         return { x, y };
     };
 
+    useEffect(() => {
+        console.log("Mise à jour de l'avatar:", user.avatar);
+    }, [user.avatar]);
+
+    useEffect(() => {
+        console.log("Les données de l'utilisateur ont changé", user);
+    }, [user]);
+
     return (
         <Rnd
             default={{
@@ -74,7 +82,7 @@ const UserInfo = ({ closeWindow, setLoginStatus, loginStatus, onEditProfileClick
                     <div className="userInfo">
                         <div className="avatar">
                             {avatar ? (
-                                <PixelArtCard size={100} color={user.avatar.baseColor}>
+                                <PixelArtCard size={100} color={user.avatar.baseColor} hoverColor={user.avatar.hoverColor}>
                                     <PixelArtCard.Hair value={user.avatar.hair} color={user.avatar.hairColor} />
                                     <PixelArtCard.HeadAccessory value={user.avatar.headAccessory} color={user.avatar.headAccessoryColor} />
                                     <PixelArtCard.Eyes value={user.avatar.eyes} color={user.avatar.eyesColor} />
