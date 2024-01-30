@@ -84,7 +84,7 @@ const ArticleExe = ({ onClose, zIndex }) => {
                     height: 700,
                 }}
                 minWidth={350}
-                minHeight={380}
+                minHeight={220}
                 className="window"
                 position={isMobileScreen()}
                 disableDragging={isMobileScreen()}
@@ -94,7 +94,7 @@ const ArticleExe = ({ onClose, zIndex }) => {
                     <div className="title-bar-controls">
                         <button aria-label="Minimize" />
                         <button aria-label="Maximize" />
-                        <button aria-label="Close" onClick={onClose} onTouch={onClose} />
+                        <button aria-label="Close" onClick={onClose} onTouchStart={onClose} />
                     </div>
                 </div>
 

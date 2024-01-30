@@ -51,13 +51,21 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
 
     // Fonction pour centrer la fenêtre
     const getCenterPosition = () => {
-        const windowWidth = window.innerWidth;
-        const windowHeight = window.innerHeight;
-
-        const x = (windowWidth - 350) / 2; // 350 est la largeur de la fenêtre
-        const y = (windowHeight - 220) / 2; // 220 est la hauteur de la fenêtre
-
-        return { x, y };
+        if (isMobileScreen()) {
+            // Sur un écran de téléphone, centre la fenêtre
+            const windowWidth = window.innerWidth * 0.8; // 80% de la largeur de l'écran
+            const windowHeight = window.innerHeight * 0.8; // 80% de la hauteur de l'écran
+            const x = (window.innerWidth - windowWidth) / 2;
+            const y = (window.innerHeight - windowHeight) / 2;
+            return { x, y, width: windowWidth, height: windowHeight };
+        } else {
+            // Sur un écran de PC, place la fenêtre de manière aléatoire
+            const windowWidth = window.innerWidth * 0.5; // 50% de la largeur de l'écran
+            const windowHeight = window.innerHeight * 0.5; // 50% de la hauteur de l'écran
+            const x = Math.random() * (window.innerWidth - windowWidth);
+            const y = Math.random() * (window.innerHeight - windowHeight);
+            return { x, y, width: windowWidth, height: windowHeight };
+        }
     };
 
     return (
@@ -68,7 +76,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
                 height: 220,
             }}
             minWidth={350}
-            minHeight={380}
+            minHeight={220}
             className="window"
             disableDragging={isMobileScreen()}
             position={isMobileScreen()}
@@ -78,7 +86,7 @@ const SignIn = ({ closeWindow, switchToSignUp, setLoginStatus, loginStatus }) =>
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />
-                    <button aria-label="Close" onClick={closeWindow} onTouch={closeWindow} />
+                    <button aria-label="Close" onClick={closeWindow} onTouchStart={closeWindow} />
                 </div>
             </div>
             <div className="window-body">

@@ -59,7 +59,7 @@ const TwitchWindow = ({ closeWindow }) => {
                     <div className="title-bar-controls">
                         <button aria-label="Minimize" />
                         <button aria-label="Maximize" />
-                        <button aria-label="Close" onClick={closeWindow} onTouch={closeWindow} />
+                        <button aria-label="Close" onClick={closeWindow} onTouchStart={closeWindow} />
                     </div>
                 </div>
 

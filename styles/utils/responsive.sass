@@ -1,6 +1,6 @@
 // Tailles d'écrans pour les médias queries
 $small-screen: 600px
-$medium-screen: 768px
+$medium-screen: 820px
 $large-screen: 1024px
 
 // Styles pour les petits écrans (téléphone)
@@ -11,13 +11,6 @@ $large-screen: 1024px
     .container
         max-width: 90%
 
-    // Styles pour la fenêtre Articles.exe en plein écran
-    .window
-        width: 100% !important
-        height: calc(100% - 40px) !important // Ajuste la hauteur pour laisser place à la Title Bar
-        position: fixed !important
-        user-drag: none // Désactive l'interaction avec la souris
-
         // Customise la "title-bar" sur téléphone
     .title-bar
         margin-top: 18px
@@ -27,7 +20,21 @@ $large-screen: 1024px
             transform: scale(1.5) // Double la taille des boutons dans title-bar-controls
             margin-right: 15px
 
+
+    // Styles pour la fenêtre Articles.exe en plein écran
+    .window
+        top: 500px
+        width: 100% !important
+        height: calc(100% - 80px) !important // Ajuste la hauteur pour laisser place à la Title Bar
+        position: fixed !important
+        user-drag: none // Désactive l'interaction avec la souris
+
+    .window-body
+        height: calc(100% - 100px)
+
+    // Customise la "status-bar" sur téléphone
     .status-bar
+        bottom: -34px
         margin-bottom: 35px
 
 
@@ -38,6 +45,26 @@ $large-screen: 1024px
 
     .container
         max-width: 80%
+
+        // Customise la "title-bar" sur tablette
+    .title-bar
+        font-size: 2em
+
+        .title-bar-controls button
+            transform: scale(1.5) // Double la taille des boutons dans title-bar-controls
+            margin-right: 15px
+
+        // Styles pour la fenêtre Articles.exe en plein écran
+    .window
+        height: calc(100% - 80px) !important // Ajuste la hauteur pour laisser place à la Title Bar
+
+    .window-body
+        height: calc(100% - 90px)
+
+    // Customise la "status-bar" sur téléphone
+    .status-bar
+        bottom: -30px
+        margin-bottom: 35px
 
 // Styles pour les grands écrans (ordinateurs)
 @media screen and (min-width: $medium-screen + 1) and (max-width: $large-screen)
