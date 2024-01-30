@@ -44,7 +44,7 @@ const Window = ({ articleData, closeWindow, onClick, zIndex }) => {
                     height: 220,
                 }}
                 minWidth={350}
-                minHeight={380}
+                minHeight={220}
                 className="window"
                 onClick={onClick}
                 position={isMobileScreen()}
@@ -55,7 +55,7 @@ const Window = ({ articleData, closeWindow, onClick, zIndex }) => {
                     <div className="title-bar-controls">
                         <button aria-label="Minimize" />
                         <button aria-label="Maximize" />
-                        <button aria-label="Close" onClick={closeWindow} onTouch={closeWindow} />
+                        <button aria-label="Close" onClick={closeWindow} onTouchStart={closeWindow} />
                     </div>
                 </div>
 

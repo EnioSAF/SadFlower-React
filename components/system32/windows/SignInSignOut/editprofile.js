@@ -107,8 +107,8 @@ const handleSaveAvatar = async (newAvatar) => {
                 width: 360,
                 height: 550,
             }}
-            minWidth={360}
-            minHeight={550}
+            minWidth={350}
+            minHeight={220}
             className="window"
             disableDragging={isMobileScreen()}
             position={isMobileScreen()}
@@ -118,7 +118,7 @@ const handleSaveAvatar = async (newAvatar) => {
                 <div className="title-bar-controls">
                     <button aria-label="Minimize" />
                     <button aria-label="Maximize" />
-                    <button aria-label="Close" onClick={closeWindow} onTouch={closeWindow} />
+                    <button aria-label="Close" onClick={closeWindow} onTouchStart={closeWindow} />
                 </div>
             </div>
             <div className="window-body">
