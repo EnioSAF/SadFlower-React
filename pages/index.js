@@ -142,8 +142,7 @@ function HomePage() {
           content='Enio, enio, ENIO, sadflower, SADFLOWER, SadFlower, Enio SadFlower, ENIO SADFLOWER, enio sadflower, sadflowerhub, SadFlowerHub, SadFlower Hub, SadFlowerCorp, sadflowercorp'
         />
         <meta name='author' content='Enio SadFlower' />
-        <meta name='viewport' content='responsiv' />
-        <meta charset='UTF-8' />
+        <meta charSet='UTF-8' />
         <html lang='fr' />
         <meta property='og:title' content='' />
         <meta
@@ -157,8 +156,6 @@ function HomePage() {
           name='twitter:description'
           content='LE MONDE DE LA SADFLOWER DANS UN SEUL ET MÊME PORTAIL. PORTOFOLIO/CV/MUSIQUE/CREATIONS...'
         />
-        <meta name='twitter:image' content='URL de votre image ici' />
-        <meta name='twitter:card' content='summary_large_image' />
       </Head>
             <Image
               className='overlaycrt-image'
