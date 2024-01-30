@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import { API } from "/components/Tools/SignInOut/constant";
+
 import { PixelArtCard } from "react-pixelart-face-card";
+import { Tilt } from 'react-next-tilt';
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -81,6 +83,9 @@ const UserList = ({ closeWindow }) => {
             <div key={user.id} className='user-card'>
               <div className='user-avatar'>
                 {user.avatar && (
+                  <Tilt
+                  // fullPageListening
+                  >
                   <PixelArtCard
                     size={100}
                     color={user.avatar.baseColor}
@@ -121,6 +126,7 @@ const UserList = ({ closeWindow }) => {
                       color={user.avatar.neckAccessoryColor}
                     />
                   </PixelArtCard>
+                  </Tilt>
                 )}
               </div>
               <div className='user-info'>
