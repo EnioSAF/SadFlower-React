@@ -24,4 +24,4 @@ Le site : Ici, on est sur le SadFlower HUB. C'est là qu'Enio regroupe toutes ce
 Le site est régulièrement mis à jour et est inspiré de Windows95.
 `;
 
-export default chatGptConfig
+export default chatGptConfig;
