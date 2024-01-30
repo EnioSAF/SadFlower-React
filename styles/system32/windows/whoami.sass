@@ -6,28 +6,58 @@
 
 .sections-container
     display: flex
-    flex-direction: row
+    flex-direction: column
     gap: 10px
 
-    // Section gauche
+    // Section Presentation
 
-.section-left
-    flex: 0 0 40%
+.section-presentation
+    display: flex
+    flex-direction: row
+    background: #eddcf1
+
+.Presentations
     display: flex
     flex-direction: column
-    background: #eddcf1
+    flex: 0 0 60%
+    align-items: center
+    align-content: center
+    justify-content: center
+    gap: 10px
+
+.ProfilePicture
+    position: sticky
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 10px
+    width: 20%
+    border: 2px solid #0078D7 // Un bon vieux bleu Windows 95.
+    border-radius: 10px // Les coins arrondis, ça claque.
+    background: #FFF // Pour que ça ressorte sur le fond.
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) // Un peu d'ombre pour le style.
+
+.AboutMe
+    display: flex
+    flex-direction: column
+    align-items: center
+    padding: 10px
+    border: 2px solid #0078D7 // Un bon vieux bleu Windows 95.
+    border-radius: 10px // Les coins arrondis, ça claque.
+    background: #FFF // Pour que ça ressorte sur le fond.
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) // Un peu d'ombre pour le style.
+
 
     // Style de ChatGPT
 
 .ChatGPT
+    display: flex
+    flex-direction: column
+    padding: 10px
     background: #000
     color: #fff
     border: 2px solid #ffffff
-    display: flex
-    flex-direction: column
     justify-content: flex-end
-    padding: 10px
-    height: 400px
     overflow-y: auto
 
 .ti-cursor
@@ -86,28 +116,23 @@
     width: 50px
     height: auto
 
-    //  Section droite
+    //  Section Experience
 
-.section-right
-    flex: 0 0 65%
+.section-experience
     display: flex
     flex-direction: column
+    align-items: center
+    align-content: center
+    justify-content: center
     background: #b8cdda
-
-    // Section GitCalendar
-
-.GitCalendar
-    border: 2px solid #000
-    background: #f4f4f4
-    padding: 10px
-    width: 400px
-    height: 200px
+    gap: 10px
 
     // Section Stats
 
 .Stats
     display: flex
     flex-direction: column
+    width: 80%
 
 .skill
     width: 100%
@@ -130,14 +155,22 @@
     background-color: #57b95f
 
 .progress-bar
-    width: 50%
+    width: 100%
     background-color: #7c7c7c
     height: 20px
     border-radius: 4px
 
+    // Section GitCalendar
+
+.GitCalendar
+    border: 2px solid #000
+    background: #f4f4f4
+    padding: 10px
+    width: 500px
+    height: 300px
+
     // Style section en bas (timeline)
 
 .Parcours
-    flex: 0 0 100% // Prend toute la largeur
     flex-direction: column
     background: #b5d6ba
