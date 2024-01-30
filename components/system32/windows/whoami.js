@@ -9,6 +9,7 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import { PixelArtCard } from "react-pixelart-face-card";
+import { Tilt } from 'react-next-tilt';
 
 import chatGptConfig from "@/components/system32/applications/chatgptconfig";
 
@@ -172,6 +173,10 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
             <div className='section-presentation'>
               <div className='Presentations'>
                 <div className='ProfilePicture'>
+                <Tilt
+                scale={1.2}
+                spotGlareColor="#febfff"
+                >
                   <PixelArtCard
                     size={100}
                     color="#7f85e1"
@@ -188,6 +193,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     <PixelArtCard.MouthAccessory value="none" color="#d3ab53" />
                     <PixelArtCard.NeckAccessory value="neck-accessory-5" color="#117486" />
                   </PixelArtCard>
+                  </Tilt>
                 </div>
                 <div className='AboutMe'>
                   <p>{`Je m'appelle Enio SADFLOWER, j'ai 25 ans et j'habite à Villeurbanne. Je suis un grand
@@ -259,7 +265,14 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                                   </u>
                                   :
                                 </p>
-                                <TypeIt>
+                                <TypeIt
+                                  options={{
+                                    speed: 0.8,
+                                    waitUntilVisible: false,
+                                    lifelike: true,
+                                    cursorChar: " ",
+                                  }}
+                                >
                                   <p>{message.content}</p>
                                 </TypeIt>
                               </div>
