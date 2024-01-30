@@ -1,11 +1,11 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#36004b",
-        "titleBar.activeBackground": "#2e2433",
-        "titleBar.activeForeground": "#d5afeb"
-    },
-    "cmake.configureOnOpen": false,
-    "deepscan.enable": true,
-    "todo-tree.tree.showBadges": true,
-    "todo-tree.tree.disableCompactFolders": true
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#36004b",
+    "titleBar.activeBackground": "#2e2433",
+    "titleBar.activeForeground": "#d5afeb"
+  },
+  "cmake.configureOnOpen": false,
+  "deepscan.enable": true,
+  "todo-tree.tree.showBadges": true,
+  "todo-tree.tree.disableCompactFolders": true
 }
