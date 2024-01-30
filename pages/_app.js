@@ -4,7 +4,7 @@ import AuthProvider from "@/components/Tools/SignInOut/AuthProvider";
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
     return (
         <AuthProvider>
-            <Head>
+            {/* <Head>
                 <title>SadFlower HUB</title>
                 <meta name="description" content="LE MONDE DE LA SADFLOWER DANS UN SEUL ET MÊME PORTAIL. PORTOFOLIO/CV/MUSIQUE/CREATIONS..." />
                 <meta name="keywords" content="Enio, enio, ENIO, sadflower, SADFLOWER, SadFlower, Enio SadFlower, ENIO SADFLOWER, enio sadflower, sadflowerhub, SadFlowerHub, SadFlower Hub, SadFlowerCorp, sadflowercorp" />
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                 <meta name="twitter:description" content="LE MONDE DE LA SADFLOWER DANS UN SEUL ET MÊME PORTAIL. PORTOFOLIO/CV/MUSIQUE/CREATIONS..." />
                 <meta name="twitter:image" content="URL de votre image ici" />
                 <meta name="twitter:card" content="summary_large_image" />
-            </Head>
+            </Head> */}
             <Component {...pageProps} />
         </AuthProvider>
     );
