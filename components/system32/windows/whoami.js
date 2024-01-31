@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
-
 import axios from "axios";
+
 import TypeIt from "typeit-react";
 import GitHubCalendar from "react-github-calendar";
 import {
@@ -19,7 +19,7 @@ import "/styles/system32/windows/whoami.sass";
 import "react-vertical-timeline-component/style.min.css";
 
 const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
-  // Pour ChatGPT
+  // - Pour ChatGPT
   const [output, setOutput] = useState("");
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -116,7 +116,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
     }
   }, [output]);
 
-  // Fonction pour vérifier la taille de l'écran
+  // - Fonction pour vérifier la taille de l'écran
   const isMobileScreen = () => window.innerWidth <= 600;
 
   // Fonction pour centrer la fenêtre
@@ -129,11 +129,13 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
       const y = (window.innerHeight - windowHeight) / 2;
       return { x, y, width: windowWidth, height: windowHeight };
     } else {
-      // Sur un écran de PC, place la fenêtre de manière aléatoire
+      // Sur un écran de PC
       const windowWidth = window.innerWidth * 0.5; // 50% de la largeur de l'écran
       const windowHeight = window.innerHeight * 0.5; // 50% de la hauteur de l'écran
-      const x = Math.random() * (window.innerWidth - windowWidth);
-      const y = Math.random() * (window.innerHeight - windowHeight);
+      const xOffset = 0; // Petit décalage horizontal
+      const yOffset = -225; // Petit décalage vertical
+      const x = (window.innerWidth - windowWidth) / 2 + xOffset;
+      const y = (window.innerHeight - windowHeight) / 2 + yOffset;
       return { x, y, width: windowWidth, height: windowHeight };
     }
   };
