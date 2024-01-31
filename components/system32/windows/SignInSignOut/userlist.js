@@ -80,60 +80,61 @@ const UserList = ({ closeWindow }) => {
       <div className='window-body'>
         <div className='user-list'>
           {users.map((user) => (
-            <div key={user.id} className='user-card'>
-              <div className='user-avatar'>
-                {user.avatar && (
-                  <Tilt
-                  // fullPageListening
-                  >
-                  <PixelArtCard
-                    size={100}
-                    color={user.avatar.baseColor}
-                    hoverColor={user.avatar.hoverColor}
-                  >
-                    <PixelArtCard.Hair
-                      value={user.avatar.hair}
-                      color={user.avatar.hairColor}
-                    />
-                    <PixelArtCard.HeadAccessory
-                      value={user.avatar.headAccessory}
-                      color={user.avatar.headAccessoryColor}
-                    />
-                    <PixelArtCard.Eyes
-                      value={user.avatar.eyes}
-                      color={user.avatar.eyesColor}
-                    />
-                    <PixelArtCard.EyesAccessory
-                      value={user.avatar.eyesAccessory}
-                      color={user.avatar.eyesAccessoryColor}
-                    />
-                    <PixelArtCard.EarAccessory
-                      value={user.avatar.earAccessory}
-                      color={user.avatar.earAccessoryColor}
-                    />
-                    <PixelArtCard.Nose value={user.avatar.nose} />
-                    <PixelArtCard.Beard value={user.avatar.beard} />
-                    <PixelArtCard.Mouth
-                      value={user.avatar.mouth}
-                      color={user.avatar.mouthColor}
-                    />
-                    <PixelArtCard.MouthAccessory
-                      value={user.avatar.mouthAccessory}
-                      color={user.avatar.mouthAccessoryColor}
-                    />
-                    <PixelArtCard.NeckAccessory
-                      value={user.avatar.neckAccessory}
-                      color={user.avatar.neckAccessoryColor}
-                    />
-                  </PixelArtCard>
-                  </Tilt>
-                )}
+            <Tilt
+            key={user.id}
+            borderRadius="20%"
+            >
+              <div key={user.id} className='user-card'>
+                <div className='user-avatar'>
+                  {user.avatar && (
+                    <PixelArtCard
+                      size={100}
+                      color={user.avatar.baseColor}
+                      hoverColor={user.avatar.hoverColor}
+                    >
+                      <PixelArtCard.Hair
+                        value={user.avatar.hair}
+                        color={user.avatar.hairColor}
+                      />
+                      <PixelArtCard.HeadAccessory
+                        value={user.avatar.headAccessory}
+                        color={user.avatar.headAccessoryColor}
+                      />
+                      <PixelArtCard.Eyes
+                        value={user.avatar.eyes}
+                        color={user.avatar.eyesColor}
+                      />
+                      <PixelArtCard.EyesAccessory
+                        value={user.avatar.eyesAccessory}
+                        color={user.avatar.eyesAccessoryColor}
+                      />
+                      <PixelArtCard.EarAccessory
+                        value={user.avatar.earAccessory}
+                        color={user.avatar.earAccessoryColor}
+                      />
+                      <PixelArtCard.Nose value={user.avatar.nose} />
+                      <PixelArtCard.Beard value={user.avatar.beard} />
+                      <PixelArtCard.Mouth
+                        value={user.avatar.mouth}
+                        color={user.avatar.mouthColor}
+                      />
+                      <PixelArtCard.MouthAccessory
+                        value={user.avatar.mouthAccessory}
+                        color={user.avatar.mouthAccessoryColor}
+                      />
+                      <PixelArtCard.NeckAccessory
+                        value={user.avatar.neckAccessory}
+                        color={user.avatar.neckAccessoryColor}
+                      />
+                    </PixelArtCard>
+                  )}
+                </div>
+                <div className='user-info'>
+                  <h3>{user.username}</h3>
+                  {/* Autres informations de l'utilisateur si nécessaire */}
+                </div>
               </div>
-              <div className='user-info'>
-                <h3>{user.username}</h3>
-                {/* Autres informations de l'utilisateur si nécessaire */}
-              </div>
-            </div>
+            </Tilt>
           ))}
         </div>
       </div>
