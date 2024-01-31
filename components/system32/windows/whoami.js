@@ -11,6 +11,7 @@ import {
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
+import { MagneticScroll, MagneticPage } from 'react-magnetic-scroll';
 
 import chatGptConfig from "@/components/system32/applications/chatgptconfig";
 
@@ -180,7 +181,6 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 className="Presentations"
                 speed={1}
               >
-                <div className='Presentations'>
                   <Tilt
                     scale={1.05}
                     spotGlareColor="#febfff"
@@ -219,7 +219,6 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     `}
                     </p>
                   </div>
-                </div>
                 <div className='ChatGPT'>
                   <div className='output-section'>
                     <div className='message-history'>
