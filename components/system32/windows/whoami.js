@@ -11,7 +11,6 @@ import {
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { MagneticScroll, MagneticPage } from 'react-magnetic-scroll';
 
 import chatGptConfig from "@/components/system32/applications/chatgptconfig";
 
