@@ -108,7 +108,9 @@ const ArticleExe = ({ onClose, zIndex }) => {
         </div>
 
         <div className='window-body'>
+          <div className="titre-sectionsarticles">
           <h3>La Crème</h3>
+          </div>
           <div className='upper-section'>
             {featuredBlogs &&
               featuredBlogs.data &&
@@ -130,7 +132,9 @@ const ArticleExe = ({ onClose, zIndex }) => {
 
           <div className='section-divider'></div>
 
+          <div className="titre-sectionsarticles">
           <h3>Les Articles</h3>
+          </div>
           <div className='lower-section'>
             {blogs &&
               blogs.data &&
