@@ -185,6 +185,8 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     scale={1.05}
                     spotGlareColor="#febfff"
                     borderRadius="20%"
+                    gyroMaxAngleX={50}
+                    gyroMaxAngleY={50}
                   >
                     <div className='ProfilePicture'>
                       <PixelArtCard
