@@ -38,12 +38,11 @@
     "react-pixelart-face-card": "^1.1.7",
     "react-rnd": "^10.4.1",
     "react-router-dom": "^6.18.0",
-    "react-scroll-snap": "^1.0.0",
-    "react-slick": "^0.30.1",
+
     "react-twitch-embed": "^3.0.1",
     "react-vertical-timeline-component": "^3.6.0",
     "sass": "^1.66.1",
-    "slick-carousel": "^1.8.1",
+
     "tailwindcss": "3.3.3",
     "typeit-react": "^2.7.0"
   },
