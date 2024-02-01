@@ -1,0 +1,72 @@
+
+.SkillCardContainer
+    display: flex
+    flex-wrap: wrap // Permet aux cartes de passer à la ligne si nécessaire
+    justify-content: center // Centre les cartes horizontalement
+    align-items: flex-start // Alignement vertical au début des cartes
+    // overflow: auto // Active le scroll si les cartes débordent
+    padding: 20px // Ajoute un peu d'espace autour des cartes
+    gap: 20px // Espacement entre les cartes
+    height: 120%
+
+.skill-card
+    cursor: pointer
+    width: 300px // Taille de la carte, ajuste comme tu veux
+    height: 400px // Taille de la carte, ajuste comme tu veux
+    position: relative // Important pour positionner front et back absolument
+
+    &-front, &-back
+        backface-visibility: hidden
+        transition: transform 0.6s, box-shadow 0.3s
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        border-radius: 10px
+        display: flex
+        align-items: center
+        justify-content: center
+        flex-direction: column
+
+    &:hover
+        &-front
+            transform: translateY(-20px)
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3)
+
+    &-front
+        z-index: 2
+        background-color: white // Couleur du recto
+
+    &-back
+        transform: rotateY(180deg)
+        z-index: 1
+        background-color: #f0f0f0 // Couleur du verso
+        overflow: hidden // Pour éviter les débordements
+
+    img
+        max-width: 90% // Pour contrôler la taille de l'illustration
+        max-height: 50%
+        margin-bottom: 20px
+
+    .progress-bar
+        width: 80% // Ajuste la largeur selon tes préférences
+        height: 20px // Hauteur de la barre de progression
+        background-color: #e0e0e0 // Couleur de fond de la barre de progression
+        border-radius: 10px // Arrondir les coins
+        overflow: hidden // Pour garder la progression à l'intérieur de la barre
+        margin: 10px 0 // Espacement entre les barres
+
+    .progress
+        height: 100%
+        background-color: #4caf50 // Couleur de la progression
+        border-radius: 10px 0 0 10px // Arrondir seulement le coin gauche
+        transition: width 0.6s ease // Animation fluide de la barre de progression
+
+.flipped
+    .skill-card-front
+        transform: rotateY(180deg)
+
+    .skill-card-back
+        transform: rotateY(0deg)
+        z-index: 2

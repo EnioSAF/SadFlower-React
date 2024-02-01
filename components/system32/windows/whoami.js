@@ -6,8 +6,9 @@ import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 
-import TimeLineEnio from "./WhoAmI/VerticalTimeline";
+import SkillCard from "./WhoAmI/SkillCard";
 import ChatGPTModule from "./WhoAmI/ChatGPTModule";
+import TimeLineEnio from "./WhoAmI/VerticalTimeline";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -122,70 +123,34 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
               </ParallaxLayer>
               <ParallaxLayer
                 className="section-experience"
-                offset={1}
-                speed={0.5}
+                offset={1} d
+                speed={0.2}
               >
-                <div className='Stats'>
-                  <h2>Skills</h2>
-                  <div className='skill'>
-                    <p>Social :</p>
-                  </div>
-                  <div className='progress-bar'>
-                    <div className='progress' style={{ width: "90%" }}>
-                      90%
-                    </div>
-                  </div>
-
-                  <div className='skill'>
-                    <p>Anglais :</p>
-                  </div>
-                  <div className='progress-bar'>
-                    <div className='progress' style={{ width: "90%" }}>
-                      90%
-                    </div>
-                  </div>
-
-                  <h4>Informatique</h4>
-                  <div className='skill'>
-                    <p>HTML :</p>
-                  </div>
-                  <div className='progress-bar'>
-                    <div className='progress' style={{ width: "90%" }}>
-                      90%
-                    </div>
-                  </div>
-
-                  <div className='skill'>
-                    <p>CSS :</p>
-                  </div>
-                  <div className='progress-bar'>
-                    <div className='progress' style={{ width: "65%" }}>
-                      65%
-                    </div>
-                  </div>
-
-                  <div className='skill'>
-                    <p>JAVASCRIPT :</p>
-                  </div>
-                  <div className='progress-bar'>
-                    <div className='progress' style={{ width: "50%" }}>
-                      50%
-                    </div>
-                  </div>
-                </div>
-                <div className='GitCalendar'>
-                  <h2>Git Activity</h2>
-                  <GitHubCalendar
-                    username='EnioSAF'
-                    year={2024}
-                    showWeekdayLabels='true'
-                    weekStart='1'
-                    maxLevel='4'
-                    colorScheme='dark'
-                  />
-                  <a href='https://github.com/EnioSAF/' target='_blank'>
-                    <p color='green'>GitHub</p>
-                  </a>
+                <div className="SkillCardContainer">
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80, 70]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80, 70]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80, 70]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
                 </div>
               </ParallaxLayer>
               <ParallaxLayer
@@ -204,7 +169,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
           <p className='status-bar-field'>Slide 1</p>
           <p className='status-bar-field'>CPU Usage: 14%</p>
         </div>
-      </Rnd>
+      </Rnd >
     </>
   );
 };
