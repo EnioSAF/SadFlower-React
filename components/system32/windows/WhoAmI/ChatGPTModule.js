@@ -4,7 +4,7 @@ import TypeIt from 'typeit-react';
 
 import chatGptConfig from "@/components/system32/applications/chatgptconfig";
 
-import "/styles/system32/windows/WhoAmI/chatgptmodule.sass";
+import "/styles/system32/windows/WhoAmI/ChatGPTModule.sass";
 
 const ChatGPTModule = ({ username, maxTokens }) => {
   const [input, setInput] = useState("");
