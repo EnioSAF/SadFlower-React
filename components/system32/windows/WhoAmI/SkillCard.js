@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import '/styles/system32/windows/WhoAmI/SkillCard.sass'; // Crée ton fichier SASS ici
 
-const SkillCard = ({ title, levels, description, illustration }) => {
+const SkillCard = ({ title, levels, description, illustration, labels }) => {
   const [flipped, setFlipped] = useState(false);
 
   const { transform, opacity } = useSpring({
@@ -16,8 +16,13 @@ const SkillCard = ({ title, levels, description, illustration }) => {
       <animated.div className="skill-card-front" style={{ opacity: opacity.interpolate(o => 1 - o), transform }}>
         <h3>{title}</h3>
         {levels.map((level, index) => (
-          <div key={index} className="progress-bar">
-            <div className="progress" style={{ width: `${level}%` }}></div>
+          <div key={index}>
+            <div className='Level'>
+              <div className="label">{labels[index]}</div>
+              <div className="progress-bar">
+                <div className="progress" style={{ width: `${level}%` }}></div>
+              </div>
+            </div>
           </div>
         ))}
       </animated.div>
