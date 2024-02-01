@@ -131,6 +131,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     <SkillCard
                       title="HTML"
                       levels={[90, 80, 70]}
+                      labels={["Niveau 1", "Niveau 2", "Niveau 3"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
                     />
@@ -139,6 +140,16 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     <SkillCard
                       title="HTML"
                       levels={[90, 80, 70]}
+                      labels={["Niveau 1", "Niveau 2", "Niveau 3"]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80]}
+                      labels={["Niveau 1", "Niveau 2"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
                     />
@@ -147,6 +158,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     <SkillCard
                       title="HTML"
                       levels={[90, 80, 70]}
+                      labels={["Niveau 1", "Niveau 2", "Niveau 3"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
                     />
@@ -155,14 +167,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                     <SkillCard
                       title="HTML"
                       levels={[90, 80, 70]}
-                      description="Maîtrise de HTML, création de structures de page, etc."
-                      illustration="/Photo/13.png"
-                    />
-                  </Tilt>
-                  <Tilt>
-                    <SkillCard
-                      title="HTML"
-                      levels={[90, 80, 70]}
+                      labels={["Niveau 1", "Niveau 2", "Niveau 3"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
                     />

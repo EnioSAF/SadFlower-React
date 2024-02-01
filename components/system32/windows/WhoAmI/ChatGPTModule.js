@@ -11,7 +11,9 @@ const ChatGPTModule = ({ username, maxTokens }) => {
   const [output, setOutput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [messageHistory, setMessageHistory] = useState([]);
-  const [tokensUsed, setTokensUsed] = useState(null);
+  const [tokensUsed, setTokensUsed] = useState(0);
+
+  const responseTokenLimit = 20; // Défini une limite de tokens par réponse
 
   const clearInput = () => {
     setInput("");
@@ -36,7 +38,7 @@ const ChatGPTModule = ({ username, maxTokens }) => {
         apiUrl,
         {
           messages,
-          max_tokens: maxTokens - tokensUsed, // Limite le nombre de tokens restants
+          max_tokens: Math.min(responseTokenLimit, maxTokens - tokensUsed),
           model: "gpt-3.5-turbo",
         },
         {
@@ -62,7 +64,6 @@ const ChatGPTModule = ({ username, maxTokens }) => {
     } catch (error) {
       console.error("Erreur lors de la requête à l'API GPT-3 :", error.message);
 
-      // Vérifie si la propriété 'response' est définie avant d'y accéder
       if (error.response) {
         console.error("Réponse détaillée de l'API:", error.response.data);
       } else {
@@ -188,7 +189,9 @@ const ChatGPTModule = ({ username, maxTokens }) => {
         onClick={() => {
           handleCommand();
           clearInput();
-        }}>
+        }}
+        disabled={!input.trim()}
+        >
         Send Command
       </button>
     )}
