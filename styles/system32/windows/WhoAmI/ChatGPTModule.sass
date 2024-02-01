@@ -1,0 +1,66 @@
+.ChatGPT
+    display: flex
+    flex-direction: column
+    padding: 10px
+    width: 80%
+    height: 100%
+    background: #000
+    color: #fff
+    border: 2px solid #ffffff
+    justify-content: flex-end
+    overflow-y: auto
+
+.ti-cursor
+    display: none !important
+
+.message-history
+    display: flex
+    flex-direction: column
+    gap: 5px
+
+    .user, .assistant
+        display: flex
+        padding: 5px
+        border-radius: 4px
+        margin-bottom: 2px
+
+    .user
+        justify-content: flex-end
+        background-color: #333
+        gap: 10px
+
+        p
+            background: #44812c
+            color: white
+            padding: 5px
+            border-radius: 10px
+
+    .assistant
+        justify-content: flex-start
+        background-color: #111111
+
+        p
+            background: #5c5c5c
+            color: white
+            padding: 5px
+            border-radius: 10px
+
+.output-section
+    img
+        width: 50px
+        height: auto
+        margin-right: 10px
+
+.message-history
+    overflow-y: auto
+    max-height: 400px
+    gap: 5px
+
+.avatar-message
+    display: flex
+    align-items: center
+    gap: 10px
+
+.avatar-image
+    width: 50px
+    height: auto
