@@ -1,19 +1,21 @@
 
 .SkillCardContainer
-    display: flex
-    flex-wrap: wrap // Permet aux cartes de passer à la ligne si nécessaire
-    justify-content: center // Centre les cartes horizontalement
-    align-items: flex-start // Alignement vertical au début des cartes
-    // overflow: auto // Active le scroll si les cartes débordent
-    padding: 20px // Ajoute un peu d'espace autour des cartes
-    gap: 20px // Espacement entre les cartes
-    height: 120%
+    display: flex // Active le layout Flexbox
+    overflow-x: auto // Active le scrolling horizontal
+    overflow-y: hidden // Cache le scrolling vertical
+    white-space: nowrap // Empêche les éléments de passer à la ligne
+    padding: 10px // Ajoute un peu de padding vertical pour respirer
+    gap: 20px
 
 .skill-card
     cursor: pointer
-    width: 300px // Taille de la carte, ajuste comme tu veux
-    height: 400px // Taille de la carte, ajuste comme tu veux
+    min-width: 300px // Taille de la carte, ajuste comme tu veux
+    min-height: 400px // Taille de la carte, ajuste comme tu veux
     position: relative // Important pour positionner front et back absolument
+    gap: 10px
+    width: 200px
+
+
 
     &-front, &-back
         backface-visibility: hidden

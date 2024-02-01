@@ -151,6 +151,22 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       illustration="/Photo/13.png"
                     />
                   </Tilt>
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80, 70]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
+                  <Tilt>
+                    <SkillCard
+                      title="HTML"
+                      levels={[90, 80, 70]}
+                      description="Maîtrise de HTML, création de structures de page, etc."
+                      illustration="/Photo/13.png"
+                    />
+                  </Tilt>
                 </div>
               </ParallaxLayer>
               <ParallaxLayer
