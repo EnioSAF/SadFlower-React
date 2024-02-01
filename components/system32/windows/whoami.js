@@ -174,6 +174,20 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 offset={2}
                 speed={1}
               >
+                                <div className='GitCalendar'>
+                    <h2>Git Activity</h2>
+                    <GitHubCalendar
+                      username='EnioSAF'
+                      year={2024}
+                      showWeekdayLabels='true'
+                      weekStart='1'
+                      maxLevel='4'
+                      colorScheme='dark'
+                    />
+                    <a href='https://github.com/EnioSAF/' target='_blank'>
+                      <p color='green'>GitHub</p>
+                    </a>
+                  </div>
                 <TimeLineEnio />
               </ParallaxLayer>
             </Parallax>
