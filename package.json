@@ -12,6 +12,8 @@
   "dependencies": {
     "@react-spring/parallax": "^9.7.3",
     "@react-spring/web": "^9.7.3",
+    "@tsparticles/all": "^3.2.1",
+    "@tsparticles/react": "^3.0.0",
     "@vercel/analytics": "^1.1.1",
     "@vercel/speed-insights": "^1.0.0",
     "98.css": "^0.1.20",
@@ -38,11 +40,9 @@
     "react-pixelart-face-card": "^1.1.7",
     "react-rnd": "^10.4.1",
     "react-router-dom": "^6.18.0",
-
     "react-twitch-embed": "^3.0.1",
     "react-vertical-timeline-component": "^3.6.0",
     "sass": "^1.66.1",
-
     "tailwindcss": "3.3.3",
     "typeit-react": "^2.7.0"
   },
