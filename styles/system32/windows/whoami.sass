@@ -24,39 +24,54 @@
 
 .section-presentation
     display: flex
-    flex-direction: row
-
-.Presentations
-    display: flex
     flex-direction: column
     align-items: center
     align-content: center
     justify-content: center
     gap: 10px
 
-.ProfilePicture
-    position: sticky
-    display: flex
-    flex-direction: column
-    align-items: center
-    padding: 10px
-    margin-top: 10px
-    width: 80%
-    border: 2px solid #0078D7 // Un bon vieux bleu Windows 95.
-    border-radius: 10px // Les coins arrondis, ça claque.
-    background: #FFF // Pour que ça ressorte sur le fond.
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) // Un peu d'ombre pour le style.
+    .ProfilePicture
+        position: sticky
+        display: flex
+        flex-direction: column
+        align-items: center
+        padding: 10px
+        margin-top: 10px
+        width: 80%
+        border: 2px solid #0078D7
+        border-radius: 10px
+        background: linear-gradient(145deg, #ffb4fb73, #abfcff60)
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
 
-.AboutMe
+    .AboutMe
+        display: flex
+        flex-direction: column
+        align-items: center
+        padding: 10px
+        width: 80%
+        border: 2px solid #0078D7
+        border-radius: 10px
+        background: #FFF
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+        font-size: 1.25em
+
+    .GitCalendar
+        border: 2px solid #000
+        background: #f4f4f4
+        padding: 10px
+        width: 90%
+        height: auto
+
+        &:hover
+            transform: translateY(-5px)
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25)
+
+    // Section ChatGPT
+
+.section-chatGPT
     display: flex
     flex-direction: column
     align-items: center
-    padding: 10px
-    width: 80%
-    border: 2px solid #0078D7 // Un bon vieux bleu Windows 95.
-    border-radius: 10px // Les coins arrondis, ça claque.
-    background: #FFF // Pour que ça ressorte sur le fond.
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) // Un peu d'ombre pour le style.
 
     //  Section Experience
 
@@ -68,20 +83,10 @@
     justify-content: center
     gap: 10px
 
-    // Section GitCalendar
-
-.GitCalendar
-    border: 2px solid #000
-    background: #f4f4f4
-    padding: 10px
-    width: 90%
-    height: 60%
-
     // Style section en bas (timeline)
 
-.Parcours
+.section-timeline
     display: flex
     flex-direction: column
     overflow: auto
     align-items: center
-    padding-bottom: 500px
