@@ -5,6 +5,9 @@ import GitHubCalendar from "react-github-calendar";
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
+import { Particles, initParticlesEngine } from "@tsparticles/react";
+import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
+import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
 
 import SkillCard from "./WhoAmI/SkillCard";
 import ChatGPTModule from "./WhoAmI/ChatGPTModule";
