@@ -29,9 +29,17 @@ const TaskBar = ({
         <span className='start-text'>Start</span>
       </button>
       {showStartMenu && (
-        <div className='start-menu'>
-          <h4>SadFlower OS.</h4>
-
+        <div className="start-menu">
+          <div className="start-menu-logocontainer">
+            <Image
+              className='taskbar-logo'
+              src='/Logo/ROTATE NOIR.gif'
+              alt='Taskbar Logo'
+              width={100}
+              height={100}
+            />
+            <p>SadFlower™ OS</p>
+          </div>
           {!user ? (
             <>
               <div className='auth-buttons'>
