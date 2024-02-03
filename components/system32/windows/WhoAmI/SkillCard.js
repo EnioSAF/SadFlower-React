@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSpring, animated } from '@react-spring/web';
 import '/styles/system32/windows/WhoAmI/SkillCard.sass'; // Crée ton fichier SASS ici
 
-const SkillCard = ({ title, levels, description, illustration, labels }) => {
+const SkillCard = ({ title, levels, description, illustration, labels, overlays, overlayPosition }) => {
   const [flipped, setFlipped] = useState(false);
 
   const { transform, opacity } = useSpring({
@@ -14,6 +14,9 @@ const SkillCard = ({ title, levels, description, illustration, labels }) => {
   return (
     <div className="skill-card" onClick={() => setFlipped(state => !state)}>
       <animated.div className="skill-card-front" style={{ opacity: opacity.interpolate(o => 1 - o), transform }}>
+        {overlays && overlays.map((overlay, index) => (
+          <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
+        ))}
         <h3>{title}</h3>
         {levels.map((level, index) => (
           <div key={index}>
@@ -27,6 +30,9 @@ const SkillCard = ({ title, levels, description, illustration, labels }) => {
         ))}
       </animated.div>
       <animated.div className="skill-card-back" style={{ opacity, transform: transform.interpolate(t => `${t} rotateY(180deg)`) }}>
+        {overlays && overlays.map((overlay, index) => (
+          <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
+        ))}
         <img src={illustration} alt={`${title} illustration`} />
         <p>{description}</p>
       </animated.div>
