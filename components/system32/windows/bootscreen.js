@@ -141,7 +141,7 @@ const BootsScreen = () => {
                   console.log("Attempting to play audio");
                   if (initSound.current) {
                     console.log("Sound is ready, playing...");
-                    initSound.current.volume = 0.2; // Baisser le volume de 50%
+                    initSound.current.volume = 0.1; // Baisser le volume de 50%
                     initSound.current.play();
                   }
                 })
