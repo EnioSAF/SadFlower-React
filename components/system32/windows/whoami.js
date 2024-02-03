@@ -22,20 +22,20 @@ import "react-vertical-timeline-component/style.min.css";
 const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
   const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
 
-  // - Pour les particules
-  const [init, setInit] = useState(false);
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-      await loadFull(engine);
-      setInit(true); // Indique que l'initialisation est terminée et que les particules peuvent être rendues
-    });
-  }, []);
+  // // - Pour les particules
+  // const [init, setInit] = useState(false);
+  // useEffect(() => {
+  //   initParticlesEngine(async (engine) => {
+  //     await loadFull(engine);
+  //     setInit(true); // Indique que l'initialisation est terminée et que les particules peuvent être rendues
+  //   });
+  // }, []);
 
-  // Pour le loading :
+  // // Pour le loading :
 
-  if (!init) {
-    return <div>Loading particles...</div>; // Affiche un loader ou un fallback tant que les particules ne sont pas prêtes
-  }
+  // if (!init) {
+  //   return <div>Loading particles...</div>; // Affiche un loader ou un fallback tant que les particules ne sont pas prêtes
+  // }
 
   // - Fonction pour vérifier la taille de l'écran
   const isMobileScreen = () => window.innerWidth <= 600;
