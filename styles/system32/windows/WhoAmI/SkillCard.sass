@@ -1,6 +1,7 @@
 
 .SkillCardContainer
     display: flex // Active le layout Flexbox
+    height: 102.5%
     overflow-x: auto // Active le scrolling horizontal
     overflow-y: hidden // Cache le scrolling vertical
     white-space: nowrap // Empêche les éléments de passer à la ligne
@@ -91,7 +92,7 @@
 
                 img
                     position: relative
-                    width: 100% // On prend une bonne partie de la carte
+                    width: 280px // On prend une bonne partie de la carte
                     height: 50% // On garde les proportions
                     border: 3px solid #dfbe51 // Un cadre pour l'image
                     border-radius: 10px // Toujours arrondi
@@ -121,7 +122,6 @@
                 .label
                     color: #000000 // ou la couleur que tu veux, frérot
                     font-weight: bold
-                    margin-bottom: 10px
                     width: 155px
                     margin-left: 100px
 
@@ -138,6 +138,34 @@
                     background-color: #4caf50 // Couleur de la progression
                     border-radius: 10px 0 0 10px // Arrondir seulement le coin gauche
                     transition: width 0.6s ease // Animation fluide de la barre de progression
+
+.skill-card-backDescription
+    display: flex
+    flex-direction: column
+    justify-content: center
+    height: 100%
+    width: 90%
+    border: 3px solid #dfbe51 // Un cadre pour l'image
+    border-radius: 10px // Toujours arrondi
+    background: #ffffffa2
+    padding: 10px
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3)
+    font-size: 1.1em
+    white-space: pre-line
+    word-wrap: break-word
+    overflow-wrap: break-word
+
+    p
+        display: flex
+        flex-direction: column
+        position: relative
+        height: 100px
+        font-size: 1.1em
+        font-weight:  bold
+        bottom: 130px
+
+    &:hover
+        scale: 2
 
 .flipped
 

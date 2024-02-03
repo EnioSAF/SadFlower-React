@@ -10,7 +10,9 @@ const ChatGPTModule = ({ username, maxTokens }) => {
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-  const [messageHistory, setMessageHistory] = useState([]);
+  const [messageHistory, setMessageHistory] = useState([
+    { role: "assistant", content: `Yo ! Bienvenue dans le module de discussion automatisé SadFlower Bot ! Tape ta quéstion et je te réponds direct. Je connais tout ce site comme ma poche, la vie d'Enio, ces derniers projets alors n'hésite pas !` },
+  ]);
   const [tokensUsed, setTokensUsed] = useState(0);
 
   const responseTokenLimit = 20; // Défini une limite de tokens par réponse
@@ -105,122 +107,129 @@ const ChatGPTModule = ({ username, maxTokens }) => {
 
   return (
     <div className='ChatGPT'>
-    <div className='output-section'>
-      <div className='message-history'>
-        {tokensUsed >= maxTokens ? (
-          <p style={{ color: "red" }}>
-            ERROR: ALL TOKENS ARE USED
-          </p>
-        ) : (
+      <div className='chatgpt-logo'>
+        <p>SadFlower BOT</p>
+      </div>
+      <div className='ChatGPT-content'>
+
+        <div className='output-section'>
           <div className='message-history'>
-            {messageHistory.map((message, index) => (
-              <div key={index} className={message.role}>
-                {message.role === "user" && (
-                  <>
-                    <p>
-                      <u>
-                        <b>{username ? username : "You"}</b>
-                      </u>
-                      :
-                    </p>
-                    <p>{message.content}</p>
-                  </>
-                )}
-                {message.role === "assistant" && (
-                  <div className='avatar-message'>
-                    <div className='avatar-image'>
-                      {index === messageHistory.length - 1 ? (
-                        // Utilise l'avatar "/Gif/EnioHeadstill.png" pour le dernier message
-                        <>
-                          {!isInputFocused && !gifVisible && (
+            {tokensUsed >= maxTokens ? (
+              <p style={{ color: "red" }}>
+                ERROR: ALL TOKENS ARE USED
+              </p>
+            ) : (
+              <div className='message-history'>
+                {messageHistory.map((message, index) => (
+                  <div key={index} className={message.role}>
+                    {message.role === "user" && (
+                      <>
+                        <p>
+                          <u>
+                            <b>{username ? username : "You"}</b>
+                          </u>
+                          :
+                        </p>
+                        <p>{message.content}</p>
+                      </>
+                    )}
+                    {message.role === "assistant" && (
+                      <div className='avatar-message'>
+                        <div className='avatar-image'>
+                          {index === messageHistory.length - 1 ? (
+                            // Utilise l'avatar "/Gif/EnioHeadstill.png" pour le dernier message
+                            <>
+                              {!isInputFocused && !gifVisible && (
+                                <img
+                                  src='/Gif/EnioHeadsleepin.png'
+                                  alt='EnioHeadsleepin'
+                                />
+                              )}
+                              {gifVisible && (
+                                <img
+                                  src='/Gif/EnioHead.gif'
+                                  alt='EnioHeadGif'
+                                />
+                              )}
+                              {isInputFocused && (
+                                <img
+                                  src='/Gif/EnioHeadstill.png'
+                                  alt='EnioHeadstill'
+                                />
+                              )}
+                            </>
+                          ) : (
+                            // Utilise l'avatar "/Gif/EnioHeadsleepin.png" pour les anciens messages
                             <img
                               src='/Gif/EnioHeadsleepin.png'
                               alt='EnioHeadsleepin'
                             />
                           )}
-                          {gifVisible && (
-                            <img
-                              src='/Gif/EnioHead.gif'
-                              alt='EnioHeadGif'
-                            />
-                          )}
-                          {isInputFocused && (
-                            <img
-                              src='/Gif/EnioHeadstill.png'
-                              alt='EnioHeadstill'
-                            />
-                          )}
-                        </>
-                      ) : (
-                        // Utilise l'avatar "/Gif/EnioHeadsleepin.png" pour les anciens messages
-                        <img
-                          src='/Gif/EnioHeadsleepin.png'
-                          alt='EnioHeadsleepin'
-                        />
-                      )}
-                    </div>
-                    <p>
-                      <u>
-                        <b>Enio</b>
-                      </u>
-                      :
-                    </p>
-                    <TypeIt
-                      options={{
-                        speed: 0.8,
-                        waitUntilVisible: false,
-                        lifelike: true,
-                        cursorChar: " ",
-                      }}
-                    >
-                      <p>{message.content}</p>
-                    </TypeIt>
+                        </div>
+                        <p>
+                          <u>
+                            <b>Enio</b>
+                          </u>
+                          :
+                        </p>
+                        <TypeIt
+                          options={{
+                            speed: 0.8,
+                            waitUntilVisible: false,
+                            lifelike: true,
+                            cursorChar: " ",
+                          }}
+                        >
+                          <p>{message.content}</p>
+                        </TypeIt>
+                      </div>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-            ))}
+            )}
           </div>
+        </div>
+        {isTyping && <p>Enio is typing...</p>}
+        {!isTyping && (
+          <button
+            onClick={() => {
+              handleCommand();
+              clearInput();
+            }}
+            disabled={!input.trim()}
+          >
+            Send Command
+          </button>
         )}
+        <div className='command-section'></div>
+        <div className='input-container'>
+          <textarea
+            className='textarea-chatpgt'
+            type='text'
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={
+              tokensUsed >= maxTokens
+                ? "No Tokens !"
+                : "Enter your command..."
+            }
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            rows='1' // Cette propriété permet à la barre de grandir avec le contenu
+            disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
+          />
+          <div className='information-section'>
+            {tokensUsed !== null && (
+              <p>
+                Nombre de tokens utilisés dans cette interaction :{" "}
+                {tokensUsed}/{maxTokens}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
-    {isTyping && <p>Enio is typing...</p>}
-    {!isTyping && (
-      <button
-        onClick={() => {
-          handleCommand();
-          clearInput();
-        }}
-        disabled={!input.trim()}
-        >
-        Send Command
-      </button>
-    )}
-    <div className='command-section'></div>
-    <div className='input-container'>
-      <textarea
-        type='text'
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder={
-          tokensUsed >= maxTokens
-            ? "No Tokens !"
-            : "Enter your command..."
-        }
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        rows='1' // Cette propriété permet à la barre de grandir avec le contenu
-        disabled={tokensUsed >= maxTokens} // Désactive l'input si tous les tokens sont utilisés
-      />
-      <div className='information-section'>
-        {tokensUsed !== null && (
-          <p>
-            Nombre de tokens utilisés dans cette interaction :{" "}
-            {tokensUsed}/{maxTokens}
-          </p>
-        )}
-      </div>
-    </div>
-  </div>
   );
 };
 

@@ -5,9 +5,9 @@ import GitHubCalendar from "react-github-calendar";
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
 import { Parallax, ParallaxLayer } from "@react-spring/parallax";
-import { Particles, initParticlesEngine } from "@tsparticles/react";
-import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
+// import { Particles, initParticlesEngine } from "@tsparticles/react";
+// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
+// import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
 
 import SkillCard from "./WhoAmI/SkillCard";
 import ChatGPTModule from "./WhoAmI/ChatGPTModule";
@@ -169,12 +169,13 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 <div className="SkillCardContainer">
                   <Tilt
                     borderRadius="2%"
+                    scale={1.05}
                   >
                     <SkillCard
                       title="HUMAN"
                       levels={[90, 80, 100]}
                       labels={["Sociable", "Humour", "Passion"]}
-                      description="Maîtrise de HTML, création de structures de page, etc."
+                      description={`Carte "HUMAN" - Le Paladin des Temps Modernes\n \nNiveau de compétence : Sociabilité 90, Humour 80, Passion 100\n \nDescription :T'as devant toi la légendaire carte "HUMAN", un véritable boss de fin en matière de vibes. Avec son aura de sociabilité à 90, impossible de résister à l'envie de taper la discute. Niveau humour, on est sur un solide 80 ; prépare-toi à te marrer même dans les galères les plus sombres. Et la passion, mec ? Maxée à 100, une véritable flamme éternelle qui brûle pour tout ce qui l'anime. C'est pas une carte, c'est un cheat code pour la vie sociale.`}
                       illustration="/Overlay/PK_Textures/Human.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/32.jpg')", opacity: 1, zIndex: -1 } },
@@ -185,16 +186,17 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                   </Tilt>
                   <Tilt
                     borderRadius="2%"
+                    scale={1.05}
                   >
                     <SkillCard
                       title="COMPUTER"
                       levels={[90, 50, 90]}
                       labels={["Front-End", "Backend", "Soft/Hardware"]}
-                      description="Maîtrise de HTML, création de structures de page, etc."
+                      description={`Carte "COMPUTER" - Le Mage Binaire\n \nNiveau de compétence : Front-End 90, Backend 50, Soft/Hardware 90\n \nDescription : La carte "COMPUTER", c'est le Gandalf du code, mais en mode 2.0. Avec un skill de Front-End à 90, les sites web qu'il touche se transforment en œuvres d'art interactives. Le Backend ? Un petit 50, parce que même les héros ont leurs faiblesses, mais ça reste suffisant pour ne pas crasher au premier ;SELECT * FROM users;. Et le combo Soft/Hardware à 90 ? Une capacité à comprendre les machines mieux que Matrix. Cette carte est le draft ultime pour toute équipe cherchant à dominer le monde digital.`}
                       illustration="/Overlay/PK_Textures/Technologic.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/43.jpg')", opacity: 1, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { sAtyle: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/44.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.6, zIndex: 1 } },
                       ]}
 
@@ -202,12 +204,13 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                   </Tilt>
                   <Tilt
                     borderRadius="2%"
+                    scale={1.05}
                   >
                     <SkillCard
                       title="MUSIC"
                       levels={[90, 50]}
-                      labels={["MAO (DAW)", "Accoustic"]}
-                      description="Maîtrise de HTML, création de structures de page, etc."
+                      labels={["Fl Studio", "Accoustic"]}
+                      description={`Carte "MUSIC" - L'Enchanteur Mélodique\n \nNiveau de compétence : FL Studio 90, Acoustique 50\n \nDescription :"MUSIC", c'est la carte qui fait vibrer les cordes... de ton cœur. Avec un niveau de maîtrise de FL Studio à 90, chaque beat est un sortilège envoyant l'auditeur dans une autre dimension. L'Acoustique, à 50, montre qu'il n'y a pas que les plugins dans la vie et que revenir aux sources, ça a du bon. Cette carte est le joker parfait pour quiconque cherche à ensorceler les foules avec des hymnes épiques ou des ballades à faire pleurer les pierres.`}
                       illustration="/Overlay/PK_Textures/Music.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/47.jpg')", opacity: 1, zIndex: -1 } },

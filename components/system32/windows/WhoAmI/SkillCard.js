@@ -41,7 +41,9 @@ const SkillCard = ({ title, levels, description, illustration, labels, overlays,
           {overlays && overlays.map((overlay, index) => (
             <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
           ))}
-          <p>{description}</p>
+          <div className='skill-card-backDescription'>
+            <p>{description}</p>
+          </div>
         </div>
       </animated.div>
     </div>

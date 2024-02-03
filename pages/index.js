@@ -21,6 +21,7 @@ import TaskBar from "@/components/system32/desktop/TaskBar";
 
 import "98.css";
 import "/styles/styles.sass";
+import "/styles/system32/windows/index.sass"
 import "/styles/system32/desktop/crt.sass";
 
 function HomePage() {
@@ -140,7 +141,7 @@ function HomePage() {
             <BootsScreen />
             <Icon
               title='WhoAmI.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
+              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Help/Help book.ico'
               onClick={() => handleIconClick("Whoami")}
             />
             <Icon
@@ -150,7 +151,7 @@ function HomePage() {
             />
             <Icon
               title='Twitch.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
+              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
               onClick={() => handleIconClick("TwitchWindow")}
             />
           </div>
@@ -208,7 +209,9 @@ function HomePage() {
               )}
             </>
           )}
-
+          <div className="watermark-desktop">
+            <p>2024 © SadFlower™ OS </p>
+          </div>
           {isClient && (
             <div className='taskbar'>
               <TaskBar
