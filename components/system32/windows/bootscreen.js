@@ -156,7 +156,7 @@ const BootsScreen = () => {
                 .pause(2000)
                 .break()
                 .type(
-                  " 1.0.0 : -Phone Compatibility updated + Bootscreen updated (TRY)",
+                  " 1.0.0 : -Sadflower™ HUB first update !",
                 )
                 .break()
                 .type(" 0.0.1 : -Site Created")

@@ -108,7 +108,7 @@ const ChatGPTModule = ({ username, maxTokens }) => {
   return (
     <div className='ChatGPT'>
       <div className='chatgpt-logo'>
-        <p>SadFlower BOT</p>
+        <p>SadFlower™ BOT</p>
       </div>
       <div className='ChatGPT-content'>
 
