@@ -14,27 +14,35 @@ const SkillCard = ({ title, levels, description, illustration, labels, overlays,
   return (
     <div className="skill-card" onClick={() => setFlipped(state => !state)}>
       <animated.div className="skill-card-front" style={{ opacity: opacity.interpolate(o => 1 - o), transform }}>
-        {overlays && overlays.map((overlay, index) => (
-          <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
-        ))}
-        <h3>{title}</h3>
-        {levels.map((level, index) => (
-          <div key={index}>
-            <div className='Level'>
-              <div className="label">{labels[index]}</div>
-              <div className="progress-bar">
-                <div className="progress" style={{ width: `${level}%` }}></div>
-              </div>
+        <div className='skill-card-content'>
+          {overlays && overlays.map((overlay, index) => (
+            <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
+          ))}
+          <h3>{title}</h3>
+          <div className='skill-card-Info'>
+            <img src={illustration} alt={`${title} illustration`} />
+            <div className='skill-card-label'>
+              {levels.map((level, index) => (
+                <div key={index}>
+                  <div className='Level'>
+                    <div className="label">{labels[index]}</div>
+                    <div className="progress-bar">
+                      <div className="progress" style={{ width: `${level}%` }}></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+        </div>
       </animated.div>
       <animated.div className="skill-card-back" style={{ opacity, transform: transform.interpolate(t => `${t} rotateY(180deg)`) }}>
-        {overlays && overlays.map((overlay, index) => (
-          <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
-        ))}
-        <img src={illustration} alt={`${title} illustration`} />
-        <p>{description}</p>
+        <div className='skill-card-content'>
+          {overlays && overlays.map((overlay, index) => (
+            <div key={index} className={`skill-card-overlay`} style={{ ...overlay.style }}></div>
+          ))}
+          <p>{description}</p>
+        </div>
       </animated.div>
     </div>
   );

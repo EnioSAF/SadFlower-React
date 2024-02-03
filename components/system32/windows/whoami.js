@@ -167,7 +167,9 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 factor={0.8}
               >
                 <div className="SkillCardContainer">
-                  <Tilt>
+                  <Tilt
+                    borderRadius="2%"
+                  >
                     <SkillCard
                       title="HUMAN"
                       levels={[90, 80, 100]}
@@ -176,27 +178,31 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       illustration="/Photo/13.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/32.jpg')", opacity: 1, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/metal_classic.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/31.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/fire_modern.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/47.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.6, zIndex: 1 } },
                       ]}
                     />
                   </Tilt>
-                  <Tilt>
+                  <Tilt
+                    borderRadius="2%"
+                  >
                     <SkillCard
                       title="COMPUTER"
-                      levels={[90, 50, 90, 60]}
-                      labels={["Front-End", "Backend", "Software", "HardWare"]}
+                      levels={[90, 50, 90]}
+                      labels={["Front-End", "Backend", "Soft/Hardware"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/43.jpg')", opacity: 1, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/dragon_new.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/35.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/44.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.6, zIndex: 1 } },
                       ]}
 
                     />
                   </Tilt>
-                  <Tilt>
+                  <Tilt
+                    borderRadius="2%"
+                  >
                     <SkillCard
                       title="MUSIC"
                       levels={[90, 50]}
@@ -205,8 +211,8 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       illustration="/Photo/13.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/47.jpg')", opacity: 1, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/psychic.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
-                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/42.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/water.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/53.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.6, zIndex: 1 } },
                       ]}
 
                     />
