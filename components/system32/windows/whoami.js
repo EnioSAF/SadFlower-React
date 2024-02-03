@@ -175,7 +175,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       levels={[90, 80, 100]}
                       labels={["Sociable", "Humour", "Passion"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
-                      illustration="/Photo/13.png"
+                      illustration="/Overlay/PK_Textures/Human.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/32.jpg')", opacity: 1, zIndex: -1 } },
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/fire_modern.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
@@ -191,7 +191,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       levels={[90, 50, 90]}
                       labels={["Front-End", "Backend", "Soft/Hardware"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
-                      illustration="/Photo/13.png"
+                      illustration="/Overlay/PK_Textures/Technologic.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/43.jpg')", opacity: 1, zIndex: -1 } },
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
@@ -208,7 +208,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       levels={[90, 50]}
                       labels={["MAO (DAW)", "Accoustic"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
-                      illustration="/Photo/13.png"
+                      illustration="/Overlay/PK_Textures/Music.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/47.jpg')", opacity: 1, zIndex: -1 } },
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/water.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
