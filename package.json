@@ -1,7 +1,7 @@
 {
   "name": "SadFlower HUB",
   "description": "Le HUB de la SadFlower Corp. où vous pouvez retrouver toutes les informations sur Enio, ses projets, sa musiques... Dans un style inspiré de Windows95 ! SadFlower GANG !",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
