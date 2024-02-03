@@ -101,7 +101,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 speed={1}
                 factor={2}
               >
-                <Particles options={retroGamingParticles} />
+                {/* <Particles options={retroGamingParticles} /> */}
                 <Tilt
                   scale={1.05}
                   spotGlareColor="#febfff"
@@ -157,7 +157,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 speed={1.2}
                 factor={1}
               >
-                <Particles options={matrixParticles} />
+                {/* <Particles options={matrixParticles} /> */}
                 <div className="ChatGPT-Explanation">
                   <p>{`Si tu as des questions supplémentaires sur ma vie, mon parcours, le site ou quoi que ce toi !
                 Tu peux discuter avec mon assistant virtuel juste en dessous !`}</p>
@@ -178,6 +178,11 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       labels={["Sociable", "Humour", "Passion"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
+                      overlays={[
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/32.jpg')", opacity: 1, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/metal_classic.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/31.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                      ]}
                     />
                   </Tilt>
                   <Tilt>
@@ -187,6 +192,12 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       labels={["Front-End", "Backend", "Software", "HardWare"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
+                      overlays={[
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/43.jpg')", opacity: 1, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/dragon_new.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/35.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                      ]}
+
                     />
                   </Tilt>
                   <Tilt>
@@ -196,6 +207,12 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       labels={["MAO (DAW)", "Accoustic"]}
                       description="Maîtrise de HTML, création de structures de page, etc."
                       illustration="/Photo/13.png"
+                      overlays={[
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/47.jpg')", opacity: 1, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/psychic.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/42.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: 1 } },
+                      ]}
+
                     />
                   </Tilt>
                 </div>
