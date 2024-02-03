@@ -14,15 +14,17 @@
     height: 60px
 
 .Parallax
+    display: flex
     width: 100% !important
     height: 78% !important
     right: 0%
-    gap: 10px
 
     // Section Presentation
 
 .section-presentation
     display: flex
+    inset: auto !important
+    height: auto !important
     flex-direction: column
     align-items: center
     align-content: center
@@ -47,7 +49,8 @@
         flex-direction: column
         align-items: center
         padding: 10px
-        width: 80%
+        width: 85%
+        margin-bottom: 500px
         border: 2px solid #0078D7
         border-radius: 10px
         background: #FFF
@@ -59,7 +62,7 @@
         background: #f4f4f4
         padding: 10px
         width: 90%
-        height: auto
+        height: 50% !important
 
         &:hover
             transform: translateY(-5px)
@@ -69,9 +72,13 @@
 
 .section-chatGPT
     display: flex
+    position: relative
     flex-direction: column
     align-items: center
 
+    @media (max-width: 600px)
+        padding: 550px 0 // Ajoute un peu d'air en haut et en bas sur petits écrans
+        height: 18% !important
     //  Section Experience
 
 .section-experience
@@ -81,6 +88,10 @@
     align-content: center
     justify-content: center
     gap: 10px
+
+    @media (max-width: 600px)
+        padding: 100px 0 // Ajoute un peu d'air en haut et en bas sur petits écrans
+    //  Section Experience
 
     // Style section en bas (timeline)
 

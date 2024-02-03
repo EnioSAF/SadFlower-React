@@ -158,10 +158,6 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                 factor={1}
               >
                 {/* <Particles options={matrixParticles} /> */}
-                <div className="ChatGPT-Explanation">
-                  <p>{`Si tu as des questions supplémentaires sur ma vie, mon parcours, le site ou quoi que ce toi !
-                Tu peux discuter avec mon assistant virtuel juste en dessous !`}</p>
-                </div>
                 <ChatGPTModule />
               </ParallaxLayer>
               <ParallaxLayer
