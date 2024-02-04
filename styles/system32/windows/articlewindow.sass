@@ -3,20 +3,28 @@
     text-align: center
 
 .upper-section, .lower-section
-    display: grid
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr))
-    grid-gap: 20px
+    display: flex
+    flex-direction: column
     align-items: center
+    // display: grid
+    // grid-template-columns: repeat(auto-fill, minmax(120px, 1fr))
+    // grid-gap: 20px
+    // align-items: center
+
+.pagination
+    .pagination-number
+        display: flex
+        justify-content: center
+        align-items: center
 
 .upper-section
-    margin-bottom: 80px // Espacement en bas des icônes
+    // margin-bottom: 80px // Espacement en bas des icônes
     .icon-container
         margin: 10px
         transition: transform 0.3s ease-in-out
         display: flex
         flex-direction: column
         align-items: center
-
 
         :hover
             transform: scale(1.2)
@@ -29,7 +37,13 @@
     margin: 30px 20px // Espacement au-dessus et en dessous de la ligne
 
 .lower-section
-    margin-bottom: 60px // Espacement en bas des icônes
+    // margin-bottom: 60px // Espacement en bas des icônes
+
+    .categories-selector
+        display: flex
+        position: relative
+        bottom: 40px
+
     .icon-container
         margin: 10px
         transition: transform 0.3s ease-in-out
