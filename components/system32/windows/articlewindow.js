@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import Icon from "../applications/icon";
 import FeaturedWindow from "./featuredwindow";
@@ -26,6 +26,42 @@ const ArticleExe = ({ onClose, zIndex }) => {
     };
     fetchData();
   }, []);
+
+  // Fonction pour les catégories
+  const [currentCategory, setCurrentCategory] = useState('Toutes'); // 'Toutes' pour afficher tout au début
+  const filteredBlogs = useMemo(() => {
+    if (!blogs || !blogs.data) return []; // Si blogs ou blogs.data est null/undefined, on retourne un tableau vide pour éviter l'erreur
+
+    let sortedBlogs = [...blogs.data].sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt)); // Tri par date, du plus récent au plus ancien
+    if (currentCategory === 'Toutes') {
+      return sortedBlogs; // Tous les blogs si la catégorie est 'Toutes'
+    }
+    return sortedBlogs.filter(blog => blog.attributes.Category === currentCategory); // Filtrage par catégorie
+  }, [blogs, currentCategory]);
+
+  const uniqueCategories = useMemo(() => {
+    if (!blogs || !blogs.data) return []; // Check si blogs est chargé
+    const categories = blogs.data.map(blog => blog.attributes.Category); // Extrait les catégories
+    return [...new Set(categories)]; // Magic Set pour virer les doublons, et t'as tes catégories uniques
+  }, [blogs]);
+
+  // Fonction pour la pagination
+  const [currentPageFeatured, setCurrentPageFeatured] = useState(1);
+  const [currentPageArticles, setCurrentPageArticles] = useState(1);
+  const articlesPerPage = 5;
+  const totalFeaturedPages = Math.ceil((featuredBlogs?.data?.length || 0) / articlesPerPage);
+  const totalArticlesPages = Math.ceil((filteredBlogs.length || 0) / articlesPerPage);
+
+  const currentFeaturedBlogs = useMemo(() => {
+    const start = (currentPageFeatured - 1) * articlesPerPage;
+    return featuredBlogs?.data?.slice(start, start + articlesPerPage) || [];
+  }, [featuredBlogs, currentPageFeatured, articlesPerPage]);
+
+  const currentArticlesBlogs = useMemo(() => {
+    const start = (currentPageArticles - 1) * articlesPerPage;
+    return filteredBlogs.slice(start, start + articlesPerPage);
+  }, [filteredBlogs, currentPageArticles, articlesPerPage]);
+
 
   // Fonction pour vérifier la taille de l'écran
   const isMobileScreen = () => window.innerWidth <= 600;
@@ -109,49 +145,57 @@ const ArticleExe = ({ onClose, zIndex }) => {
 
         <div className='window-body'>
           <div className="titre-sectionsarticles">
-          <h3>La Crème</h3>
+            <h3>La Crème</h3>
           </div>
           <div className='upper-section'>
-            {featuredBlogs &&
-              featuredBlogs.data &&
-              featuredBlogs.data.map((blog) => (
-                <div key={blog.attributes.Title} className='icon-container'>
-                  <Icon
-                    title={blog.attributes.Title}
-                    iconPath={`${blog.attributes.Icon.data.attributes.url}`}
-                    onClick={() =>
-                      handleIconClick(blog.attributes.Title, "upper")
-                    }
-                    onTouchStart={() =>
-                      handleIconClick(blog.attributes.Title, "upper")
-                    }
-                  />
-                </div>
-              ))}
+            {currentFeaturedBlogs.map((blog) => (
+              <div key={blog.attributes.Title} className='icon-container'>
+                <Icon
+                  title={blog.attributes.Title}
+                  iconPath={`${blog.attributes.Icon.data.attributes.url}`}
+                  onClick={() => handleIconClick(blog.attributes.Title, "upper")}
+                  onTouchStart={() => handleIconClick(blog.attributes.Title, "upper")}
+                />
+              </div>
+            ))}
+            <div className="pagination">
+              <button onClick={() => setCurrentPageFeatured(prev => Math.max(prev - 1, 1))} disabled={currentPageFeatured === 1}>Précédent</button>
+              <button onClick={() => setCurrentPageFeatured(prev => Math.min(prev + 1, totalFeaturedPages))} disabled={currentPageFeatured === totalFeaturedPages}>Suivant</button>
+              <div className="pagination-number">Page {currentPageFeatured} sur {totalFeaturedPages}</div> {/* Affichage du numéro de page et du total */}
+            </div>
           </div>
 
           <div className='section-divider'></div>
 
           <div className="titre-sectionsarticles">
-          <h3>Les Articles</h3>
+            <h3>Les Articles</h3>
           </div>
           <div className='lower-section'>
-            {blogs &&
-              blogs.data &&
-              blogs.data.map((blog) => (
-                <div key={blog.attributes.Title} className='icon-container'>
-                  <Icon
-                    title={blog.attributes.Title}
-                    iconPath={`${blog.attributes.Icon.data.attributes.url}`}
-                    onClick={() =>
-                      handleIconClick(blog.attributes.Title, "lower")
-                    }
-                    onTouchStart={() =>
-                      handleIconClick(blog.attributes.Title, "lower")
-                    }
-                  />
-                </div>
-              ))}
+            <div className="categories-selector">
+              <select onChange={(e) => setCurrentCategory(e.target.value)} value={currentCategory}>
+                <option value="Toutes">Toutes</option>
+                {uniqueCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {currentArticlesBlogs.map((blog) => (
+              <div key={blog.attributes.Title} className='icon-container'>
+                <Icon
+                  title={blog.attributes.Title}
+                  iconPath={`${blog.attributes.Icon.data.attributes.url}`}
+                  onClick={() => handleIconClick(blog.attributes.Title, "lower")}
+                  onTouchStart={() => handleIconClick(blog.attributes.Title, "lower")}
+                />
+              </div>
+            ))}
+            <div className="pagination">
+              <button onClick={() => setCurrentPageArticles(prev => Math.max(prev - 1, 1))} disabled={currentPageArticles === 1}>Précédent</button>
+              <button onClick={() => setCurrentPageArticles(prev => Math.min(prev + 1, totalArticlesPages))} disabled={currentPageArticles === totalArticlesPages}>Suivant</button>
+              <div className="pagination-number">Page {currentPageArticles} sur {totalArticlesPages}</div> {/* Affichage du numéro de page et du total */}
+            </div>
           </div>
         </div>
         <div className='status-bar'>
@@ -164,24 +208,20 @@ const ArticleExe = ({ onClose, zIndex }) => {
       {upperSectionWindows.map((window, index) => (
         <FeaturedWindow
           key={index}
-          articleData={featuredBlogs.data.find(
-            (blog) => blog.attributes.Title === window.title,
-          )}
+          articleData={featuredBlogs.data.find(blog => blog.attributes.Title === window.title)}
           closeWindow={() => handleCloseWindow(window, "upper")}
-          onClick={() => handleWindowClick(window)}
-          zIndex={focusedWindows.indexOf(window) + 1} // Donne le bon z-index dynamiquement
+          onClick={() => handleWindowClick(window.title)}
+          zIndex={index + 1} // Ajuste selon la logique de zIndex que tu souhaites
         />
       ))}
 
       {lowerSectionWindows.map((window, index) => (
         <SimpleWindow
           key={index}
-          articleData={blogs.data.find(
-            (blog) => blog.attributes.Title === window.title,
-          )}
+          articleData={blogs.data.find(blog => blog.attributes.Title === window.title)}
           closeWindow={() => handleCloseWindow(window, "lower")}
-          onClick={() => handleWindowClick(window)}
-          zIndex={focusedWindows.indexOf(window) + 1} // Donne le bon z-index dynamiquement
+          onClick={() => handleWindowClick(window.title)}
+          zIndex={index + 1} // Ajuste selon la logique de zIndex que tu souhaites
         />
       ))}
     </>
