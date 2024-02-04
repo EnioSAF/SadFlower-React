@@ -196,7 +196,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
                       illustration="/Overlay/PK_Textures/Technologic.png"
                       overlays={[
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Papier/43.jpg')", opacity: 1, zIndex: -1 } },
-                        { sAtyle: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
+                        { style: { backgroundImage: "url('/Overlay/PK_Textures/grass.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.5, zIndex: -1 } },
                         { style: { backgroundImage: "url('/Overlay/PK_Textures/textures/Plastic/44.png')", backgroundColor: 'rgba(0, 0, 0, 0.2)', opacity: 0.6, zIndex: 1 } },
                       ]}
 
