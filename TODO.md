@@ -1,10 +1,11 @@
 ## TODO
 
-- [ ] Corriger affichage avatar instantané à l'edit + Fenêtre bug quand on ferme avec un avatar dedans
-<!-- bug déconnexion lié à avatar (voir chatgpt) (à monter à Arnaud) (Solution potentielle temporaire : Pas de bug en prod mais present dans console + dev) -->
-- [ ] Mettre en page le bouton userlist
-- [ ] Remettre en page la page de connexion et d'inscription
-- [ ] Continuer page WhoAmI
-- [ ] Modifier BootScreen pour attendre une intéraction avec la page pour pouvoir jouer les sons correctement (bug à vérifier)
+[ ] Corriger la mise en page des articles dans Articles.exe (ça ne renvois pas les mises en pages de Heroku)
+[ ] Rajouter des popups
+[ ] Rajouter des bugs/glitchs (erreur/crash = ecran bleu | duplication de fenêtres par moment | reference à des hacks/bugs connus)
 
-- [ ] Modifier l'indéxation du site sur internet
+
+[ ] Faire des articles
+[ ] Faire une application musique (trouver idées)
+[ ] Faire un forum
+[ ] Gamifier le site (trouver idées)
