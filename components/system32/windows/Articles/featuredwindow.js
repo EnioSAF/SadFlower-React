@@ -1,11 +1,14 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import config from "@/src/config";
-import { Rnd } from "react-rnd";
-import styles from "@/styles/utils/style.module.sass";
 
+import { Rnd } from "react-rnd";
+import ReactMarkdown from 'react-markdown';
+
+import styles from "@/styles/utils/style.module.sass";
 import "98.css";
 import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/Articles/window-contenu.sass";
 
 const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
   // Fonction pour vérifier la taille de l'écran
@@ -71,12 +74,14 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
         <div className='window-body'>
           <div className='fenetre-article'>
             {articleData && articleData.attributes && (
-              <>
+              <div className="window-contenu">
                 <h2>{articleData.attributes.Title}</h2>
                 <hr />
+                <div className="window-resume">
                 <p>{articleData.attributes.Summary}</p>
+                </div>
                 <hr />
-                <p>{articleData.attributes.Content}</p>
+                <ReactMarkdown>{articleData.attributes.Content}</ReactMarkdown>
                 <hr />
                 <Image
                   className={`${styles.stylepourdetails} mb-50`}
@@ -85,7 +90,7 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
                   width='1050'
                   height='387'
                 />
-              </>
+                </div>
             )}
           </div>
         </div>
