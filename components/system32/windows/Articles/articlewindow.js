@@ -1,11 +1,11 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { Rnd } from "react-rnd";
-import Icon from "../applications/icon";
+import Icon from "../../applications/icon";
 import FeaturedWindow from "./featuredwindow";
 import SimpleWindow from "./simplewindow";
 import fetchBlogs from "@/components/Tools/Blog/fetch-blogs";
 
-import "/styles/system32/windows/articlewindow.sass";
+import "/styles/system32/windows/Articles/articlewindow.sass";
 import "98.css";
 
 const ArticleExe = ({ onClose, zIndex }) => {
@@ -26,6 +26,27 @@ const ArticleExe = ({ onClose, zIndex }) => {
     };
     fetchData();
   }, []);
+
+  // Fonction pour les icônes
+  const handleIconClick = (articleTitle, section) => {
+    if (previewArticle === articleTitle) {
+      // C'est le second clic, on ouvre la fenêtre
+      const newWindow = { title: articleTitle, section };
+      if (section === "upper") {
+        setUpperSectionWindows((prevWindows) => [...prevWindows, newWindow]);
+      } else {
+        setLowerSectionWindows((prevWindows) => [...prevWindows, newWindow]);
+      }
+      setPreviewArticle(null); // Reset pour le prochain article
+    } else {
+      // Premier clic, on affiche le résumé
+      setPreviewArticle(articleTitle);
+    }
+  };
+
+  // Fonction pour les résumés
+  const [previewArticle, setPreviewArticle] = useState(null);
+  const articlePreview = previewArticle ? featuredBlogs.data.concat(blogs.data).find(blog => blog.attributes.Title === previewArticle) : null;
 
   // Fonction pour les catégories
   const [currentCategory, setCurrentCategory] = useState('Toutes'); // 'Toutes' pour afficher tout au début
@@ -74,15 +95,6 @@ const ArticleExe = ({ onClose, zIndex }) => {
     return { x, y };
   };
 
-  const handleIconClick = (articleTitle, section) => {
-    const newWindow = { title: articleTitle, section };
-    if (section === "upper") {
-      setUpperSectionWindows((prevWindows) => [...prevWindows, newWindow]);
-    } else {
-      setLowerSectionWindows((prevWindows) => [...prevWindows, newWindow]);
-    }
-  };
-
   // Fonction pour gérer le focus des fenêtres
   const [focusedWindows, setFocusedWindows] = useState([]);
   const [articleExeZIndex, setArticleExeZIndex] = useState(0);
@@ -114,6 +126,11 @@ const ArticleExe = ({ onClose, zIndex }) => {
 
   return (
     <>
+        {articlePreview && (
+      <div className="article-preview">
+        {articlePreview.attributes.Summary || "Résumé pas disponible"}
+      </div>
+    )}
       <Rnd
         style={{
           fontFamily: "Arial, sans-serif",
