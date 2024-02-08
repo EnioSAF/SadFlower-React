@@ -4,6 +4,7 @@ import "/styles/system32/desktop/taskbar.sass";
 
 const TaskBar = ({
   user,
+  onAboutClick,
   onSignInClick,
   onSignUpClick,
   onUserInfoClick,
@@ -35,15 +36,27 @@ const TaskBar = ({
               className='taskbar-logo'
               src='/Logo/ROTATE NOIR.gif'
               alt='Taskbar Logo'
-              width={100}
-              height={100}
+              width={50}
+              height={50}
             />
             <p>SadFlower™ OS</p>
+          </div>
+          <div className='about'>
+            <button className='taskbar-button' onClick={onAboutClick}>
+              <Image
+                src='/Icon/Windows95/Sort by Category [Without duplicates]/Dialog icons/Question.ico'
+                alt='About'
+                width={32}
+                height={32}
+                className='auth-icon'
+              />
+              About
+            </button>
           </div>
           {!user ? (
             <>
               <div className='auth-buttons'>
-                <button className='sign-in-button' onClick={onSignInClick}>
+                <button className='taskbar-button' onClick={onSignInClick}>
                   <Image
                     src='/Icon/Windows95/Sort by Category [Without duplicates]/People/User program.ico'
                     alt='SignIn'
@@ -58,7 +71,7 @@ const TaskBar = ({
           ) : (
             <>
               <div className='user-info'>
-                <button className='user-info-button' onClick={onUserInfoClick}>
+                <button className='taskbar-button' onClick={onUserInfoClick}>
                   <Image
                     src='/Icon/Windows95/Sort by Category [Without duplicates]/People/Agent.ico'
                     alt='UserInfo'
@@ -70,7 +83,7 @@ const TaskBar = ({
                 </button>
               </div>
               <div className='user-list'>
-                <button className='user-list-button' onClick={onUserListClick}>
+                <button className='taskbar-button' onClick={onUserListClick}>
                   <Image
                     src='/Icon/Windows95/Sort by Category [Without duplicates]/People/People.ico' // Chemin de l'icône de la liste des utilisateurs
                     alt='UserList'

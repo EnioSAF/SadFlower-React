@@ -30,11 +30,15 @@
     margin-left: 20px
 
 .start-text
+    position: relative
+    bottom: 3px
     vertical-align: middle
     margin-top: 4px
     display: inline-block
 
 .logo
+    position: relative
+    bottom: 4px
     font-size: 24px
     vertical-align: middle
     margin-right: 5px
@@ -59,7 +63,7 @@
         font-size: 15px
         padding: 10px
         border: 1px solid black
-        margin: 10px
+        margin: 10px 10px 25px 10px
 
         p
             position: relative
@@ -67,7 +71,9 @@
             color: #808080
             text-shadow: 1px 1px #fff, -1px -1px #363636
 
-        img
+        .taskbar-logo
+            width: 100%
+            height: 500%
             position: relative
             right: 40px
 // Start-Menu buttons
@@ -83,33 +89,7 @@
     height: 20px
     margin-right: 10px
 
-.sign-in-button
-    width: 100%
-    padding: 10px 0
-    display: flex
-    justify-content: flex-start
-    align-items: center
-    padding-left: 10px
-    background: #808080
-    border: none
-    color: white
-    cursor: pointer
-    font-size: 18px
-
-.user-info-button
-    width: 100% // Prend toute la largeur de la fenêtre
-    padding: 10px 0
-    display: flex
-    justify-content: flex-start
-    align-items: center
-    padding-left: 10px
-    background: #808080 // Couleur de ton choix
-    border: none
-    color: white
-    cursor: pointer
-    font-size: 18px
-
-.user-list-button
+.taskbar-button
     width: 100%
     padding: 10px 0
     display: flex
