@@ -52,7 +52,7 @@ const AboutPage = ({ closeWindow }) => {
                 </div>
 
                 <div className='window-body'>
-                    <h1>CECI EST UN TEST</h1>
+                    <h1>LOADING...</h1>
                 </div>
 
                 <div className='status-bar'>
