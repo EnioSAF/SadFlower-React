@@ -9,6 +9,7 @@ import SignUp from "@/components/system32/windows/SignInSignOut/signup";
 import EditProfile from "@/components/system32/windows/SignInSignOut/editprofile";
 import UserInfo from "@/components/system32/windows/SignInSignOut/userinfo";
 import UserList from "@/components/system32/windows/SignInSignOut/userlist";
+import AboutPage from "@/components/system32/windows/aboutpage";
 import Whoami from "@/components/system32/windows/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
@@ -66,6 +67,7 @@ function HomePage() {
   };
 
   // Fonctions des fenetres
+  const [isAboutPageOpen, setIsAboutPageOpen] = useState(false);
   const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
   const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
   const [isWhoamiOpen, setWhoamiOpen] = useState(false);
@@ -108,6 +110,9 @@ function HomePage() {
         } else {
           setIsTwitchWindowOpen(true); // Sinon, ça ouvre la fenêtre normalement
         }
+        break;
+      case "About":
+        setIsAboutPageOpen(true);
         break;
       case "Whoami":
         setWhoamiOpen(true);
@@ -156,6 +161,11 @@ function HomePage() {
 
           {isClient && (
             <>
+              {isAboutPageOpen && (
+                <AboutPage
+                  closeWindow={() => setIsAboutPageOpen(false)}
+                />
+              )}
               {isArticleExeOpen && (
                 <ArticleExe onClose={handleArticleExeClose} />
               )}
@@ -214,6 +224,7 @@ function HomePage() {
             <div className='taskbar'>
               <TaskBar
                 user={user}
+                onAboutClick={() => setIsAboutPageOpen(true)}
                 onSignInClick={() => setIsSignInOpen(true)}
                 onSignUpClick={() => setIsSignUpOpen(true)}
                 onUserInfoClick={() => setIsUserInfoOpen(true)}
