@@ -6,51 +6,73 @@
     display: flex
     flex-direction: column
     align-items: center
-    // display: grid
-    // grid-template-columns: repeat(auto-fill, minmax(120px, 1fr))
-    // grid-gap: 20px
-    // align-items: center
+    overflow: auto // Permettre le défilement si le contenu dépasse
 
-.pagination
-    .pagination-number
+    span
+        margin: 0 10px
+
+    .section-divider
+        width: 100%
+        height: 1px
+        border-top: 1px solid #9c9c9c
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2)
+        margin: 20px 0
+
+    .table-container // Nouveau style pour le conteneur de table
+        width: 100%
+        height: 100%
+
+        table.interactive
+            width: 100%
+            height: 100%
+
+        th, td
+            text-align: left
+            padding: 8px
+            border-bottom: 1px solid #000000
+            background-color: white // Assure que le fond de chaque cellule est blanc
+            position: relative
+
+            &:not(:last-child) // Ajoute un séparateur sauf pour la dernière cellule de chaque ligne
+            &:after
+                content: ""
+                position: absolute
+                right: 0
+                top: 0
+                bottom: 0
+                width: 1px
+                background-color: #000000 // Couleur du séparateur
+
+        th
+            background-color: #aad2eb // Couleur de fond différente pour l'en-tête
+            &:not(:last-child)
+            &:after
+                background-color: #bbb // Séparateurs un peu plus foncés pour l'en-tête
+
+        tr
+            &:hover
+                background-color: #ddd
+
+        tr:nth-child(even)
+            background-color: #f2f2f2
+
+        tr:hover
+            background-color: #ddd
+
+    .pagination
         display: flex
         justify-content: center
         align-items: center
+        width: 100%
+        padding: 10px 0
 
-.upper-section
-    // margin-bottom: 80px // Espacement en bas des icônes
-    .icon-container
-        margin: 10px
-        transition: transform 0.3s ease-in-out
-        display: flex
-        flex-direction: column
-        align-items: center
+    button
+        padding: 5px 10px
+        cursor: pointer
+        background-color: #8a8a8b
+        border: none
+        border-radius: 5px
+        color: white
 
-        :hover
-            transform: scale(1.2)
-
-.section-divider
-    width: 100%
-    height: 0 // Ajustement pour la ligne avec ombre
-    border-top: 1px solid #9c9c9c // Couleur de la ligne
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2) // Ombre sous la ligne
-    margin: 30px 20px // Espacement au-dessus et en dessous de la ligne
-
-.lower-section
-    // margin-bottom: 60px // Espacement en bas des icônes
-
-    .categories-selector
-        display: flex
-        position: relative
-        bottom: 40px
-
-    .icon-container
-        margin: 10px
-        transition: transform 0.3s ease-in-out
-        display: flex
-        flex-direction: column
-        align-items: center
-        margin-bottom: 50px // Espacement en bas des icônes
-
-        :hover
-            transform: scale(1.2)
+        &:disabled
+            background-color: #cccccc

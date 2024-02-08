@@ -11,8 +11,6 @@ import UserInfo from "@/components/system32/windows/SignInSignOut/userinfo";
 import UserList from "@/components/system32/windows/SignInSignOut/userlist";
 import Whoami from "@/components/system32/windows/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
-import Window from "@/components/system32/windows/Articles/simplewindow";
-import FeaturedWindow from "@/components/system32/windows/Articles/featuredwindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 
 import Icon from "@/components/system32/applications/icon";
