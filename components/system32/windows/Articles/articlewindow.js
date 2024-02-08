@@ -53,10 +53,10 @@ const ArticleExe = ({ onClose }) => {
   };
 
   // Fonction pour les catégories
-  const renderTabs = (categories, setCurrentCategory) => (
-    <menu role="tablist" className="multirows">
+  const renderTabs = (categories, currentCategory, setCurrentCategory) => (
+    <menu role="tablist" className="menu">
       {categories.map((category) => (
-        <li role="tab" key={category} onClick={() => setCurrentCategory(category)}>
+        <li role="tab" key={category} className={`tab ${currentCategory === category ? 'active' : ''}`} onClick={() => setCurrentCategory(category)}>
           <a href="#tabs">{category}</a>
         </li>
       ))}
@@ -123,8 +123,8 @@ const ArticleExe = ({ onClose }) => {
       <Rnd
         default={{
           ...getCenterPosition(),
-          width: 360,
-          height: 550,
+          width: 540,
+          height: 628,
         }}
         minWidth={350}
         minHeight={220}
@@ -147,7 +147,7 @@ const ArticleExe = ({ onClose }) => {
             <div className="titre-sectionsarticles">
               <h3>La Crème</h3>
             </div>
-            {renderTabs(categoriesFeatured, setCurrentCategoryFeatured)}
+            {renderTabs(categoriesFeatured, currentCategoryFeatured, setCurrentCategoryFeatured)}
             <div className="table-container">
               <table className="interactive">
                 <thead>
@@ -159,7 +159,7 @@ const ArticleExe = ({ onClose }) => {
                   </tr>
                 </thead>
                 <tbody>
-                {renderTableRows(featuredBlogs?.data, true, currentPageFeatured, currentCategoryFeatured)}
+                  {renderTableRows(featuredBlogs?.data, true, currentPageFeatured, currentCategoryFeatured)}
                 </tbody>
               </table>
             </div>
@@ -177,7 +177,7 @@ const ArticleExe = ({ onClose }) => {
             <div className="titre-sectionsarticles">
               <h3>Les Articles</h3>
             </div>
-            {renderTabs(categoriesArticles, setCurrentCategoryArticles)}
+            {renderTabs(categoriesArticles, currentCategoryArticles, setCurrentCategoryArticles)}
             <div className="table-container">
               <table className="interactive">
                 <thead>
@@ -189,7 +189,7 @@ const ArticleExe = ({ onClose }) => {
                   </tr>
                 </thead>
                 <tbody>
-                {renderTableRows(blogs?.data, false, currentPageArticles, currentCategoryArticles)}
+                  {renderTableRows(blogs?.data, false, currentPageArticles, currentCategoryArticles)}
                 </tbody>
               </table>
             </div>

@@ -11,6 +11,30 @@
     span
         margin: 0 10px
 
+    .menu
+        display: flex
+        flex-direction: row
+        justify-content: center
+
+    .tab
+        cursor: pointer
+        text-align: center
+        background-color: #8a8a8b // Couleur de fond pour les onglets non actifs
+        border-bottom: 2px solid #ffffff // Met en évidence l'onglet actif
+        color: white
+        transition: background-color 0.3s
+
+        &.active
+            background-color: #aad2eb // Couleur de fond pour l'onglet actif
+            border-bottom: 2px solid #aad2eb // Met en évidence l'onglet actif
+            color: #000000
+
+            &:hover
+                background-color: darken(#8a8a8b, 10%)
+
+        li
+            list-style: none
+
     .section-divider
         width: 100%
         height: 1px
@@ -30,7 +54,6 @@
             text-align: left
             padding: 8px
             border-bottom: 1px solid #000000
-            background-color: white // Assure que le fond de chaque cellule est blanc
             position: relative
 
             &:not(:last-child) // Ajoute un séparateur sauf pour la dernière cellule de chaque ligne
@@ -51,13 +74,7 @@
 
         tr
             &:hover
-                background-color: #ddd
-
-        tr:nth-child(even)
-            background-color: #f2f2f2
-
-        tr:hover
-            background-color: #ddd
+                background-color: #c5c5c5
 
     .pagination
         display: flex
