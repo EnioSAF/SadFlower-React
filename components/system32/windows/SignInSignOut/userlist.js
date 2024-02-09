@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "/components/Tools/ZIndexContext";
 import { API } from "/components/Tools/SignInOut/constant";
 
 import { PixelArtCard } from "react-pixelart-face-card";
@@ -11,6 +12,15 @@ import "/styles/system32/windows/SignInSignOut/userlist.sass";
 
 const UserList = ({ closeWindow }) => {
   const [users, setUsers] = useState([]);
+
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+    const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+    setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -54,6 +64,9 @@ const UserList = ({ closeWindow }) => {
 
   return (
     <Rnd
+      style={{
+        zIndex: zIndex
+      }}
       default={{
         ...getCenterPosition(),
         width: 400,
@@ -62,6 +75,7 @@ const UserList = ({ closeWindow }) => {
       minWidth={350}
       minHeight={220}
       className='window'
+      onClick={updateZIndex}
       disableDragging={isMobileScreen()}
       position={isMobileScreen()}
     >
@@ -81,8 +95,8 @@ const UserList = ({ closeWindow }) => {
         <div className='user-list'>
           {users.map((user) => (
             <Tilt
-            key={user.id}
-            borderRadius="20%"
+              key={user.id}
+              borderRadius="20%"
             >
               <div key={user.id} className='user-card'>
                 <div className='user-avatar'>

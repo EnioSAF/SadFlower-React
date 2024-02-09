@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { useAuthContext } from "/context/AuthContext";
 import { API } from "/components/Tools/SignInOut/constant";
 import { setToken, setUser } from "components/Tools/SignInOut/strapitoken";
@@ -15,6 +16,15 @@ const SignIn = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+    const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+    setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+  };
 
   //Pour le login
   const onFinish = async (event) => {
@@ -74,6 +84,9 @@ const SignIn = ({
 
   return (
     <Rnd
+      style={{
+        zIndex: zIndex
+      }}
       default={{
         ...getCenterPosition(),
         width: 350,
@@ -82,6 +95,7 @@ const SignIn = ({
       minWidth={350}
       minHeight={220}
       className='window'
+      onClick={updateZIndex}
       disableDragging={isMobileScreen()}
       position={isMobileScreen()}
     >

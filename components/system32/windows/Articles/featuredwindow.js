@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import config from "@/src/config";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import { Rnd } from "react-rnd";
 import ReactMarkdown from 'react-markdown';
@@ -10,9 +10,18 @@ import "98.css";
 import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/Articles/window-contenu.sass";
 
-const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
+const FeaturedWindow = ({ articleData, closeWindow, onClick }) => {
   // Fonction pour vérifier la taille de l'écran
   const isMobileScreen = () => window.innerWidth <= 600;
+
+    // Pour gérer le Z-index
+    const { bringToFront, zIndex: globalZIndex } = useZIndex();
+    const [zIndex, setZIndex] = useState(globalZIndex);
+
+    const updateZIndex = () => {
+        const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+        setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+    };
 
   // Fonction pour générer une position aléatoire
   const getRandomPosition = () => {
@@ -25,16 +34,6 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
     const y = Math.floor(Math.random() * (windowHeight - 220)); // 220 est la hauteur de la fenêtre
 
     return { x, y };
-
-    // Fonction pour centrer la fenêtre
-    const getInitialPosition = () => ({
-      x: isMobileScreen()
-        ? (window.innerWidth - window.innerWidth * 0.9) / 2
-        : 0,
-      y: isMobileScreen()
-        ? (window.innerHeight - window.innerHeight * 0.9) / 2
-        : 0,
-    });
   };
 
   return (
@@ -52,7 +51,7 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
         minWidth={350}
         minHeight={220}
         className='window'
-        onClick={onClick}
+        onClick={updateZIndex}
         position={isMobileScreen()}
         disableDragging={isMobileScreen()}
       >
@@ -73,25 +72,23 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick, zIndex }) => {
 
         <div className='window-body'>
           <div className='fenetre-article'>
-            {articleData && articleData.attributes && (
-              <div className="window-contenu">
-                <h2>{articleData.attributes.Title}</h2>
-                <hr />
-                <div className="window-resume">
+            <div className="window-contenu">
+              <h2>{articleData.attributes.Title}</h2>
+              <hr />
+              <div className="window-resume">
                 <p>{articleData.attributes.Summary}</p>
-                </div>
-                <hr />
-                <ReactMarkdown>{articleData.attributes.Content}</ReactMarkdown>
-                <hr />
-                <Image
-                  className={`${styles.stylepourdetails} mb-50`}
-                  src={`${articleData.attributes.FeaturedImage.data.attributes.url}`}
-                  alt='6'
-                  width='1050'
-                  height='387'
-                />
-                </div>
-            )}
+              </div>
+              <hr />
+              <ReactMarkdown>{articleData.attributes.Content}</ReactMarkdown>
+              <hr />
+              <Image
+                className={`${styles.stylepourdetails} mb-50`}
+                src={`${articleData.attributes.FeaturedImage.data.attributes.url}`}
+                alt='6'
+                width='1050'
+                height='387'
+              />
+            </div>
           </div>
         </div>
         <div className='status-bar'>

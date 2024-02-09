@@ -1,16 +1,23 @@
 import React, { useState, useRef, useMemo } from "react";
+import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
+
 import { TwitchPlayer } from "react-twitch-embed";
 import { TwitchChat } from "react-twitch-embed";
-import { Rnd } from "react-rnd";
-import styles from "@/styles/utils/style.module.sass";
-import twitchwindow from "@/styles/system32/windows/twitchwindow.sass";
+
+import "/styles/utils/style.module.sass";
+import "/styles/system32/windows/twitchwindow.sass";
 
 const TwitchWindow = ({ closeWindow }) => {
-  const [zIndex, setZIndex] = useState(1);
   const embed = useRef();
 
-  const bringToFront = () => {
-    setZIndex((prevZIndex) => prevZIndex + 1);
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+      const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+      setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
   };
 
   const getRandomPosition = () => {
@@ -43,7 +50,7 @@ const TwitchWindow = ({ closeWindow }) => {
       <Rnd
         style={{
           fontFamily: "Arial, sans-serif",
-          zIndex: zIndex,
+          zIndex: zIndex
         }}
         default={{
           ...getRandomPosition(),
@@ -53,9 +60,9 @@ const TwitchWindow = ({ closeWindow }) => {
         minWidth={1337}
         minHeight={656}
         className='window'
-        onMouseDownCapture={bringToFront}
-        onDragStart={bringToFront}
-        onTouchStart={bringToFront}
+        onMouseDownCapture={updateZIndex}
+        onDragStart={updateZIndex}
+        onTouchStart={updateZIndex}
       >
         <div className='title-bar'>
           <div className='title-bar-text'>Twitch.tv</div>
