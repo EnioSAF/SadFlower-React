@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import GitHubCalendar from "react-github-calendar";
 import { PixelArtCard } from "react-pixelart-face-card";
@@ -19,8 +20,16 @@ import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/whoami.sass";
 import "react-vertical-timeline-component/style.min.css";
 
-const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
+const Whoami = ({ closeWindow, username }) => {
   const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+      const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+      setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+  };
 
   // // - Pour les particules
   // const [init, setInit] = useState(false);
@@ -75,7 +84,7 @@ const Whoami = ({ closeWindow, onClick, zIndex, username }) => {
         minWidth={350}
         minHeight={220}
         className={`window`}
-        onClick={onClick}
+        onClick={updateZIndex}
         position={isMobileScreen()}
         disableDragging={isMobileScreen()}>
         <div className='title-bar'>

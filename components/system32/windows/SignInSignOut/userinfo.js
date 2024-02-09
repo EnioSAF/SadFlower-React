@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 import {
   setToken,
   removeToken,
@@ -23,6 +24,15 @@ const UserInfo = ({
   const [username, setUsername] = useState("Chargement...");
   const [avatar, setAvatar] = useState(null);
   const [isComponentDying, setIsComponentDying] = useState(false);
+
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+    const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+    setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+  };
 
   useEffect(() => {
     if (user) {
@@ -66,6 +76,9 @@ const UserInfo = ({
 
   return (
     <Rnd
+      style={{
+        zIndex: zIndex
+      }}
       default={{
         ...getCenterPosition(),
         width: 359,
@@ -74,6 +87,7 @@ const UserInfo = ({
       minWidth={350}
       minHeight={220}
       className='window'
+      onClick={updateZIndex}
       disableDragging={isMobileScreen()}
       position={isMobileScreen()}
     >

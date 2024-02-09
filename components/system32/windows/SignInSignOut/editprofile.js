@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { useAuthContext } from "@/context/AuthContext";
 import { API, BEARER } from "@/components/Tools/SignInOut/constant";
 import { getToken } from "@/components/Tools/SignInOut/strapitoken";
@@ -12,6 +13,16 @@ import "/styles/system32/windows/window.sass";
 const EditProfile = ({ closeWindow }) => {
   const { user, setUser } = useAuthContext();
   const [formData, setFormData] = useState({ username: "", email: "" });
+
+  // Pour gérer le Z-index
+  const { bringToFront, zIndex: globalZIndex } = useZIndex();
+  const [zIndex, setZIndex] = useState(globalZIndex);
+
+  const updateZIndex = () => {
+    const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+    setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+  };
+
 
   useEffect(() => {
     if (user) {
@@ -104,6 +115,9 @@ const EditProfile = ({ closeWindow }) => {
 
   return (
     <Rnd
+      style={{
+        zIndex: zIndex
+      }}
       default={{
         ...getCenterPosition(),
         width: 360,
@@ -112,6 +126,7 @@ const EditProfile = ({ closeWindow }) => {
       minWidth={350}
       minHeight={220}
       className='window'
+      onClick={updateZIndex}
       disableDragging={isMobileScreen()}
       position={isMobileScreen()}
     >

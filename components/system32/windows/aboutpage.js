@@ -1,13 +1,17 @@
 import React, { useState, useRef } from "react";
 import { Rnd } from "react-rnd";
+import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import "/styles/utils/style.module.sass";
 
 const AboutPage = ({ closeWindow }) => {
-    const [zIndex, setZIndex] = useState(1);
+    // Pour gérer le Z-index
+    const { bringToFront, zIndex: globalZIndex } = useZIndex();
+    const [zIndex, setZIndex] = useState(globalZIndex);
 
-    const bringToFront = () => {
-        setZIndex((prevZIndex) => prevZIndex + 1);
+    const updateZIndex = () => {
+        const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
+        setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
     };
 
     const getRandomPosition = () => {
@@ -24,7 +28,7 @@ const AboutPage = ({ closeWindow }) => {
             <Rnd
                 style={{
                     fontFamily: "Arial, sans-serif",
-                    zIndex: zIndex,
+                    zIndex: zIndex
                 }}
                 default={{
                     ...getRandomPosition(),
@@ -34,9 +38,9 @@ const AboutPage = ({ closeWindow }) => {
                 minWidth={350}
                 minHeight={220}
                 className='window'
-                onMouseDownCapture={bringToFront}
-                onDragStart={bringToFront}
-                onTouchStart={bringToFront}
+                onMouseDownCapture={updateZIndex}
+                onDragStart={updateZIndex}
+                onTouchStart={updateZIndex}
             >
                 <div className='title-bar'>
                     <div className='title-bar-text'>About</div>
