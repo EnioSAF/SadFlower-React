@@ -65,7 +65,7 @@ const FeaturedWindow = ({ articleData, closeWindow, onClick }) => {
             <button
               aria-label='Close'
               onClick={closeWindow}
-              onTouchStart={closeWindow}
+              onTouch={closeWindow}
             />
           </div>
         </div>
