@@ -4,7 +4,7 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import "/styles/utils/style.module.sass";
 
-const AboutPage = ({ closeWindow }) => {
+const PopUp1 = ({ closeWindow }) => {
 
 
     // Pour gérer le Z-index
@@ -58,7 +58,7 @@ const AboutPage = ({ closeWindow }) => {
                 position={isMobileScreen()}
             >
                 <div className='title-bar'>
-                    <div className='title-bar-text'>About</div>
+                    <div className='title-bar-text'>PopUp1</div>
                     <div className='title-bar-controls'>
                         <button aria-label='Minimize' />
                         <button aria-label='Maximize' />
@@ -75,7 +75,7 @@ const AboutPage = ({ closeWindow }) => {
                 </div>
 
                 <div className='status-bar'>
-                    <p className='status-bar-field'>About</p>
+                    <p className='status-bar-field'>PopUp1</p>
                     <p className='status-bar-field'>TheMoreUKnow</p>
                     <p className='status-bar-field'>CPU Usage: 55%</p>
                 </div>
@@ -84,4 +84,4 @@ const AboutPage = ({ closeWindow }) => {
     );
 };
 
-export default AboutPage;
+export default PopUp1;
