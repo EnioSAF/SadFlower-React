@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 
+import Tilt from "react-next-tilt";
+
 import "/styles/utils/style.module.sass";
 import "98.css";
 import "/styles/system32/windows/aboutpage.sass";
@@ -191,8 +193,28 @@ const AboutPage = ({ closeWindow }) => {
 
                     <div className="contact-section">
                         <h2>Contactez les ██████</h2>
-                        <p>{`Si votre âme est prête à franchir le seuil, utilisez ce formulaire pour envoyer un message codé aux gardiens de SadFlower HUB. Soyez prudents, chaque mot a son poids, chaque question ses conséquences.`}</p>
-
+                        <p>{`Si votre âme est prête à franchir le seuil, utilisez ce formulaire pour envoyer un message codé aux ████████ de SadFlower HUB. Soyez prudents, chaque mot a son poids, chaque question ses conséquences.`}</p>
+                        <div className="contactcard-section">
+                            <Tilt className="tilt-card"
+                            options={{
+                                max: 25,
+                                scale: 1.05,
+                                radius: 30
+                                }}>
+                                <div className="card-info">
+                                    <h3>Contact Card</h3>
+                                    <p>Pour toutes missives et autres contacts :</p>
+                                    <a href="mailto:tonemail@lesombres.com">enio.sadflower@gmail.com</a>
+                                    <div className="social-links">
+                                        <a href="https://twitter.com/enioSadflower" target="_blank" rel="noopener noreferrer">Twitter</a>
+                                        <a href="https://www.instagram.com/antoine.sadflower/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                                        <a href="https://linktr.ee/eniosadflower?subscribe" target="_blank" rel="noopener noreferrer">Linktree (Music)</a>
+                                        <a href="https://github.com/EnioSAF" target="_blank" rel="noopener noreferrer">GitHub</a>
+                                        {/* Ajoute ici d'autres liens vers tes réseaux sociaux ou ce que tu veux */}
+                                    </div>
+                                </div>
+                            </Tilt>
+                        </div>
                     </div>
                 </div>
 
