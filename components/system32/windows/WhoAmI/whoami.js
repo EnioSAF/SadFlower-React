@@ -10,9 +10,9 @@ import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 // import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 // import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
 
-import SkillCard from "./WhoAmI/SkillCard";
-import ChatGPTModule from "./WhoAmI/ChatGPTModule";
-import TimeLineEnio from "./WhoAmI/VerticalTimeline";
+import SkillCard from "./SkillCard";
+import ChatGPTModule from "./ChatGPTModule";
+import TimeLineEnio from "./VerticalTimeline";
 
 import "/styles/styles.sass";
 import "98.css";
