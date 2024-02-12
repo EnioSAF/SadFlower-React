@@ -10,7 +10,7 @@ import EditProfile from "@/components/system32/windows/SignInSignOut/editprofile
 import UserInfo from "@/components/system32/windows/SignInSignOut/userinfo";
 import UserList from "@/components/system32/windows/SignInSignOut/userlist";
 import AboutPage from "@/components/system32/windows/aboutpage";
-import Whoami from "@/components/system32/windows/whoami";
+import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 
