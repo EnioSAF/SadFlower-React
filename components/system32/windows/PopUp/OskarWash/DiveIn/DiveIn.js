@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from 'next/image';
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
@@ -9,7 +9,8 @@ import "styles/system32/windows/PopUp/OskarWash/DiveIn/divein.sass";
 
 const DiveIn = ({ closeWindow }) => {
 
-    // Fonction pour corruption du cerveau
+    // - Fonction pour corruption du cerveau
+    useEffect(() => {
     const brain = document.querySelector('.cerveau-divein');
     const applyGlitch = () => {
         const glitchChance = Math.random();
@@ -22,7 +23,7 @@ const DiveIn = ({ closeWindow }) => {
         }
     };
 
-    setInterval(applyGlitch, 200); // Applique un léger glitch toutes les 200 ms
+    const intervalId = setInterval(applyGlitch, 200); // Applique un léger glitch toutes les 200 ms
 
     // Pour intensifier le glitch au survol
     brain.addEventListener('mouseenter', () => {
@@ -35,7 +36,11 @@ const DiveIn = ({ closeWindow }) => {
         brain.classList.remove('glitch-intense'); // Retire la classe d'effet intense
     });
 
-    // Pour gérer le Z-index
+    return () => clearInterval(intervalId);
+  }, []); // Le tableau vide [] signifie que cet effet ne s'exécute qu'une fois, après le premier rendu
+
+
+    // - Pour gérer le Z-index
     const { bringToFront, zIndex: globalZIndex } = useZIndex();
     const [zIndex, setZIndex] = useState(globalZIndex);
 
@@ -111,22 +116,26 @@ const DiveIn = ({ closeWindow }) => {
                                 height='875'
                             />
                             <div className="boutton-divein">
-                                <Image
-                                    className={'divein-button'}
-                                    src={'/PopUp/Oskar-Wash/DiveIn/button.png'}
-                                    alt='divein-button'
-                                    width='497'
-                                    height='157'
-                                />
+                                <a href="https://www.instagram.com/oskarwash" target="_blank" rel="noopener noreferrer">
+                                    <Image
+                                        className={'divein-button'}
+                                        src={'/PopUp/Oskar-Wash/DiveIn/button.png'}
+                                        alt='divein-button'
+                                        width='497'
+                                        height='157'
+                                    />
+                                </a>
                             </div>
                             <div className="cerveau-divein">
-                                <Image
-                                    className={'divein-brain'}
-                                    src={'/PopUp/Oskar-Wash/DiveIn/brain.png'}
-                                    alt='divein-brain'
-                                    width='273'
-                                    height='209'
-                                />
+                                <a href="https://www.instagram.com/p/CxA2Xp2Nn3L/?hl=fr&img_index=1" target="_blank" rel="noopener noreferrer">
+                                    <Image
+                                        className={'divein-brain'}
+                                        src={'/PopUp/Oskar-Wash/DiveIn/brain.png'}
+                                        alt='divein-brain'
+                                        width='273'
+                                        height='209'
+                                    />
+                                </a>
                             </div>
                         </div>
                     </div>
