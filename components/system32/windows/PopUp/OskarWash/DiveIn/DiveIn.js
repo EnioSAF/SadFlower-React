@@ -78,34 +78,27 @@ const DiveIn = ({ closeWindow }) => {
         return { x, y, width: rndWidth, height: rndHeight };
     };
 
-    // Pour la fonction tactile onTouch
-    document.addEventListener('DOMContentLoaded', function () {
-        const instagramAppLink = 'instagram://user?username=oskarwash'; // Lien pour l'app
-        const instagramWebLink = 'https://www.instagram.com/oskarwash'; // Lien pour le web
-        const instagramBrainLink = 'https://www.instagram.com/p/CxA2Xp2Nn3L/?hl=fr&img_index=1'; // Lien spécifique pour le cerveau
+    //- Fonction pour pouvoir toucher Cerveau et Button sur écran tactiles
+    const handleTouch = (e) => {
+        e.stopPropagation(); // On empêche l'événement de se propager.
 
-        // Ajoute l'écouteur pour le bouton
-        document.querySelector('.boutton-divein a').addEventListener('touchstart', function (e) {
-            e.preventDefault(); // Empêche le comportement par défaut
-            tryToOpenApp(instagramAppLink, instagramWebLink);
-        }, { passive: false });
+        // On tente d'ouvrir l'URL de l'application.
+        window.open("instagram://user?username=oskarwash");
 
-        // Ajoute l'écouteur pour l'image du cerveau
-        document.querySelector('.cerveau-divein a').addEventListener('touchstart', function (e) {
-            e.preventDefault(); // Empêche le comportement par défaut
-            tryToOpenApp(instagramAppLink, instagramBrainLink);
-        }, { passive: false });
+        // On met un petit délai pour vérifier si l'appli s'est ouverte ou pas.
+        const checker = setTimeout(() => {
+            // Si après 25ms l'appli n'a pas réagi, on ouvre le profil dans le navigateur.
+            // C'est un peu arbitraire comme délai, tu peux ajuster selon tes tests.
+            window.open("https://www.instagram.com/oskarwash", "_blank");
+        }, 25);
 
-        function tryToOpenApp(appUrl, fallbackUrl) {
-            window.location = appUrl;
-            // Si ça ne fonctionne pas, redirige vers le lien web après un court délai
-            setTimeout(function () {
-                window.location = fallbackUrl;
-            }, 25);
-        }
-    });
-
-
+        // Pour éviter d'ouvrir l'URL dans le navigateur si l'appli s'est lancée,
+        // on écoute l'événement "visibilitychange" du document.
+        document.addEventListener("visibilitychange", function onVisibilityChange() {
+            document.removeEventListener("visibilitychange", onVisibilityChange);
+            clearTimeout(checker); // On annule le délai si l'appli Instagram s'est ouverte.
+        });
+    };
 
     return (
         <>
@@ -152,6 +145,7 @@ const DiveIn = ({ closeWindow }) => {
                                     href="https://www.instagram.com/oskarwash"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onTouchStart={handleTouch}
                                 >
                                     <Image
                                         className={'divein-button'}
@@ -167,6 +161,7 @@ const DiveIn = ({ closeWindow }) => {
                                     href="https://www.instagram.com/p/CxA2Xp2Nn3L/?hl=fr&img_index=1"
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onTouchStart={handleTouch}
                                 >
                                     <Image
                                         className={'divein-brain'}
