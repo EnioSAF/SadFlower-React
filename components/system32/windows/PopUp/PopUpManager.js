@@ -3,10 +3,13 @@ import DiveIn from './OskarWash/DiveIn/DiveIn';
 
 const PopUpManager = () => {
     const [popUps, setPopUps] = useState([]);
+    const [nextPopUpIn, setNextPopUpIn] = useState(0); // Nouvel état pour suivre le temps restant
 
     useEffect(() => {
         const schedulePopUps = () => {
             const delay = Math.random() * (10 * 60 * 1000); // Délai aléatoire avant de montrer les pop-ups, jusqu'à 10 minutes
+            setNextPopUpIn(delay); // Met à jour le timer de test
+
             setTimeout(() => {
                 const numberOfPopUps = Math.floor(Math.random() * (10 - 2 + 1)) + 2; // Entre 2 et 10 pop-ups
 
@@ -28,6 +31,15 @@ const PopUpManager = () => {
         // Pas de nettoyage spécifique nécessaire ici car les timeouts déclenchent leur propre nettoyage via `setPopUps`
     }, []);
 
+    useEffect(() => {
+        // Met à jour le timer chaque seconde pour l'affichage
+        const interval = setInterval(() => {
+            setNextPopUpIn(prevTime => (prevTime > 0 ? prevTime - 1000 : 0));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const handleClosePopUp = (id) => {
         setPopUps(prevPopUps => prevPopUps.filter(popUp => popUp.id !== id));
     };
@@ -45,6 +57,7 @@ const PopUpManager = () => {
         <div>
             {popUps.map(popUp => popUp.Component)}
             <button onClick={handleShowPopUp}>Afficher le pop-up</button>
+            <div>Prochain groupe de pop-ups dans : {(nextPopUpIn / 1000).toFixed(0)} secondes</div>
         </div>
     );
 };
