@@ -14,6 +14,8 @@ import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 
+import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
+
 import Icon from "@/components/system32/applications/icon";
 import BootsScreen from "@/components/system32/windows/bootscreen";
 import TaskBar from "@/components/system32/desktop/TaskBar";
@@ -157,6 +159,9 @@ function HomePage() {
               iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
               onClick={() => handleIconClick("TwitchWindow")}
             />
+            <>
+              <PopUpManager />
+            </>
           </div>
 
           {isClient && (
