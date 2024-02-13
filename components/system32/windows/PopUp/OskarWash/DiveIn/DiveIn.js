@@ -78,6 +78,35 @@ const DiveIn = ({ closeWindow }) => {
         return { x, y, width: rndWidth, height: rndHeight };
     };
 
+    // Pour la fonction tactile onTouch
+    document.addEventListener('DOMContentLoaded', function () {
+        const instagramAppLink = 'instagram://user?username=oskarwash'; // Lien pour l'app
+        const instagramWebLink = 'https://www.instagram.com/oskarwash'; // Lien pour le web
+        const instagramBrainLink = 'https://www.instagram.com/p/CxA2Xp2Nn3L/?hl=fr&img_index=1'; // Lien spécifique pour le cerveau
+
+        // Ajoute l'écouteur pour le bouton
+        document.querySelector('.boutton-divein a').addEventListener('touchstart', function (e) {
+            e.preventDefault(); // Empêche le comportement par défaut
+            tryToOpenApp(instagramAppLink, instagramWebLink);
+        }, { passive: false });
+
+        // Ajoute l'écouteur pour l'image du cerveau
+        document.querySelector('.cerveau-divein a').addEventListener('touchstart', function (e) {
+            e.preventDefault(); // Empêche le comportement par défaut
+            tryToOpenApp(instagramAppLink, instagramBrainLink);
+        }, { passive: false });
+
+        function tryToOpenApp(appUrl, fallbackUrl) {
+            window.location = appUrl;
+            // Si ça ne fonctionne pas, redirige vers le lien web après un court délai
+            setTimeout(function () {
+                window.location = fallbackUrl;
+            }, 25);
+        }
+    });
+
+
+
     return (
         <>
             <Rnd

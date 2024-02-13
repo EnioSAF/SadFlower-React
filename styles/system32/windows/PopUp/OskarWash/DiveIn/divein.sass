@@ -53,3 +53,18 @@
 
     &:hover
         filter: hue-rotate(60deg) contrast(150%) saturate(150%) // Corruption PLUS intense
+        animation: tourneHue 0.5s infinite alternate
+
+    @keyframes tourneHue
+        0%
+            filter: hue-rotate(0deg)
+        100%
+            filter: hue-rotate(360deg)
+
+
+@media (max-width: 768px)
+    .boutton-divein
+        animation: gigote 0.5s infinite alternate
+
+    .cerveau-divein
+        filter: hue-rotate(60deg) contrast(150%) saturate(150%)
