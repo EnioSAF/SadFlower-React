@@ -2,30 +2,48 @@ import React, { useState, useEffect } from 'react';
 import DiveIn from './OskarWash/DiveIn/DiveIn';
 
 const PopUpManager = () => {
-    const [showPopUp, setShowPopUp] = useState(false);
+    const [popUps, setPopUps] = useState([]);
 
-    // Pour afficher la pop-up au hasard, tu peux utiliser un effet avec un timeout
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowPopUp(true); // Active la pop-up après un délai
-        }, Math.random() * 5000); // Entre 0 et 5 secondes, ajuste comme tu veux
+        const schedulePopUps = () => {
+            const delay = Math.random() * (10 * 60 * 1000); // Délai aléatoire avant de montrer les pop-ups, jusqu'à 10 minutes
+            setTimeout(() => {
+                const numberOfPopUps = Math.floor(Math.random() * (10 - 2 + 1)) + 2; // Entre 2 et 10 pop-ups
 
-        return () => clearTimeout(timer);
+                for (let i = 0; i < numberOfPopUps; i++) {
+                    setTimeout(() => {
+                        const id = Math.random().toString(36).substr(2, 9); // ID unique pour chaque pop-up
+                        setPopUps(prevPopUps => [...prevPopUps, { id, Component: <DiveIn key={id} closeWindow={() => handleClosePopUp(id)} /> }]);
+                    }, i * 100); // Un délai très court entre chaque pop-up, ici 100ms
+                }
+
+                // Planifie le prochain groupe de pop-ups après un espace d'au moins 10 minutes
+                schedulePopUps();
+            }, delay);
+        };
+
+        // Démarrage initial
+        schedulePopUps();
+
+        // Pas de nettoyage spécifique nécessaire ici car les timeouts déclenchent leur propre nettoyage via `setPopUps`
     }, []);
 
-    // Gère le clic pour afficher la pop-up direct
-    const handleShowPopUp = () => {
-        setShowPopUp(true);
+    const handleClosePopUp = (id) => {
+        setPopUps(prevPopUps => prevPopUps.filter(popUp => popUp.id !== id));
     };
 
-    const handleClosePopUp = () => {
-        setShowPopUp(false);
+    // Le bouton pour tester l'ouverture d'un pop-up reste inchangé
+    const handleShowPopUp = () => {
+        const newPopUp = {
+            id: Math.random().toString(36).substr(2, 9),
+            Component: <DiveIn key={Math.random().toString(36).substr(2, 9)} closeWindow={() => handleClosePopUp(Math.random().toString(36).substr(2, 9))} />
+        };
+        setPopUps([...popUps, newPopUp]);
     };
 
     return (
         <div>
-            {showPopUp && <DiveIn closeWindow={handleClosePopUp} />}
-            {/* Ajoute ici un bouton ou autre élément déclencheur si tu veux */}
+            {popUps.map(popUp => popUp.Component)}
             <button onClick={handleShowPopUp}>Afficher le pop-up</button>
         </div>
     );
