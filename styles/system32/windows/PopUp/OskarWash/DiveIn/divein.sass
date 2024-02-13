@@ -1,0 +1,55 @@
+.content-divein
+    position: relative
+    width: 100%
+    height: 100%
+
+    .fond-divein
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+
+        img
+            width: 100%
+            height: 100%
+            object-fit: contain // ou contain selon le rendu souhaité
+
+    .boutton-divein, .cerveau-divein
+        position: absolute
+        width: auto
+        height: auto
+
+        img
+            width: 100%
+            height: 100%
+            object-fit: cover // ou contain selon le rendu souhaité
+
+.boutton-divein
+    position: absolute
+    top: 64%
+    left: 48%
+    transform: translate(-50%, -50%)
+    transition: transform 0.3s ease // Doux et rapide
+
+    &:hover
+        transform: translate(-50%, -50%) scale(1.1) rotate(5deg) // Grossit et tourne légèrement
+        animation: gigote 0.5s infinite alternate
+
+    @keyframes gigote
+        0%
+            transform: translate(-50%, -50%) rotate(2deg)
+        100%
+            transform: translate(-50%, -50%) rotate(-2deg)
+
+.cerveau-divein
+    position: absolute
+    width: 30% !important
+    top: 20%
+    left: 78%
+    transform: translate(-50%, -50%)
+    filter: hue-rotate(20deg) contrast(110%) // Légère corruption visuelle
+    transition: filter 0.5s ease, transform 0.5s ease
+
+    &:hover
+        filter: hue-rotate(60deg) contrast(150%) saturate(150%) // Corruption PLUS intense
