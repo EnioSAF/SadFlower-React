@@ -8,7 +8,7 @@ const PopUpManager = () => {
 
     useEffect(() => {
         const schedulePopUps = () => {
-            const delay = Math.random() * (10 * 60 * 10); // Délai aléatoire jusqu'à 10 minutes (10 * 60 * 10) pour 10 secondes
+            const delay = Math.random() * (1000 * 60 * 10); // Délai aléatoire jusqu'à 10 minutes (10 * 60 * 10) pour 10 secondes
             setNextPopUpIn(delay);
 
             setTimeout(() => {
@@ -47,7 +47,6 @@ const PopUpManager = () => {
     return (
         <div>
             {popUps.map(popUp => popUp.Component)}
-            <div>Prochain groupe de pop-ups dans : {(nextPopUpIn / 1000).toFixed(0)} secondes</div>
         </div>
     );
 };
