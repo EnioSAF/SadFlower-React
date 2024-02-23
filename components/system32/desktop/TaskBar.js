@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import "/styles/system32/desktop/taskbar.sass";
 
@@ -20,6 +20,20 @@ const TaskBar = ({
     return () => clearInterval(interval);
   }, []);
 
+  const startMenuRef = useRef(null); // Pour fermer le menu quand clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (startMenuRef.current && !startMenuRef.current.contains(event.target)) {
+        setShowStartMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const toggleStartMenu = () => setShowStartMenu(!showStartMenu);
 
@@ -30,7 +44,7 @@ const TaskBar = ({
         <span className='start-text'>Start</span>
       </button>
       {showStartMenu && (
-        <div className="start-menu">
+        <div className="start-menu" ref={startMenuRef}>
           <div className="start-menu-logocontainer">
             <Image
               className='taskbar-logo'
