@@ -96,7 +96,7 @@ const MusicCure = ({ closeWindow }) => {
                 cancel=".musiccure-background, .title-bar-controls button"
             >
                 <div className='title-bar' style={titleBarStyle}>
-                    <div className='title-bar-text'>musiccure</div>
+                    <div className='title-bar-text'>MusicIsABlessing?</div>
                     <div className='title-bar-controls'>
                         <button aria-label='Minimize' />
                         <button aria-label='Maximize' />
@@ -141,7 +141,7 @@ const MusicCure = ({ closeWindow }) => {
                 <div className='status-bar' style={statusBarStyle}>
                     <p className='status-bar-field'>MUSIC IS THE MIRACLE</p>
                     <p className='status-bar-field'>CLICK</p>
-                    <p className='status-bar-field'>CPU Usage: 666%</p>
+                    <p className='status-bar-field'>CPU Usage: 1337%</p>
                 </div>
             </Rnd>
         </>
