@@ -6,10 +6,10 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { PowerGlitch } from 'powerglitch';
 
 import "/styles/utils/style.module.sass";
-import "styles/system32/windows/PopUp/Enio/ClickOnThis/clickonthis.sass";
+import "styles/system32/windows/PopUp/Enio/MusicCure/musiccure.sass";
 
 
-const ClickOnThis = ({ closeWindow }) => {
+const MusicCure = ({ closeWindow }) => {
 
     // - Glitch les images
     const faceRef = useRef(null);
@@ -32,7 +32,9 @@ const ClickOnThis = ({ closeWindow }) => {
                     "maxHeight": 0.15,
                     "hueRotate": true
                 },
-                pulse: false,
+                pulse: {
+                    scale: 6
+                },
             });
         }
     }, [faceRef]);
@@ -91,10 +93,10 @@ const ClickOnThis = ({ closeWindow }) => {
                 maxHeight={461}
                 className='window'
                 onClick={updateZIndex}
-                cancel=".divein-background, .title-bar-controls button"
+                cancel=".musiccure-background, .title-bar-controls button"
             >
                 <div className='title-bar' style={titleBarStyle}>
-                    <div className='title-bar-text'>DiveIn</div>
+                    <div className='title-bar-text'>musiccure</div>
                     <div className='title-bar-controls'>
                         <button aria-label='Minimize' />
                         <button aria-label='Maximize' />
@@ -107,29 +109,29 @@ const ClickOnThis = ({ closeWindow }) => {
                 </div>
 
                 <div className='window-body'>
-                    <div className="content-clickonthis">
-                        <div className="fond-clickonthis">
+                    <div className="content-musiccure">
+                        <div className="fond-musiccure">
                             <Image
-                                className={'divein-background'}
-                                src={'/PopUp/GoodCitizen/background.jpg'}
-                                alt='clickonthis-bg'
+                                className={'musiccure-background'}
+                                src={'/PopUp/MusicCure/musiccure.jpg'}
+                                alt='musiccure-bg'
                                 width='941'
                                 height='875'
                             />
                         </div>
-                        <div className="face-clickonthis" ref={faceRef}>
+                        <div className="bottle-musiccure" ref={faceRef}>
                             <a
-                                href="https://linktr.ee/eniosadflower"
+                                href="https://www.instagram.com/antoine.sadflower/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                onTouchEnd={() => window.open("https://linktr.ee/eniosadflower", "_blank")}
+                                onTouchEnd={() => window.open("https://www.instagram.com/antoine.sadflower/", "_blank")}
                             >
                                 <Image
-                                    className={'face-clickonthis'}
-                                    src={'/PopUp/GoodCitizen/face.png'}
-                                    alt='face-clickonthis'
-                                    width='500'
-                                    height='400'
+                                    className={'musiccure-bottle'}
+                                    src={'/PopUp/MusicCure/bottle.png'}
+                                    alt='musiccure-bottle'
+                                    width='130'
+                                    height='250'
                                 />
                             </a>
                         </div>
@@ -137,7 +139,7 @@ const ClickOnThis = ({ closeWindow }) => {
                 </div>
 
                 <div className='status-bar' style={statusBarStyle}>
-                    <p className='status-bar-field'>CLICKONTHIS</p>
+                    <p className='status-bar-field'>MUSIC IS THE MIRACLE</p>
                     <p className='status-bar-field'>CLICK</p>
                     <p className='status-bar-field'>CPU Usage: 666%</p>
                 </div>
@@ -146,4 +148,4 @@ const ClickOnThis = ({ closeWindow }) => {
     );
 };
 
-export default ClickOnThis;
+export default MusicCure;
