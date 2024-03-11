@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import DiveIn from './OskarWash/DiveIn/DiveIn';
+import ClickOnThis from './Enio/ClickOnThis/ClickOnThis';
 
 const PopUpManager = () => {
     const [popUps, setPopUps] = useState([]);
@@ -8,12 +9,12 @@ const PopUpManager = () => {
 
     useEffect(() => {
         const schedulePopUps = () => {
-            const delay = Math.random() * (1000 * 60 * 10); // Délai aléatoire jusqu'à 10 minutes (10 * 60 * 10) pour 10 secondes
+            const delay = Math.random() * (10 * 60 * 10); // Délai aléatoire jusqu'à 10 minutes (10 * 60 * 10) pour 10 secondes
             setNextPopUpIn(delay);
 
             setTimeout(() => {
                 const numberOfPopUps = Math.floor(Math.random() * (5 - 2 + 1)) + 2; // Entre 2 et 10 pop-ups
-                const popUpTypes = [DiveIn]; // Array de tes composants pop-up [DiveIn, PopUpA, PopUpB]
+                const popUpTypes = [DiveIn, ClickOnThis]; // Array de tes composants pop-up [DiveIn, PopUpA, PopUpB]
 
                 for (let i = 0; i < numberOfPopUps; i++) {
                     setTimeout(() => {
