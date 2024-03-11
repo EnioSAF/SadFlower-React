@@ -94,7 +94,7 @@ const ClickOnThis = ({ closeWindow }) => {
                 cancel=".divein-background, .title-bar-controls button"
             >
                 <div className='title-bar' style={titleBarStyle}>
-                    <div className='title-bar-text'>DiveIn</div>
+                    <div className='title-bar-text'>CLICKONIT</div>
                     <div className='title-bar-controls'>
                         <button aria-label='Minimize' />
                         <button aria-label='Maximize' />
@@ -139,7 +139,7 @@ const ClickOnThis = ({ closeWindow }) => {
                 <div className='status-bar' style={statusBarStyle}>
                     <p className='status-bar-field'>CLICKONTHIS</p>
                     <p className='status-bar-field'>CLICK</p>
-                    <p className='status-bar-field'>CPU Usage: 666%</p>
+                    <p className='status-bar-field'>CPU Usage: 853985%</p>
                 </div>
             </Rnd>
         </>
