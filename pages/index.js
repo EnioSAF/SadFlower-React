@@ -13,6 +13,7 @@ import AboutPage from "@/components/system32/windows/aboutpage";
 import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
+import TamagotchiWidget from "@/components/system32/applications/Tamagotchi/Tamagotchi-Widget";
 
 import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
 
@@ -81,6 +82,16 @@ function HomePage() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [showUserList, setShowUserList] = useState(false);
 
+  // Fonction pour gérer le Tamagotchi
+  const [isTamagotchiWidgetOpen, setIsTamagotchiWidgetOpen] = useState(false);
+  const openTamagotchiWidget = () => {
+    setIsTamagotchiWidgetOpen(true);
+  };
+  const closeTamagotchiWidget = () => {
+    setIsTamagotchiWidgetOpen(false);
+  };
+
+  // Fonction pour gérer les autres fenêtres
   const openSignIn = () => {
     setIsSignInOpen(true);
     setIsSignUpOpen(false);
@@ -209,6 +220,7 @@ function HomePage() {
                   closeWindow={() => setIsUserInfoOpen(false)}
                   onEditProfileClick={openEditProfile}
                   setIsUserInfoOpen={setIsUserInfoOpen}
+                  openTamagotchiWidget={openTamagotchiWidget}
                 />
               )}
               {isEditProfileOpen && (
@@ -216,6 +228,9 @@ function HomePage() {
                   updateUser={updateUser}
                   closeWindow={() => setIsEditProfileOpen(false)}
                 />
+              )}
+              {isTamagotchiWidgetOpen && (
+                <TamagotchiWidget closeWindow={closeTamagotchiWidget} />
               )}
               {showUserList && (
                 <UserList closeWindow={() => setShowUserList(false)} />

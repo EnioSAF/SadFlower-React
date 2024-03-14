@@ -9,6 +9,7 @@ import {
 import { useAuthContext } from "@/context/AuthContext";
 
 import { PixelArtCard } from "react-pixelart-face-card";
+import TamagotchiWidget from "../../applications/Tamagotchi/Tamagotchi-Widget";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -19,10 +20,12 @@ const UserInfo = ({
   setLoginStatus,
   loginStatus,
   onEditProfileClick,
+  openTamagotchiWidget,
 }) => {
   const { user } = useAuthContext();
   const [username, setUsername] = useState("Chargement...");
   const [avatar, setAvatar] = useState(null);
+  const [showTamagotchi, setShowTamagotchi] = useState(false);
   const [isComponentDying, setIsComponentDying] = useState(false);
 
   // Pour gérer le Z-index
@@ -155,6 +158,9 @@ const UserInfo = ({
               <p>{username}</p>
             </div>
           </div>
+          <button className='auth_button' onClick={() => openTamagotchiWidget()}>
+              Open Tamagotchi
+            </button>
           <div className='buttons'>
             <button className='auth_button_logout' onClick={onEditProfileClick}>
               Edit Profile
@@ -170,6 +176,7 @@ const UserInfo = ({
         <p className='status-bar-field'>Slide 1</p>
         <p className='status-bar-field'>CPU Usage: 14%</p>
       </div>
+{showTamagotchi && <TamagotchiWidget closeWindow={() => setShowTamagotchi(false)} />}
     </Rnd>
   );
 };
