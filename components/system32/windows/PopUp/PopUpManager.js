@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DiveIn from './OskarWash/DiveIn/DiveIn';
 import ClickOnThis from './Enio/ClickOnThis/ClickOnThis';
 import MusicCure from './Enio/MusicCure/MusicCure';
+import CoolBug4Sell from './OskarWash/CoolBug4Sell/CoolBug4Sell';
 
 const PopUpManager = () => {
     const [popUps, setPopUps] = useState([]);
@@ -15,7 +16,7 @@ const PopUpManager = () => {
 
             setTimeout(() => {
                 const numberOfPopUps = Math.floor(Math.random() * (5 - 2 + 1)) + 2; // Entre 2 et 10 pop-ups
-                const popUpTypes = [DiveIn, ClickOnThis, MusicCure]; // Array de tes composants pop-up [DiveIn, PopUpA, PopUpB]
+                const popUpTypes = [DiveIn, ClickOnThis, MusicCure, CoolBug4Sell]; // Array de tes composants pop-up [DiveIn, PopUpA, PopUpB]
 
                 for (let i = 0; i < numberOfPopUps; i++) {
                     setTimeout(() => {
