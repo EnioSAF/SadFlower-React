@@ -1,38 +1,64 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import Image from 'next/image';
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 
-import Tamagotchi from "./Tamagotchi-Core";
+import TamagotchiCore from "components/system32/applications/Tamagotchi/Tamagotchi-Core.js";
+import TamagotchiMenu from "components/system32/applications/Tamagotchi/Tamagotchi-Menu.js";
+
+import styles from "styles/system32/applications/Tamagotchi/tamagotchi.module.sass"
 
 const TamagotchiWidget = ({ closeWindow }) => {
 
+    // Pour gérer le tamagotchi
 
+    const [isOn, setIsOn] = useState(true);
+    const [currentView, setCurrentView] = useState('core');
+    const [isButtonMiddlePressed, setIsButtonMiddlePressed] = useState(false);
 
-    // Pour gérer le Z-index
+    const togglePower = () => {
+        closeWindow();
+    };
+
+    const toggleView = () => {
+        if (isOn) {
+            setCurrentView(currentView => currentView === 'core' ? 'menu' : 'core');
+        }
+    };
+
+    const playClickSound = () => {
+        const sounds = [
+            '/SadGotchu/clicksounds/click1.mp3',
+            '/SadGotchu/clicksounds/click2.mp3',
+            '/SadGotchu/clicksounds/click3.mp3',
+            '/SadGotchu/clicksounds/click4.mp3',
+        ];
+        const soundToPlay = sounds[Math.floor(Math.random() * sounds.length)]; // Sélectionne un son aléatoire
+        const sound = new Audio(soundToPlay);
+        sound.play();
+    };
+    // Pour gérer la fenêtre
+
     const { bringToFront, zIndex: globalZIndex } = useZIndex();
     const [zIndex, setZIndex] = useState(globalZIndex);
 
     const updateZIndex = () => {
-        const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
-        setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+        const newZIndex = bringToFront();
+        setZIndex(newZIndex);
     };
 
-    // Fonction pour vérifier la taille de l'écran
     const isMobileScreen = () => window.innerWidth <= 600;
 
-    // Fonction pour centrer la fenêtre
     const getCenterPosition = () => {
         if (isMobileScreen()) {
-            // Sur un écran de téléphone, centre la fenêtre
-            const windowWidth = window.innerWidth * 0.8; // 80% de la largeur de l'écran
-            const windowHeight = window.innerHeight * 0.8; // 80% de la hauteur de l'écran
+            const windowWidth = window.innerWidth * 0.8;
+            const windowHeight = window.innerHeight * 0.8;
             const x = (window.innerWidth - windowWidth) / 2;
             const y = (window.innerHeight - windowHeight) / 2;
             return { x, y, width: windowWidth, height: windowHeight };
         } else {
-            // Sur un écran de PC, place la fenêtre de manière aléatoire
-            const windowWidth = window.innerWidth * 0.5; // 50% de la largeur de l'écran
-            const windowHeight = window.innerHeight * 0.5; // 50% de la hauteur de l'écran
+            const windowWidth = window.innerWidth * 0.5;
+            const windowHeight = window.innerHeight * 0.5;
             const x = Math.random() * (window.innerWidth - windowWidth);
             const y = Math.random() * (window.innerHeight - windowHeight);
             return { x, y, width: windowWidth, height: windowHeight };
@@ -48,33 +74,44 @@ const TamagotchiWidget = ({ closeWindow }) => {
                 }}
                 default={{
                     ...getCenterPosition(),
-                    width: 350,
-                    height: 220,
+                    width: 286,
+                    height: 338,
                 }}
-                minWidth={350}
-                minHeight={220}
-                className='window'
+                minWidth={286}
+                minHeight={338}
+                className='sadgotchu'
                 onClick={updateZIndex}
                 disableDragging={isMobileScreen()}
                 position={isMobileScreen()}
             >
-                <div className='title-bar'>
-                    <div className='title-bar-text'>About</div>
-                    <div className='title-bar-controls'>
-                        <button aria-label='Minimize' />
-                        <button aria-label='Maximize' />
-                        <button
-                            aria-label='Close'
-                            onClick={closeWindow}
-                            onTouchStart={closeWindow}
-                        />
-                    </div>
-                </div>
-                <div className='window-body'>
-                    <div className="TamagotchiWidget">
-                        <h1>Mon Tamagotchi</h1>
-                        <Tamagotchi />
-                    </div>
+                <div className={styles.tamagotchiWidget}>
+                    <Image
+                        className={styles.shell}
+                        src={isOn ? '/SadGotchu/shell.png' : '/SadGotchu/shell-OFF.png'}
+                        alt={isOn ? 'shell' : 'shell-off'}
+                        layout='fill'
+                        objectFit='cover'
+                    />
+                    <img src="/SadGotchu/button-off.png" alt="On/Off" className={styles.buttonOnOff} onClick={togglePower} />
+                    <img
+                        src={isButtonMiddlePressed ? "/SadGotchu/button-middle(pushed).png" : "/SadGotchu/button-middle.png"}
+                        alt="Middle"
+                        className={styles.buttonMiddle}
+                        onMouseDown={() => {
+                            setIsButtonMiddlePressed(true);
+                            playClickSound();
+                        }}
+                        onMouseUp={() => {
+                            setIsButtonMiddlePressed(false);
+                            toggleView();
+                        }}
+                        onMouseLeave={() => setIsButtonMiddlePressed(false)}
+                    />
+                    {isOn && (
+                        <div>
+                            {currentView === 'core' ? <TamagotchiCore /> : <TamagotchiMenu />}
+                        </div>
+                    )}
                 </div>
             </Rnd>
         </>
