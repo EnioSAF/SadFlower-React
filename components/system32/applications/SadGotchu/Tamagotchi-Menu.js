@@ -1,7 +1,7 @@
 // TamagotchiCore.jsx
 import React, { useState, useEffect } from 'react';
 
-import styles from "styles/system32/applications/Tamagotchi/tamagotchi.module.sass";
+import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
 const TamagotchiMenu = ({ closing }) => {
     const [hunger, setHunger] = useState(50);

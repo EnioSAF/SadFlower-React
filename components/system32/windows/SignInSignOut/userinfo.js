@@ -9,7 +9,7 @@ import {
 import { useAuthContext } from "@/context/AuthContext";
 
 import { PixelArtCard } from "react-pixelart-face-card";
-import TamagotchiWidget from "../../applications/Tamagotchi/Tamagotchi-Widget";
+import TamagotchiWidget from "../../applications/SadGotchu/Tamagotchi-Widget";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";

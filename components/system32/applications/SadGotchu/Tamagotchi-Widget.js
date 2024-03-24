@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 
-import TamagotchiCore from "components/system32/applications/Tamagotchi/Tamagotchi-Core.js";
-import TamagotchiMenu from "components/system32/applications/Tamagotchi/Tamagotchi-Menu.js";
+import TamagotchiCore from "components/system32/applications/SadGotchu/Tamagotchi-Core.js";
+import TamagotchiMenu from "components/system32/applications/SadGotchu/Tamagotchi-Menu.js";
 
-import styles from "styles/system32/applications/Tamagotchi/tamagotchi.module.sass"
+import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
 const TamagotchiWidget = ({ closeWindow }) => {
 
