@@ -13,7 +13,7 @@ const TamagotchiMenu = ({ closing }) => {
             setHunger(hunger => Math.min(100, hunger + 5));
             setSleepiness(sleepiness => Math.min(100, sleepiness + 5));
             setHappiness(happiness => Math.max(0, happiness - 5));
-        }, 10000); // Ajuste selon le rythme désiré
+        }, 10000);
 
         return () => clearInterval(interval);
     }, []);
@@ -22,8 +22,6 @@ const TamagotchiMenu = ({ closing }) => {
         setHunger(Math.max(0, hunger - 30));
         setHappiness(Math.min(100, happiness + 10));
     };
-
-    // Ici, tu pourrais ajouter d'autres interactions comme jouer, dormir, etc.
 
     return (
         <div className={`${styles.tamagotchiMenu} ${closing ? styles.closingAnimation : ''}`}>
