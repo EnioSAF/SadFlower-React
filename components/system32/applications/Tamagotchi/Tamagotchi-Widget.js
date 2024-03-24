@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from 'next/image';
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
@@ -65,6 +65,11 @@ const TamagotchiWidget = ({ closeWindow }) => {
         }
     };
 
+    useEffect(() => {
+        const newZIndex = bringToFront();
+        setZIndex(newZIndex);
+    }, []);
+
     return (
         <>
             <Rnd
@@ -82,19 +87,19 @@ const TamagotchiWidget = ({ closeWindow }) => {
                 className='sadgotchu'
                 onClick={updateZIndex}
                 disableDragging={isMobileScreen()}
-                position={isMobileScreen()}
             >
                 <div className={styles.tamagotchiWidget}>
                     <Image
                         className={styles.shell}
-                        src={isOn ? '/SadGotchu/shell.png' : '/SadGotchu/shell-OFF.png'}
+                        src={isOn ? '/SadGotchu/shell/shell.png' : '/SadGotchu/shell/shell-OFF.png'}
                         alt={isOn ? 'shell' : 'shell-off'}
                         layout='fill'
                         objectFit='cover'
+                        onDragStart={(e) => e.preventDefault()}
                     />
-                    <img src="/SadGotchu/button-off.png" alt="On/Off" className={styles.buttonOnOff} onClick={togglePower} />
+                    <img src="/SadGotchu/buttons/button-off.png" alt="On/Off" className={styles.buttonOnOff} onClick={togglePower} onDragStart={(e) => e.preventDefault()} />
                     <img
-                        src={isButtonMiddlePressed ? "/SadGotchu/button-middle(pushed).png" : "/SadGotchu/button-middle.png"}
+                        src={isButtonMiddlePressed ? "/SadGotchu/buttons/button-middle(pushed).png" : "/SadGotchu/buttons/button-middle.png"}
                         alt="Middle"
                         className={styles.buttonMiddle}
                         onMouseDown={() => {
@@ -106,6 +111,7 @@ const TamagotchiWidget = ({ closeWindow }) => {
                             toggleView();
                         }}
                         onMouseLeave={() => setIsButtonMiddlePressed(false)}
+                        onDragStart={(e) => e.preventDefault()}
                     />
                     {isOn && (
                         <div>
