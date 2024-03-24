@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 
-import styles from "styles/system32/applications/Tamagotchi/tamagotchi.module.sass";
+import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
+
 const TamagotchiCore = ({ closing }) => {
     return (
         <div className={`${styles.tamagotchiCore} ${closing ? styles.closingAnimation : ''}`}>
