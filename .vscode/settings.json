@@ -8,5 +8,8 @@
   "deepscan.enable": true,
   "todo-tree.tree.showBadges": true,
   "todo-tree.tree.disableCompactFolders": false,
-  "todo-tree.tree.showCountsInTree": true
+  "todo-tree.tree.showCountsInTree": true,
+  "Codegeex.Chat.LanguagePreference": "English",
+  "Codegeex.Comment.LanguagePreference": "English",
+  "Codegeex.SidebarUI.LanguagePreference": "English"
 }
