@@ -4,7 +4,6 @@ import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import TamagotchiCore from "components/system32/applications/SadGotchu/Tamagotchi-Core.js";
-import TamagotchiMenu from "components/system32/applications/SadGotchu/Tamagotchi-Menu.js";
 
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
@@ -15,15 +14,12 @@ const TamagotchiWidget = ({ closeWindow }) => {
     const [isOn, setIsOn] = useState(true);
     const [currentView, setCurrentView] = useState('core');
     const [isButtonMiddlePressed, setIsButtonMiddlePressed] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const toggleView = () => setIsMenuVisible(!isMenuVisible);
+
 
     const togglePower = () => {
         closeWindow();
-    };
-
-    const toggleView = () => {
-        if (isOn) {
-            setCurrentView(currentView => currentView === 'core' ? 'menu' : 'core');
-        }
     };
 
     const playClickSound = () => {
@@ -37,6 +33,7 @@ const TamagotchiWidget = ({ closeWindow }) => {
         const sound = new Audio(soundToPlay);
         sound.play();
     };
+
     // Pour gérer la fenêtre
 
     const { bringToFront, zIndex: globalZIndex } = useZIndex();
@@ -115,7 +112,7 @@ const TamagotchiWidget = ({ closeWindow }) => {
                     />
                     {isOn && (
                         <div>
-                            {currentView === 'core' ? <TamagotchiCore /> : <TamagotchiMenu />}
+                            <TamagotchiCore isMenuVisible={isMenuVisible} />
                         </div>
                     )}
                 </div>
