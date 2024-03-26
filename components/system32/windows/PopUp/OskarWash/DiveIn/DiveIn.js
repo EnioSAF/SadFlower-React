@@ -139,6 +139,7 @@ const DiveIn = ({ closeWindow }) => {
                                 alt='divein-bg'
                                 width='941'
                                 height='875'
+                                onDragStart={(e) => e.preventDefault()}
                             />
                             <div className="boutton-divein">
                                 <a
@@ -153,6 +154,7 @@ const DiveIn = ({ closeWindow }) => {
                                         alt='divein-button'
                                         width='497'
                                         height='157'
+                                        onDragStart={(e) => e.preventDefault()}
                                     />
                                 </a>
                             </div>
@@ -169,6 +171,7 @@ const DiveIn = ({ closeWindow }) => {
                                         alt='divein-brain'
                                         width='273'
                                         height='209'
+                                        onDragStart={(e) => e.preventDefault()}
                                     />
                                 </a>
                             </div>

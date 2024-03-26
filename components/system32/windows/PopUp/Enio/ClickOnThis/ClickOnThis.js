@@ -115,6 +115,7 @@ const ClickOnThis = ({ closeWindow }) => {
                                 alt='clickonthis-bg'
                                 width='941'
                                 height='875'
+                                onDragStart={(e) => e.preventDefault()}
                             />
                         </div>
                         <div className="face-clickonthis" ref={faceRef}>
@@ -130,6 +131,7 @@ const ClickOnThis = ({ closeWindow }) => {
                                     alt='face-clickonthis'
                                     width='500'
                                     height='400'
+                                    onDragStart={(e) => e.preventDefault()}
                                 />
                             </a>
                         </div>

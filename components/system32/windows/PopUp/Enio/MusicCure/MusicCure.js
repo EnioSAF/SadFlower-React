@@ -117,6 +117,7 @@ const MusicCure = ({ closeWindow }) => {
                                 alt='musiccure-bg'
                                 width='941'
                                 height='875'
+                                onDragStart={(e) => e.preventDefault()}
                             />
                         </div>
                         <div className="bottle-musiccure" ref={faceRef}>
@@ -132,6 +133,7 @@ const MusicCure = ({ closeWindow }) => {
                                     alt='musiccure-bottle'
                                     width='130'
                                     height='250'
+                                    onDragStart={(e) => e.preventDefault()}
                                 />
                             </a>
                         </div>
