@@ -115,6 +115,7 @@ const CoolBug4Sell = ({ closeWindow }) => {
                                 alt='CoolBug4Sell-bg'
                                 width='941'
                                 height='875'
+                                onDragStart={(e) => e.preventDefault()}
                             />
                         </div>
                         <div className="button-CoolBug4Sell" ref={faceRef}>
@@ -130,6 +131,7 @@ const CoolBug4Sell = ({ closeWindow }) => {
                                     alt='button-CoolBug4Sell'
                                     width='400'
                                     height='120'
+                                    onDragStart={(e) => e.preventDefault()}
                                 />
                             </a>
                         </div>
