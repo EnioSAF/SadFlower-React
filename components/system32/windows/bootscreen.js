@@ -161,7 +161,7 @@ const BootsScreen = () => {
                 .break()
                 .type(" 1.0.1 : -Added SadGotchu to created users !")
                 .break()
-                .type("(for registered user only")
+                .type("(for registered user only)")
                 .pause(2000)
                 .delete(null, { instant: true })
                 .type("■□□□□□□□□□ 01%", { instant: true })
