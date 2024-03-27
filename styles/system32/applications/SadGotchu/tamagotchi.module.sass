@@ -32,7 +32,6 @@
         display: flex
         flex-direction: column
 
-
 .buttonOnOff, .buttonMiddle, .buttonLeft, .buttonRight
     position: absolute
     cursor: pointer
@@ -47,15 +46,44 @@
     bottom: 3%
     width: 12%
 
-.closingAnimation
-    animation: fadeOut 10s forwards
-
-@keyframes fadeOut
-    to
-        opacity: 0
-
 .dodoSprite
     position: absolute
     top: 26%
     width: 51% !important
     height: 43% !important
+
+.extraSpritepoop
+    position: absolute
+    left: 20%
+
+.extraSpritesick
+    position: absolute
+    right: 30%
+    top: 30%
+
+.extraSpritehungry
+    position: absolute
+    right: 30%
+    top: 30%
+
+@keyframes animation-bebe
+    0%, 100%
+        transform: translateY(0)
+    33%
+        transform: translateY(-5px)
+    66%
+        transform: translateY(5px)
+
+@keyframes animation-adulte
+    0%, 100%
+        transform: rotate(0deg)
+    33%
+        transform: rotate(-5deg)
+    66%
+        transform: rotate(5deg)
+
+.animation-bebe
+    animation: animation-bebe 1s infinite
+
+.animation-adulte
+    animation: animation-adulte 1s infinite
