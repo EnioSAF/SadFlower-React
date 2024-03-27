@@ -11,11 +11,9 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     const [evolutionLine, setEvolutionLine] = useState(savedState.evolutionLine || null);
     const [hunger, setHunger] = useState(savedState.hunger || 50);
     const [happiness, setHappiness] = useState(savedState.happiness || 50);
-    const [isSleeping, setIsSleeping] = useState(false);
-    const [sleepiness, setSleepiness] = useState(savedState.sleepiness || 50); // Assurez-vous que cette valeur est également sauvegardée et restaurée si nécessaire
     const [timeAtHundredHunger, setTimeAtHundredHunger] = useState(savedState.timeAtHundredHunger || 0);
     const [timeAtZeroHappiness, setTimeAtZeroHappiness] = useState(savedState.timeAtZeroHappiness || 0);
-
+    const [isSleeping, setIsSleeping] = useState(false);
 
     // Sprites pour chaque stade
     const sprites = {
@@ -43,7 +41,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         }, 60000); // Simule le passage d'un an toutes les minutes
 
         return () => clearInterval(evolutionInterval);
-    }, [age, happiness, hunger, stage, evolutionLine]);
+    }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness, isSleeping]);
 
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
@@ -77,8 +75,8 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         return () => clearInterval(needsUpdateInterval);
     }, [stage, timeAtHundredHunger, timeAtZeroHappiness]); // Dépendance à `stage`, `timeAtZeroHunger`, et `timeAtZeroHappiness`
     // Fonctions d'interaction
-    const feed = () => setHunger(Math.max(0, hunger - 30));
-    const play = () => setHappiness(Math.min(100, happiness + 20));
+    const feed = () => isSleeping ? null : setHunger(Math.max(0, hunger - 30));
+    const play = () => isSleeping ? null : setHappiness(Math.min(100, happiness + 20));
     // Ajoute d'autres fonctions comme jouer ou dormir ici
 
     // Sauvegarde de l'état actuel dans le localStorage
@@ -106,17 +104,20 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness]);
 
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
-    const checkIfSleeping = (stage) => {
-        const currentHour = new Date().getHours();
-        const sleepTimes = {
-            bébé: 19,
-            enfant: 20,
-            adulte: 22,
-            vieux: 20,
-        };
-        // Si l'heure actuelle est égale ou après l'heure de sommeil définie pour le stade
-        return currentHour >= (sleepTimes[stage] || 22); // Par défaut à 22h pour les stades non spécifiés
-    };
+// Fonction pour déterminer si le Tamagotchi devrait être endormi
+const checkIfSleeping = (stage) => {
+    const currentHour = new Date().getHours();
+    const sleepStartTimes = { bébé: 19, enfant: 20, adulte: 22, vieux: 20 };
+    const sleepEndTimes = { bébé: 7, enfant: 8, adulte: 10, vieux: 9 }; // Supposons que tous se réveillent à 8h pour simplifier
+
+    const sleepStartTime = sleepStartTimes[stage] || 22;
+    const sleepEndTime = sleepEndTimes[stage] || 8;
+
+    if (currentHour >= sleepStartTime || currentHour < sleepEndTime) {
+        return true; // Le Tamagotchi dort
+    }
+    return false; // Le Tamagotchi est éveillé
+};
 
     // Mettre à jour l'état de sommeil en fonction du stade et de l'heure
     useEffect(() => {
@@ -135,7 +136,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     // Désactivation des boutons et ajustement des sprites si endormi
     const getSprite = () => {
         if (isSleeping) {
-            return `/SadGotchu/tamas/sleep-${stage}.png`; // Assurez-vous que ces sprites existent
+            return `/SadGotchu/tamas/dodo.png`; // Assurez-vous que ces sprites existent
         }
         return sprites[stage]; // Votre logique existante pour déterminer le sprite
     };
@@ -212,8 +213,9 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                 <Image
                     src={getSprite()}
                     alt="Tamagotchi"
-                    width={447}
-                    height={360}
+                    className={isSleeping ? styles.dodoSprite : ''}
+                    width={isSleeping ? '800' : '447'}
+                    height={isSleeping ? '500' : '360'}
                     onDragStart={(e) => e.preventDefault()}
                 />
             ) : (
