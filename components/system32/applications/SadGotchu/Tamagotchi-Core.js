@@ -9,33 +9,58 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     const [stage, setStage] = useState(savedState.stage || 'oeuf');
     const [age, setAge] = useState(savedState.age || 0);
     const [evolutionLine, setEvolutionLine] = useState(savedState.evolutionLine || null);
+    const [hasPoop, setHasPoop] = useState(false);
+    const [isSick, setIsSick] = useState(false);
     const [hunger, setHunger] = useState(savedState.hunger || 50);
     const [happiness, setHappiness] = useState(savedState.happiness || 50);
     const [timeAtHundredHunger, setTimeAtHundredHunger] = useState(savedState.timeAtHundredHunger || 0);
     const [timeAtZeroHappiness, setTimeAtZeroHappiness] = useState(savedState.timeAtZeroHappiness || 0);
     const [isSleeping, setIsSleeping] = useState(false);
+    const [isFinalStage, setIsFinalStage] = useState(false);
+
 
     // Sprites pour chaque stade
     const sprites = {
         oeuf: '/SadGotchu/tamas/egg(enio).png',
-        bébé: '/SadGotchu/tamas/baby(enio).png',
-        enfant: '/SadGotchu/tamas/child(enio).png',
-        adulteGood: '/SadGotchu/tamas/adult(good-julie).png',
-        adulteBad: '/SadGotchu/tamas/adult(bad-enio).png',
-        vieux: '/SadGotchu/tamas/old(enio-tama).png',
-        ange: '/SadGotchu/tamas/gooddeath(enio).png',
-        demon: '/SadGotchu/tamas/baddeath(enio).png',
+        bébé: '/SadGotchu/tamas/baby/baby(enio).png',
+        enfant: '/SadGotchu/tamas/child/child(enio).png',
+        adulteGood: '/SadGotchu/tamas/adult/adult(good-julie).png',
+        adulteBad: '/SadGotchu/tamas/adult/adult(bad-enio).png',
+        vieux: '/SadGotchu/tamas/old/old(enio-tama).png',
+        ange: '/SadGotchu/tamas/death/gooddeath(enio).png',
+        demon: '/SadGotchu/tamas/death/baddeath(enio).png',
+    };
+
+    const extraSprites = {
+        sick: '/SadGotchu/tamas/other/sick.png',
+        hungry: '/SadGotchu/tamas/other/hungry.png',
+        poop: '/SadGotchu/tamas/other/poop.png',
+    };
+
+    const getAnimationClass = (stage) => {
+        switch (stage) {
+            case 'bébé':
+                return 'animation-bebe';
+            case 'adulteGood':
+                return 'animation-adulte';
+            // Ajoutez d'autres cas selon vos stages
+            default:
+                return ''; // Pas d'animation par défaut
+        }
     };
 
     useEffect(() => {
         const evolutionInterval = setInterval(() => {
             setAge(prevAge => prevAge + 1); // Simule le passage d'un an
 
-            // Determine la prochaine étape d'évolution basée sur l'âge, le bonheur, la faim, et la ligne d'évolution
+            // Determine la prochaine étape d'évolution basée sur l'âge, le bonheur, la faim, et la ligne d'évolution ainsi que la fin d'évolution
             const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
             if (evolutionResult) {
                 setStage(evolutionResult.type); // Mise à jour du stade
                 setEvolutionLine(evolutionResult.evolutionLine); // Mise à jour de la ligne d'évolution
+                if (evolutionResult.type === 'ange' || evolutionResult.type === 'demon') {
+                    setIsFinalStage(true);
+                }
             }
 
         }, 60000); // Simule le passage d'un an toutes les minutes
@@ -47,38 +72,44 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     useEffect(() => {
         const needsUpdateInterval = setInterval(() => {
             const currentNeedsUpdate = evolutionTree[stage]?.needsUpdate;
-            if (currentNeedsUpdate) {
+            if (currentNeedsUpdate && !isSleeping && !isFinalStage) { // Ne met à jour la faim et le bonheur que si le Tamagotchi n'est pas endormi
                 setHunger((prevHunger) => {
                     const newHunger = Math.min(100, prevHunger + currentNeedsUpdate.hungerIncrement);
-                    // Vérifier si la faim est à 100 et mettre à jour le compteur
-                    if (newHunger === 0) setTimeAtHundredHunger(prev => prev + currentNeedsUpdate.updateInterval / 60000);
-                    else setTimeAtHundredHunger(0);
                     return newHunger;
                 });
                 setHappiness((prevHappiness) => {
                     const newHappiness = Math.max(0, prevHappiness - currentNeedsUpdate.happinessDecrement);
-                    // Vérifier si le bonheur est à 0 et mettre à jour le compteur
-                    if (newHappiness === 0) setTimeAtZeroHappiness(prev => prev + currentNeedsUpdate.updateInterval / 60000);
-                    else setTimeAtZeroHappiness(0);
                     return newHappiness;
                 });
             }
 
-            // Vérifier si le Tamagotchi doit se transformer en démon
+            // Cette partie s'exécute indépendamment du sommeil pour vérifier l'évolution
             if (timeAtHundredHunger >= 12 || timeAtZeroHappiness >= 12) {
                 setStage('demon');
-                setTimeAtZeroHunger(0);
+                setTimeAtHundredHunger(0);
                 setTimeAtZeroHappiness(0);
             }
         }, evolutionTree[stage]?.needsUpdate.updateInterval);
 
         return () => clearInterval(needsUpdateInterval);
-    }, [stage, timeAtHundredHunger, timeAtZeroHappiness]); // Dépendance à `stage`, `timeAtZeroHunger`, et `timeAtZeroHappiness`
+    }, [stage, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]); // Dépendance à `stage`, `timeAtZeroHunger`, et `timeAtZeroHappiness`
     // Fonctions d'interaction
-    const feed = () => isSleeping ? null : setHunger(Math.max(0, hunger - 30));
+    const feed = () => {
+        if (isSleeping || stage === 'ange' || stage === 'demon') return; // Ne nourrissez pas si endormi ou si au stade final
+        setHunger(Math.max(0, hunger - 20));
+        // Planification du "poop"
+        const [min, max] = evolutionTree[stage].poopFrequency;
+        setTimeout(() => setHasPoop(true), Math.random() * (max - min) + min);
+    };
     const play = () => isSleeping ? null : setHappiness(Math.min(100, happiness + 20));
     // Ajoute d'autres fonctions comme jouer ou dormir ici
-
+    useEffect(() => {
+        const checkSickness = () => {
+            if (Math.random() < evolutionTree[stage].sicknessChance) setIsSick(true);
+        };
+        const sicknessCheckInterval = setInterval(checkSickness, 3600000); // Toutes les heures
+        return () => clearInterval(sicknessCheckInterval);
+    }, [stage]);
     // Sauvegarde de l'état actuel dans le localStorage
     useEffect(() => {
         const saveState = () => {
@@ -104,20 +135,20 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness]);
 
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
-// Fonction pour déterminer si le Tamagotchi devrait être endormi
-const checkIfSleeping = (stage) => {
-    const currentHour = new Date().getHours();
-    const sleepStartTimes = { bébé: 19, enfant: 20, adulte: 22, vieux: 20 };
-    const sleepEndTimes = { bébé: 7, enfant: 8, adulte: 10, vieux: 9 }; // Supposons que tous se réveillent à 8h pour simplifier
+    // Fonction pour déterminer si le Tamagotchi devrait être endormi
+    const checkIfSleeping = (stage) => {
+        const currentHour = new Date().getHours();
+        const sleepStartTimes = { bébé: 19, enfant: 20, adulte: 22, vieux: 20 };
+        const sleepEndTimes = { bébé: 7, enfant: 8, adulte: 10, vieux: 9 }; // Supposons que tous se réveillent à 8h pour simplifier
 
-    const sleepStartTime = sleepStartTimes[stage] || 22;
-    const sleepEndTime = sleepEndTimes[stage] || 8;
+        const sleepStartTime = sleepStartTimes[stage] || 22;
+        const sleepEndTime = sleepEndTimes[stage] || 8;
 
-    if (currentHour >= sleepStartTime || currentHour < sleepEndTime) {
-        return true; // Le Tamagotchi dort
-    }
-    return false; // Le Tamagotchi est éveillé
-};
+        if (currentHour >= sleepStartTime || currentHour < sleepEndTime) {
+            return true; // Le Tamagotchi dort
+        }
+        return false; // Le Tamagotchi est éveillé
+    };
 
     // Mettre à jour l'état de sommeil en fonction du stade et de l'heure
     useEffect(() => {
@@ -135,10 +166,18 @@ const checkIfSleeping = (stage) => {
 
     // Désactivation des boutons et ajustement des sprites si endormi
     const getSprite = () => {
-        if (isSleeping) {
-            return `/SadGotchu/tamas/dodo.png`; // Assurez-vous que ces sprites existent
+        if (isSleeping) return `/SadGotchu/tamas/dodo.png`;
+
+        let spritePath = sprites[stage]; // Utilisez le sprite par défaut en premier
+
+        // Ajustez le chemin en fonction du bonheur
+        if (happiness > 80) {
+            spritePath = `/SadGotchu/tamas/happy/happy-${stage}.png`;
+        } else if (happiness < 40 || hunger > 50) {
+            spritePath = `/SadGotchu/tamas/sad/sad-${stage}.png`;
         }
-        return sprites[stage]; // Votre logique existante pour déterminer le sprite
+
+        return spritePath;
     };
 
 
@@ -210,14 +249,19 @@ const checkIfSleeping = (stage) => {
     return (
         <div className={styles.tamagotchiCore}>
             {!isMenuVisible ? (
-                <Image
-                    src={getSprite()}
-                    alt="Tamagotchi"
-                    className={isSleeping ? styles.dodoSprite : ''}
-                    width={isSleeping ? '800' : '447'}
-                    height={isSleeping ? '500' : '360'}
-                    onDragStart={(e) => e.preventDefault()}
-                />
+                <>
+                    <Image
+                        src={getSprite()}
+                        alt="Tamagotchi"
+                        className={`${isSleeping ? styles.dodoSprite : ''} ${styles[getAnimationClass(stage)]}`}
+                        width={isSleeping ? '800' : '447'}
+                        height={isSleeping ? '500' : '360'}
+                        onDragStart={(e) => e.preventDefault()}
+                    />
+                    {isSick && <img src={extraSprites.sick} alt="Sick" className={styles.extraSpritesick} />}
+                    {hunger > 50 && <img src={extraSprites.hungry} alt="Hungry" className={styles.extraSpritehungry} />}
+                    {hasPoop && <img src={extraSprites.poop} alt="Poop" className={styles.extraSpritepoop} />}
+                </>
             ) : (
                 <div className={styles.tamagotchiMenu}>
                     <p>Stade: {stage}</p>
@@ -226,10 +270,14 @@ const checkIfSleeping = (stage) => {
                         <>
                             <p>Faim: {hunger}%</p>
                             <p>Bonheur: {happiness}%</p>
-                            <div className={styles.menuButtons}>
-                                <button onClick={feed} disabled={isSleeping}>Nourrir</button>
-                                <button onClick={play} disabled={isSleeping}>Jouer</button>
-                            </div>
+                            {!isFinalStage && (
+                                <div className={styles.menuButtons}>
+                                    <button onClick={feed} disabled={isSleeping}>Nourrir</button>
+                                    <button onClick={play} disabled={isSleeping}>Jouer</button>
+                                    <button onClick={() => setHasPoop(false)} disabled={!hasPoop}>Nettoyer</button>
+                                    <button onClick={() => setIsSick(false)} disabled={!isSick}>Soigner</button>
+                                </div>
+                            )}
                         </>
                     )}
                 </div>
