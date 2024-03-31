@@ -93,6 +93,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
 
         return () => clearInterval(needsUpdateInterval);
     }, [stage, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]); // Dépendance à `stage`, `timeAtZeroHunger`, et `timeAtZeroHappiness`
+
     // Fonctions d'interaction
     const feed = () => {
         if (isSleeping || stage === 'ange' || stage === 'demon') return; // Ne nourrissez pas si endormi ou si au stade final
@@ -110,31 +111,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         const sicknessCheckInterval = setInterval(checkSickness, 3600000); // Toutes les heures
         return () => clearInterval(sicknessCheckInterval);
     }, [stage]);
-    // Sauvegarde de l'état actuel dans le localStorage
-    useEffect(() => {
-        const saveState = () => {
-            const stateToSave = {
-                stage,
-                age,
-                evolutionLine,
-                hunger,
-                happiness,
-                timeAtHundredHunger,
-                timeAtZeroHappiness,
-                lastUpdate: Date.now()
-            };
-            localStorage.setItem('tamagotchiState', JSON.stringify(stateToSave));
-        };
 
-        window.addEventListener('beforeunload', saveState);
-
-        return () => {
-            window.removeEventListener('beforeunload', saveState);
-            saveState(); // Assurez-vous de sauvegarder lorsque le composant est démonté
-        };
-    }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness]);
-
-    // Fonction pour déterminer si le Tamagotchi devrait être endormi
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
     const checkIfSleeping = (stage) => {
         const currentHour = new Date().getHours();
@@ -179,6 +156,31 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
 
         return spritePath;
     };
+
+
+    // Sauvegarde de l'état actuel dans le localStorage
+    useEffect(() => {
+        const saveState = () => {
+            const stateToSave = {
+                stage,
+                age,
+                evolutionLine,
+                hunger,
+                happiness,
+                timeAtHundredHunger,
+                timeAtZeroHappiness,
+                lastUpdate: Date.now()
+            };
+            localStorage.setItem('tamagotchiState', JSON.stringify(stateToSave));
+        };
+
+        window.addEventListener('beforeunload', saveState);
+
+        return () => {
+            window.removeEventListener('beforeunload', saveState);
+            saveState(); // Assurez-vous de sauvegarder lorsque le composant est démonté
+        };
+    }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness]);
 
 
     // Restauration de l'état à partir du localStorage
