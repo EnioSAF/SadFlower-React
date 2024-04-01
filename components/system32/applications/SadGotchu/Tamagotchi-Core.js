@@ -49,6 +49,8 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         }
     };
 
+// FONCTION d'interval / Check-Intéractions / Passage du temps
+
     useEffect(() => {
         const evolutionInterval = setInterval(() => {
             setAge(prevAge => prevAge + 1); // Simule le passage d'un an
@@ -157,6 +159,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         return spritePath;
     };
 
+// FONCTION de Sauvegardes / Chargements
 
     // Sauvegarde de l'état actuel dans le localStorage
     useEffect(() => {
