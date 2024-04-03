@@ -1,23 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
+import { incrementAge, setStage, adjustHunger, adjustHappiness, resetTimeAtHundredHunger, resetTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed } from 'src/redux/sadgotchuSlice.js';
 import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
-    const savedState = JSON.parse(localStorage.getItem('tamagotchiState')) || {};
-    const [stage, setStage] = useState(savedState.stage || 'oeuf');
-    const [age, setAge] = useState(savedState.age || 0);
-    const [evolutionLine, setEvolutionLine] = useState(savedState.evolutionLine || null);
-    const [hasPoop, setHasPoop] = useState(false);
-    const [isSick, setIsSick] = useState(false);
-    const [hunger, setHunger] = useState(savedState.hunger || 50);
-    const [happiness, setHappiness] = useState(savedState.happiness || 50);
-    const [timeAtHundredHunger, setTimeAtHundredHunger] = useState(savedState.timeAtHundredHunger || 0);
-    const [timeAtZeroHappiness, setTimeAtZeroHappiness] = useState(savedState.timeAtZeroHappiness || 0);
-    const [isSleeping, setIsSleeping] = useState(false);
-    const [isFinalStage, setIsFinalStage] = useState(false);
-
+    const dispatch = useDispatch();
+    const {
+        stage,
+        age,
+        evolutionLine,
+        hunger,
+        happiness,
+        hasPoop,
+        isSick,
+        isSleeping,
+        isFinalStage,
+        timeAtHundredHunger,
+        timeAtZeroHappiness,
+    } = useSelector((state) => state.sadGotchu);
 
     // Sprites pour chaque stade
     const sprites = {
@@ -49,70 +52,115 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         }
     };
 
-// FONCTION d'interval / Check-Intéractions / Passage du temps
+    // FONCTION d'interval / Check-Intéractions / Passage du temps
 
+
+    // // Pour update les states depuis la dernière intéraction
+    // useEffect(() => {
+    //     // Simuler le temps qui passe à la montée du composant
+    //     const lastInteractionTime = localStorage.getItem('lastInteractionTime');
+    //     const currentTime = Date.now();
+    //     const timeElapsed = lastInteractionTime ? currentTime - parseInt(lastInteractionTime) : 0;
+
+    //     // Ajuster l'état basé sur le temps écoulé
+    //     dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+
+    //     // Mettre à jour le localStorage avec le temps actuel pour la prochaine montée du composant
+    //     localStorage.setItem('lastInteractionTime', currentTime.toString());
+    // }, [dispatch]);
+
+    // Simulation du temps qui passe
     useEffect(() => {
         const evolutionInterval = setInterval(() => {
-            setAge(prevAge => prevAge + 1); // Simule le passage d'un an
+            if (!isFinalStage) {
+                dispatch(incrementAge());
 
-            // Determine la prochaine étape d'évolution basée sur l'âge, le bonheur, la faim, et la ligne d'évolution ainsi que la fin d'évolution
-            const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
-            if (evolutionResult) {
-                setStage(evolutionResult.type); // Mise à jour du stade
-                setEvolutionLine(evolutionResult.evolutionLine); // Mise à jour de la ligne d'évolution
-                if (evolutionResult.type === 'ange' || evolutionResult.type === 'demon') {
-                    setIsFinalStage(true);
+                // Utilise l'état actuel depuis Redux pour la logique d'évolution
+                // Note : Tu dois obtenir age, stage, etc., via useSelector au début de ton composant.
+                const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
+                if (evolutionResult) {
+                    dispatch(setStage(evolutionResult.type)); // Dispatch l'action pour changer le stage
+                    dispatch(setEvolutionLine(evolutionResult.evolutionLine)); // Dispatch l'action pour changer la ligne d'évolution
+                    if (evolutionResult.type === 'ange' || evolutionResult.type === 'demon') {
+                        dispatch(setIsFinalStage(true)); // Dispatch l'action pour marquer le stage final
+                    }
                 }
             }
-
         }, 60000); // Simule le passage d'un an toutes les minutes
 
         return () => clearInterval(evolutionInterval);
-    }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness, isSleeping]);
+    }, [dispatch, stage, age, happiness, hunger, evolutionLine, isFinalStage]);
 
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
         const needsUpdateInterval = setInterval(() => {
             const currentNeedsUpdate = evolutionTree[stage]?.needsUpdate;
-            if (currentNeedsUpdate && !isSleeping && !isFinalStage) { // Ne met à jour la faim et le bonheur que si le Tamagotchi n'est pas endormi
-                setHunger((prevHunger) => {
-                    const newHunger = Math.min(100, prevHunger + currentNeedsUpdate.hungerIncrement);
-                    return newHunger;
-                });
-                setHappiness((prevHappiness) => {
-                    const newHappiness = Math.max(0, prevHappiness - currentNeedsUpdate.happinessDecrement);
-                    return newHappiness;
-                });
+            if (currentNeedsUpdate && !isSleeping && !isFinalStage) {
+                dispatch(adjustHunger({ amount: currentNeedsUpdate.hungerIncrement }));
+                dispatch(adjustHappiness({ amount: -currentNeedsUpdate.happinessDecrement }));
             }
 
-            // Cette partie s'exécute indépendamment du sommeil pour vérifier l'évolution
             if (timeAtHundredHunger >= 12 || timeAtZeroHappiness >= 12) {
-                setStage('demon');
-                setTimeAtHundredHunger(0);
-                setTimeAtZeroHappiness(0);
+                dispatch(setStage('demon'));
+                dispatch(resetTimeAtHundredHunger());
+                dispatch(resetTimeAtZeroHappiness());
             }
         }, evolutionTree[stage]?.needsUpdate.updateInterval);
 
         return () => clearInterval(needsUpdateInterval);
-    }, [stage, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]); // Dépendance à `stage`, `timeAtZeroHunger`, et `timeAtZeroHappiness`
+    }, [dispatch, stage, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]);
 
     // Fonctions d'interaction
     const feed = () => {
-        if (isSleeping || stage === 'ange' || stage === 'demon') return; // Ne nourrissez pas si endormi ou si au stade final
-        setHunger(Math.max(0, hunger - 20));
-        // Planification du "poop"
+        if (isSleeping || stage === 'ange' || stage === 'demon') return;
+        dispatch(adjustHunger({ amount: -20 }));
         const [min, max] = evolutionTree[stage].poopFrequency;
-        setTimeout(() => setHasPoop(true), Math.random() * (max - min) + min);
+        setTimeout(() => dispatch(togglePoop(true)), Math.random() * (max - min) + min);
     };
-    const play = () => isSleeping ? null : setHappiness(Math.min(100, happiness + 20));
+
+    const play = () => {
+        if (!isSleeping) dispatch(adjustHappiness({ amount: 20 }));
+    };
     // Ajoute d'autres fonctions comme jouer ou dormir ici
+
+    // Pour les maladies et le caca
     useEffect(() => {
         const checkSickness = () => {
-            if (Math.random() < evolutionTree[stage].sicknessChance) setIsSick(true);
+            // Vérifie aussi que le Tamagotchi n'est pas dans un état final
+            if (evolutionTree[stage] && stage !== "ange" && stage !== "démon" && Math.random() < evolutionTree[stage].sicknessChance) {
+                dispatch(setIsSick(true));
+            }
         };
         const sicknessCheckInterval = setInterval(checkSickness, 3600000); // Toutes les heures
         return () => clearInterval(sicknessCheckInterval);
-    }, [stage]);
+    }, [dispatch, stage]);
+
+    // Utilisez useEffect pour surveiller hasPoop
+    useEffect(() => {
+        let sicknessTimer;
+        let deathTimer;
+
+        if (hasPoop) {
+            // Démarrer un timer pour marquer comme malade si le "poop" n'est pas nettoyé en 10 minutes
+            sicknessTimer = setTimeout(() => {
+                dispatch(setIsSick(true));
+
+                // Démarrer un autre timer pour la mort si pas soigné en 24 heures
+                deathTimer = setTimeout(() => {
+                    if (isSick) { // Vérifier si toujours malade
+                        dispatch(setStage('demon')); // Passer au stade "démon"
+                    }
+                }, 8640); // 24 heures
+            }, 6000); // 10 minutes
+        }
+
+        // Nettoyage : s'assurer d'annuler les timers si le composant est démonté ou si les conditions changent
+        return () => {
+            clearTimeout(sicknessTimer);
+            clearTimeout(deathTimer);
+        };
+    }, [dispatch, hasPoop, isSick]);
+
 
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
     const checkIfSleeping = (stage) => {
@@ -133,15 +181,14 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     useEffect(() => {
         const updateSleepStatus = () => {
             const sleeping = checkIfSleeping(stage);
-            setIsSleeping(sleeping);
+            dispatch(setIsSleeping(sleeping));
         };
 
         updateSleepStatus();
-        // Vérifier toutes les minutes si l'état de sommeil doit être mis à jour
         const interval = setInterval(updateSleepStatus, 60000);
 
         return () => clearInterval(interval);
-    }, [stage]);
+    }, [dispatch, stage]);
 
     // Désactivation des boutons et ajustement des sprites si endormi
     const getSprite = () => {
@@ -159,97 +206,14 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         return spritePath;
     };
 
-// FONCTION de Sauvegardes / Chargements
-
-    // Sauvegarde de l'état actuel dans le localStorage
+    // FONCTION pour récupérer l'heure exacte de la dernière intéraction
     useEffect(() => {
-        const saveState = () => {
-            const stateToSave = {
-                stage,
-                age,
-                evolutionLine,
-                hunger,
-                happiness,
-                timeAtHundredHunger,
-                timeAtZeroHappiness,
-                lastUpdate: Date.now()
-            };
-            localStorage.setItem('tamagotchiState', JSON.stringify(stateToSave));
-        };
-
-        window.addEventListener('beforeunload', saveState);
-
+        // Fonction exécutée lorsque le composant se démonte
         return () => {
-            window.removeEventListener('beforeunload', saveState);
-            saveState(); // Assurez-vous de sauvegarder lorsque le composant est démonté
-        };
-    }, [stage, age, evolutionLine, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness]);
-
-
-    // Restauration de l'état à partir du localStorage
-    useEffect(() => {
-        const savedState = localStorage.getItem('tamagotchiState');
-        if (savedState) {
-            const {
-                stage: savedStage,
-                age: savedAge,
-                evolutionLine: savedEvolutionLine,
-                hunger: savedHunger,
-                happiness: savedHappiness,
-                timeAtHundredHunger: savedTimeAtHundredHunger,
-                timeAtZeroHappiness: savedTimeAtZeroHappiness,
-                lastUpdate
-            } = JSON.parse(savedState);
             const currentTime = Date.now();
-            const timeElapsed = (currentTime - lastUpdate) / 60000; // Converti en minutes
-
-            // Ajustez ici l'âge, la faim, le bonheur, etc., en fonction du temps écoulé
-            // Note : Assurez-vous de définir une fonction pour calculer ces ajustements basée sur `timeElapsed`
-            // Fonction pour ajuster l'âge en fonction du temps écoulé
-            const calculateAgeAdjustment = (timeElapsed) => {
-                // Arrondir à l'entier le plus proche pour l'âge
-                return Math.round(timeElapsed / 60); // Si 1 heure réelle correspond à 1 an dans le jeu
-            };
-            // Fonction pour ajuster la faim en fonction du temps écoulé
-            const calculateHungerAdjustment = (hunger, timeElapsed) => {
-                // Assurer que la faim ne dépasse jamais 100 et est arrondie
-                return Math.min(100, Math.round(hunger + timeElapsed));
-            };
-            // Fonction pour ajuster le bonheur en fonction du temps écoulé
-            const calculateHappinessAdjustment = (happiness, timeElapsed) => {
-                // Assurer que le bonheur ne tombe jamais en dessous de 0 et est arrondi
-                return Math.max(0, Math.round(happiness - timeElapsed));
-            };
-            // Ajuste le compteur pour le temps passé à 100% de faim basé sur le temps écoulé.
-            const calculateTimeAtHundredHungerAdjustment = (timeAtHundredHunger, hunger, timeElapsed) => {
-                if (hunger === 100) {
-                    // Si la faim est à 100%, ajoute le temps écoulé au compteur existant.
-                    return timeAtHundredHunger + timeElapsed;
-                } else {
-                    // Si la faim n'est pas à 100%, réinitialise le compteur.
-                    return 0;
-                }
-            };
-            // Ajuste le compteur pour le temps passé à 0% de bonheur basé sur le temps écoulé.
-            const calculateTimeAtZeroHappinessAdjustment = (timeAtZeroHappiness, happiness, timeElapsed) => {
-                if (happiness === 0) {
-                    // Si le bonheur est à 0%, ajoute le temps écoulé au compteur existant.
-                    return timeAtZeroHappiness + timeElapsed;
-                } else {
-                    // Si le bonheur n'est pas à 0%, réinitialise le compteur.
-                    return 0;
-                }
-            };
-            setStage(savedStage);
-            setAge(savedAge + calculateAgeAdjustment(timeElapsed));
-            setEvolutionLine(savedEvolutionLine);
-            setHunger(calculateHungerAdjustment(savedHunger, timeElapsed));
-            setHappiness(calculateHappinessAdjustment(savedHappiness, timeElapsed));
-            setTimeAtHundredHunger(calculateTimeAtHundredHungerAdjustment(savedTimeAtHundredHunger, timeElapsed));
-            setTimeAtZeroHappiness(calculateTimeAtZeroHappinessAdjustment(savedTimeAtZeroHappiness, timeElapsed));
-        }
+            localStorage.setItem('lastUpdateTime', currentTime.toString());
+        };
     }, []);
-
 
     return (
         <div className={styles.tamagotchiCore}>
@@ -263,9 +227,9 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                         height={isSleeping ? '500' : '360'}
                         onDragStart={(e) => e.preventDefault()}
                     />
-                    {isSick && <img src={extraSprites.sick} alt="Sick" className={styles.extraSpritesick} />}
-                    {hunger > 50 && <img src={extraSprites.hungry} alt="Hungry" className={styles.extraSpritehungry} />}
-                    {hasPoop && <img src={extraSprites.poop} alt="Poop" className={styles.extraSpritepoop} />}
+                    {isSick && !isFinalStage && <img src={extraSprites.sick} alt="Sick" className={styles.extraSpritesick} />}
+                    {hunger > 50 && !isFinalStage && <img src={extraSprites.hungry} alt="Hungry" className={styles.extraSpritehungry} />}
+                    {hasPoop && !isFinalStage && <img src={extraSprites.poop} alt="Poop" className={styles.extraSpritepoop} />}
                 </>
             ) : (
                 <div className={styles.tamagotchiMenu}>
@@ -279,8 +243,8 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                                 <div className={styles.menuButtons}>
                                     <button onClick={feed} disabled={isSleeping}>Nourrir</button>
                                     <button onClick={play} disabled={isSleeping}>Jouer</button>
-                                    <button onClick={() => setHasPoop(false)} disabled={!hasPoop}>Nettoyer</button>
-                                    <button onClick={() => setIsSick(false)} disabled={!isSick}>Soigner</button>
+                                    <button onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop}>Nettoyer</button>
+                                    <button onClick={() => dispatch(setIsSick(false))} disabled={!isSick}>Soigner</button>
                                 </div>
                             )}
                         </>
