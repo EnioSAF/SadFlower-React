@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
-import { incrementAge, setStage, adjustHunger, adjustHappiness, resetTimeAtHundredHunger, resetTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed } from 'src/redux/sadgotchuSlice.js';
+import { incrementAge, setStage, adjustHunger, adjustHappiness, setTimeAtHundredHunger, setTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed } from 'src/redux/sadgotchuSlice.js';
 import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
@@ -54,20 +54,19 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
 
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
+    // Pour update les states depuis la dernière intéraction
+    useEffect(() => {
+        // Récupérer le timestamp de la dernière interaction depuis localStorage
+        const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - parseInt(lastInteractionTime);
 
-    // // Pour update les states depuis la dernière intéraction
-    // useEffect(() => {
-    //     // Simuler le temps qui passe à la montée du composant
-    //     const lastInteractionTime = localStorage.getItem('lastInteractionTime');
-    //     const currentTime = Date.now();
-    //     const timeElapsed = lastInteractionTime ? currentTime - parseInt(lastInteractionTime) : 0;
+        // Ajuster l'état basé sur le temps écoulé
+        dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
 
-    //     // Ajuster l'état basé sur le temps écoulé
-    //     dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-
-    //     // Mettre à jour le localStorage avec le temps actuel pour la prochaine montée du composant
-    //     localStorage.setItem('lastInteractionTime', currentTime.toString());
-    // }, [dispatch]);
+        // Mise à jour du timestamp de la dernière interaction
+        localStorage.setItem('lastInteractionTime', currentTime.toString());
+    }, [dispatch]);
 
     // Simulation du temps qui passe
     useEffect(() => {
@@ -94,32 +93,54 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
         const needsUpdateInterval = setInterval(() => {
+            const currentTime = Date.now();
             const currentNeedsUpdate = evolutionTree[stage]?.needsUpdate;
             if (currentNeedsUpdate && !isSleeping && !isFinalStage) {
-                dispatch(adjustHunger({ amount: currentNeedsUpdate.hungerIncrement }));
-                dispatch(adjustHappiness({ amount: -currentNeedsUpdate.happinessDecrement }));
+                const hungerAdjustment = Math.round(currentNeedsUpdate.hungerIncrement);
+                const happinessAdjustment = Math.round(-currentNeedsUpdate.happinessDecrement);
+                dispatch(adjustHunger(hungerAdjustment));
+                dispatch(adjustHappiness(happinessAdjustment));
             }
 
-            if (timeAtHundredHunger >= 12 || timeAtZeroHappiness >= 12) {
-                dispatch(setStage('demon'));
-                dispatch(resetTimeAtHundredHunger());
-                dispatch(resetTimeAtZeroHappiness());
+            // Si la faim est à 100 et que timeAtHundredHunger n'est pas défini, ou si le bonheur est à 0 et que timeAtZeroHappiness n'est pas défini,
+            // enregistrez le timestamp actuel. Sinon, vérifiez si 12 heures se sont écoulées pour déclencher la mort.
+            if (hunger === 100 && timeAtHundredHunger === 0) {
+                dispatch(setTimeAtHundredHunger(currentTime));
+            } else if (hunger < 100) {
+                dispatch(setTimeAtHundredHunger(0));
             }
+
+            if (happiness === 0 && timeAtZeroHappiness === 0) {
+                dispatch(setTimeAtZeroHappiness(currentTime));
+            } else if (happiness > 0) {
+                dispatch(setTimeAtZeroHappiness(0));
+            }
+
+            // Vérifiez si 12 heures se sont écoulées depuis que la faim est à 100 ou le bonheur à 0
+            if ((timeAtHundredHunger && currentTime - timeAtHundredHunger >= 12 * 3600000) ||
+                (timeAtZeroHappiness && currentTime - timeAtZeroHappiness >= 12 * 3600000)) {
+                dispatch(setStage('demon')); // Marquez comme mort
+                dispatch(setIsFinalStage(true));
+                dispatch(setTimeAtHundredHunger(0));
+                dispatch(setTimeAtZeroHappiness(0));
+            }
+
         }, evolutionTree[stage]?.needsUpdate.updateInterval);
 
         return () => clearInterval(needsUpdateInterval);
-    }, [dispatch, stage, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]);
+    }, [dispatch, stage, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]);
 
     // Fonctions d'interaction
     const feed = () => {
-        if (isSleeping || stage === 'ange' || stage === 'demon') return;
-        dispatch(adjustHunger({ amount: -20 }));
+        if (isSleeping || isFinalStage) return;
+        dispatch(adjustHunger(-20)); // Notez l'absence de { amount: ... }
         const [min, max] = evolutionTree[stage].poopFrequency;
         setTimeout(() => dispatch(togglePoop(true)), Math.random() * (max - min) + min);
     };
 
     const play = () => {
-        if (!isSleeping) dispatch(adjustHappiness({ amount: 20 }));
+        if (isSleeping || isFinalStage) return;
+        dispatch(adjustHappiness(20)); // De même ici
     };
     // Ajoute d'autres fonctions comme jouer ou dormir ici
 
@@ -222,31 +243,35 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                     <Image
                         src={getSprite()}
                         alt="Tamagotchi"
-                        className={`${isSleeping ? styles.dodoSprite : ''} ${styles[getAnimationClass(stage)]}`}
+                        className={`${isSleeping ? styles.dodoSprite : ''} ${getAnimationClass(stage)}`}
                         width={isSleeping ? '800' : '447'}
                         height={isSleeping ? '500' : '360'}
                         onDragStart={(e) => e.preventDefault()}
                     />
-                    {isSick && !isFinalStage && <img src={extraSprites.sick} alt="Sick" className={styles.extraSpritesick} />}
-                    {hunger > 50 && !isFinalStage && <img src={extraSprites.hungry} alt="Hungry" className={styles.extraSpritehungry} />}
-                    {hasPoop && !isFinalStage && <img src={extraSprites.poop} alt="Poop" className={styles.extraSpritepoop} />}
+                    {/* Conditionnellement rendre les extras basé sur isFinalStage */}
+                    {!isFinalStage && (
+                        <>
+                            {isSick && <img src={extraSprites.sick} alt="Sick" className={styles.extraSpritesick} />}
+                            {hunger > 50 && <img src={extraSprites.hungry} alt="Hungry" className={styles.extraSpritehungry} />}
+                            {hasPoop && <img src={extraSprites.poop} alt="Poop" className={styles.extraSpritepoop} />}
+                        </>
+                    )}
                 </>
             ) : (
                 <div className={styles.tamagotchiMenu}>
                     <p>Stade: {stage}</p>
                     <p>Âge: {age} ans</p>
-                    {stage !== 'oeuf' && !isSleeping && (
+                    {/* Afficher les stats uniquement si ce n'est pas le stage final */}
+                    {!isFinalStage && stage !== 'oeuf' && !isSleeping && (
                         <>
                             <p>Faim: {hunger}%</p>
                             <p>Bonheur: {happiness}%</p>
-                            {!isFinalStage && (
-                                <div className={styles.menuButtons}>
-                                    <button onClick={feed} disabled={isSleeping}>Nourrir</button>
-                                    <button onClick={play} disabled={isSleeping}>Jouer</button>
-                                    <button onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop}>Nettoyer</button>
-                                    <button onClick={() => dispatch(setIsSick(false))} disabled={!isSick}>Soigner</button>
-                                </div>
-                            )}
+                            <div className={styles.menuButtons}>
+                                <button onClick={feed}>Nourrir</button>
+                                <button onClick={play}>Jouer</button>
+                                <button onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop || isFinalStage}>Nettoyer</button>
+                                <button onClick={() => dispatch(setIsSick(false))} disabled={!isSick || isFinalStage}>Soigner</button>
+                            </div>
                         </>
                     )}
                 </div>

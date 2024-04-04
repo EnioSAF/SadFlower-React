@@ -1,44 +1,92 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { evolutionTree } from '@/components/system32/applications/SadGotchu/EvolutionTree';
 
-// // FONCTION d'ajustement du temps basé sur la dernière interaction
-// export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
-//     'sadgotchu/adjustStateBasedOnTimeElapsed',
-//     async (timeElapsed, { getState, dispatch }) => {
-//         const state = getState().sadGotchu;
-//         const { stage, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness } = state;
+// FONCTION d'ajustement du temps basé sur la dernière interaction
+export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
+    'sadgotchu/adjustStateBasedOnTimeElapsed',
+    async (timeElapsed, { getState, dispatch }) => {
+        const state = getState().sadGotchu;
+        let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage } = state;
 
-//         // Définir les stages pour lesquels les ajustements sont applicables
-//         const validStagesForAdjustment = new Set(['bébé', 'enfant', 'adulteGood', 'adulteBad', 'vieux']);
+        if (['ange', 'demon', 'oeuf'].includes(stage)) {
+            console.log('Pas d’ajustement nécessaire pour le stade final ou initial.');
+            return;
+        }
+        console.log(`Début adjustStateBasedOnTimeElapsed avec timeElapsed: ${timeElapsed}`);
+        console.log(`État initial - stage: ${stage}, hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
 
-//         // Vérifier si le stage actuel permet un ajustement
-//         if (!validStagesForAdjustment.has(stage)) {
-//             console.log(`Aucun ajustement requis pour le stage : ${stage}`);
-//             return;
-//         }
+        const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
+        const daysElapsed = Math.floor(timeInMinutes / 1440); // Convertir les minutes en jours (1440 minutes par jour)
+        const stageConfig = evolutionTree[stage];
+        hunger = hunger ?? 50; // Valeur par défaut si null
+        happiness = happiness ?? 50; // Valeur par défaut si null
 
-//         // Récupérer les informations de mise à jour basées sur le stage actuel
-//         const stageUpdateInfo = evolutionTree[stage]?.needsUpdate;
-//         if (!stageUpdateInfo) {
-//             console.log(`Aucune info de mise à jour pour le stage ${stage}`);
-//             return;
-//         }
+        if (stageConfig?.needsUpdate) {
+            const { hungerIncrement, happinessDecrement, updateInterval } = stageConfig.needsUpdate;
+            let adjustedHunger = Math.min(100, Math.max(0, hunger + (hungerIncrement * timeInMinutes / (updateInterval / 60000))));
+            let adjustedHappiness = Math.max(0, Math.min(100, happiness - (happinessDecrement * timeInMinutes / (updateInterval / 60000))));
 
-//         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
-//         const adjustedHunger = Math.min(100, hunger + (timeInMinutes * stageUpdateInfo.hungerIncrement / (stageUpdateInfo.updateInterval / 60000)));
-//         const adjustedHappiness = Math.max(0, happiness - (timeInMinutes * stageUpdateInfo.happinessDecrement / (stageUpdateInfo.updateInterval / 60000)));
+            // Dispatch seulement si les valeurs sont valides
+            if (!isNaN(adjustedHunger)) {
+                dispatch(adjustHunger(adjustedHunger - hunger));
+            }
+            if (!isNaN(adjustedHappiness)) {
+                dispatch(adjustHappiness(adjustedHappiness - happiness));
+            }
+        } else {
+            console.error('Valeurs calculées non valides', { adjustedHunger, adjustedHappiness });
+        }
 
-//         // Appliquer les ajustements calculés
-//         dispatch(adjustHunger(adjustedHunger - hunger));
-//         dispatch(adjustHappiness(adjustedHappiness - happiness));
+        if (daysElapsed > 0) {
+            // Incrémenter l'âge basé sur les jours écoulés
+            dispatch(incrementAgeBy(daysElapsed));
+        }
 
-//         // Ajuster timeAtHundredHunger et timeAtZeroHappiness si nécessaire
-//         const newTimeAtHundredHunger = adjustedHunger === 100 ? (timeAtHundredHunger + timeElapsed) : 0;
-//         const newTimeAtZeroHappiness = adjustedHappiness === 0 ? (timeAtZeroHappiness + timeElapsed) : 0;
-//         dispatch(resetTimeAtHundredHunger(newTimeAtHundredHunger));
-//         dispatch(resetTimeAtZeroHappiness(newTimeAtZeroHappiness));
-//     }
-// );
+        // Vérifiez si le Tamagotchi devrait évoluer
+        const evolutionResult = determineNextStage(stage, age, happiness, hunger);
+        if (evolutionResult) {
+            dispatch(incrementAge(evolutionResult.nextStage));
+            stage = evolutionResult.nextStage; // Mettre à jour la variable locale pour la suite de la logique
+        }
+
+        console.log(`Age après ajustement: ${age}`);
+        if (evolutionResult) {
+            console.log(`Résultat de l'évolution:`, evolutionResult);
+        } else {
+            console.log(`Pas d'évolution pour ${stage} à l'âge ${age}`);
+        }
+
+        // Mise à jour pour la mort due à la faim ou au bonheur nul pendant plus de 12 heures
+        const currentTime = Date.now();
+        const deathByHungerThreshold = 12 * 60 * 60 * 1000; // 12 heures en millisecondes
+        const deathByUnhappinessThreshold = 12 * 60 * 60 * 1000;
+
+        if (hunger === 100 && (!timeAtHundredHunger || currentTime - timeAtHundredHunger >= deathByHungerThreshold)) {
+            dispatch(setStage('demon'));
+            isFinalStage = true;
+        } else if (happiness === 0 && (!timeAtZeroHappiness || currentTime - timeAtZeroHappiness >= deathByUnhappinessThreshold)) {
+            dispatch(setStage('demon'));
+            isFinalStage = true;
+        }
+
+        // Assurer la mise à jour de timeAtHundredHunger et timeAtZeroHappiness
+        if (hunger === 100 && !timeAtHundredHunger) {
+            dispatch(setTimeAtHundredHunger(currentTime));
+        } else if (hunger < 100) {
+            dispatch(setTimeAtHundredHunger(0));
+        }
+
+        if (happiness === 0 && !timeAtZeroHappiness) {
+            dispatch(setTimeAtZeroHappiness(currentTime));
+        } else if (happiness > 0) {
+            dispatch(setTimeAtZeroHappiness(0));
+        }
+
+        if (isFinalStage) {
+            dispatch(setIsFinalStage(true));
+        }
+    }
+);
 
 // Création de la slice pour le SadGotchu
 export const sadgotchuSlice = createSlice({
@@ -62,6 +110,7 @@ export const sadgotchuSlice = createSlice({
         },
         setStage: (state, action) => {
             state.stage = action.payload;
+            state.isFinalStage = ['ange', 'demon'].includes(action.payload);
         },
         setEvolutionLine: (state, action) => {
             state.evolutionLine = action.payload;
@@ -73,17 +122,17 @@ export const sadgotchuSlice = createSlice({
             state.isSick = action.payload;
         },
         adjustHunger: (state, action) => {
-            const newHunger = state.hunger + action.payload.amount;
+            const newHunger = Math.round(state.hunger + action.payload);
             state.hunger = Math.min(100, Math.max(0, newHunger));
         },
         adjustHappiness: (state, action) => {
-            const newHappiness = state.happiness + action.payload.amount;
+            const newHappiness = Math.round(state.happiness + action.payload);
             state.happiness = Math.min(100, Math.max(0, newHappiness));
         },
-        resetTimeAtHundredHunger: (state, action) => {
+        setTimeAtHundredHunger: (state, action) => {
             state.timeAtHundredHunger = action.payload;
         },
-        resetTimeAtZeroHappiness: (state, action) => {
+        setTimeAtZeroHappiness: (state, action) => {
             state.timeAtZeroHappiness = action.payload;
         },
         setIsSleeping: (state, action) => {
@@ -91,6 +140,9 @@ export const sadgotchuSlice = createSlice({
         },
         setIsFinalStage: (state, action) => {
             state.isFinalStage = action.payload;
+        },
+        incrementAgeBy: (state, action) => {
+            state.age += action.payload; // action.payload contient le nombre de jours à ajouter
         },
         // Ajoute ici d'autres reducers selon les actions que ton Tamagotchi peut entreprendre
     },
@@ -105,10 +157,11 @@ export const {
     setIsSick,
     adjustHunger,
     adjustHappiness,
-    resetTimeAtHundredHunger,
-    resetTimeAtZeroHappiness,
+    setTimeAtHundredHunger,
+    setTimeAtZeroHappiness,
     setIsSleeping,
     setIsFinalStage,
+    incrementAgeBy,
     // Exporte d'autres actions ici...
 } = sadgotchuSlice.actions;
 
