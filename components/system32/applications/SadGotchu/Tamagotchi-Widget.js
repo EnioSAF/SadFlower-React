@@ -81,6 +81,8 @@ const TamagotchiWidget = ({ closeWindow }) => {
                 }}
                 minWidth={286}
                 minHeight={338}
+                maxWidth={286}
+                maxHeight={338}
                 className='sadgotchu'
                 onClick={updateZIndex}
                 disableDragging={isMobileScreen()}

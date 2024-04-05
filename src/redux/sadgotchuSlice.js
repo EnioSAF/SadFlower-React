@@ -92,6 +92,7 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
 export const sadgotchuSlice = createSlice({
     name: 'SadGotchu',
     initialState: {
+        name: "",
         stage: 'oeuf',
         age: 0,
         evolutionLine: null,
@@ -105,6 +106,9 @@ export const sadgotchuSlice = createSlice({
         isFinalStage: false,
     },
     reducers: {
+        setName: (state, action) => {
+            state.name = action.payload;
+        },
         incrementAge: (state) => {
             state.age += 1;
         },
@@ -144,12 +148,27 @@ export const sadgotchuSlice = createSlice({
         incrementAgeBy: (state, action) => {
             state.age += action.payload; // action.payload contient le nombre de jours à ajouter
         },
+        resetSadGotchu: (state) => {
+            state.name = "";
+            state.stage = 'oeuf';
+            state.age = 0;
+            state.evolutionLine = null;
+            state.hasPoop = false;
+            state.isSick = false;
+            state.hunger = 50;
+            state.happiness = 50;
+            state.timeAtHundredHunger = 0;
+            state.timeAtZeroHappiness = 0;
+            state.isSleeping = false;
+            state.isFinalStage = false;
+        },
         // Ajoute ici d'autres reducers selon les actions que ton Tamagotchi peut entreprendre
     },
 });
 
 // Action creators sont générés pour chaque cas de reducer
 export const {
+    setName,
     incrementAge,
     setStage,
     setEvolutionLine,
@@ -162,6 +181,7 @@ export const {
     setIsSleeping,
     setIsFinalStage,
     incrementAgeBy,
+    resetSadGotchu,
     // Exporte d'autres actions ici...
 } = sadgotchuSlice.actions;
 

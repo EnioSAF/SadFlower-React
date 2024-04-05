@@ -2,23 +2,23 @@ export const evolutionTree = {
     oeuf: {
         nextStage: "bébé",
         ageToEvolve: 1,
-        needsUpdate: { hungerIncrement: 0, happinessDecrement: 0, updateInterval: 5000 },
+        needsUpdate: { hungerIncrement: 0, happinessDecrement: 0, updateInterval: 3600000 },
         poopFrequency: null,
         sicknessChance: 0.0,
     },
     bébé: {
         nextStage: "enfant",
         ageToEvolve: 10,
-        needsUpdate: { hungerIncrement: 7, happinessDecrement: 7, updateInterval: 8500 },
-        poopFrequency: [120000, 600000], // Entre 2 et 10 minutes
-        sicknessChance: 5, // 2% de chance de tomber malade
+        needsUpdate: { hungerIncrement: 7, happinessDecrement: 7, updateInterval: 1500000 },
+        poopFrequency: [3600000 * 12, 3600000 * 24], // Entre 12 et 24 heures
+        sicknessChance: 5,
     },
     enfant: {
         nextStage: "adulte",
         ageToEvolve: 25,
-        needsUpdate: { hungerIncrement: 5, happinessDecrement: 5, updateInterval: 15000 },
-        poopFrequency: [180000, 720000], // Entre 3 et 12 minutes
-        sicknessChance: 1.5, // 1.5% de chance
+        needsUpdate: { hungerIncrement: 5, happinessDecrement: 5, updateInterval: 2000000 },
+        poopFrequency: [3600000 * 12, 3600000 * 24], // Entre 12 et 24 heures
+        sicknessChance: 1.5,
         evolutionOptions: [
             { type: "adulteGood", condition: (happiness) => happiness > 80, evolutionLine: "good" },
             { type: "adulteBad", condition: (happiness) => happiness <= 60, evolutionLine: "bad" },
@@ -27,24 +27,24 @@ export const evolutionTree = {
     adulteGood: {
         nextStage: "vieux",
         ageToEvolve: 60,
-        needsUpdate: { hungerIncrement: 3, happinessDecrement: 3, updateInterval: 10000 },
-        poopFrequency: [120000, 600000], // Entre 2 et 10 minutes
-        sicknessChance: 0.5, // 1.5% de chance de tomber malade
+        needsUpdate: { hungerIncrement: 3, happinessDecrement: 3, updateInterval: 3600000 },
+        poopFrequency: [3600000 * 24, 3600000 * 48], // Entre 24 et 48 heures
+        sicknessChance: 0.5,
         evolutionLine: "good",
     },
     adulteBad: {
         nextStage: "vieux",
         ageToEvolve: 60,
-        needsUpdate: { hungerIncrement: 5, happinessDecrement: 5, updateInterval: 15000 },
-        poopFrequency: [120000, 800000],
-        sicknessChance: 1, // 9% de chance de tomber malade
+        needsUpdate: { hungerIncrement: 5, happinessDecrement: 5, updateInterval: 260000 },
+        poopFrequency: [3600000 * 20, 3600000 * 24],
+        sicknessChance: 1,
         evolutionLine: "bad",
     },
     vieux: {
         ageToEvolve: 100,
-        needsUpdate: { hungerIncrement: 2, happinessDecrement: 7, updateInterval: 15000 },
-        poopFrequency: [120000, 600000], // Entre 2 et 10 minutes
-        sicknessChance: 5, // 2% de chance de tomber malade
+        needsUpdate: { hungerIncrement: 2, happinessDecrement: 7, updateInterval: 2000000 },
+        poopFrequency: [3600000 * 2, 3600000 * 24], // Entre 2 et 24 heure
+        sicknessChance: 5,
         evolutionOptions: [
             { type: "ange", condition: (evolutionLine) => evolutionLine === "good", evolutionLine: "good" },
             { type: "demon", condition: (evolutionLine) => evolutionLine === "bad", evolutionLine: "bad" },
