@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
-import { incrementAge, setStage, adjustHunger, adjustHappiness, setTimeAtHundredHunger, setTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed } from 'src/redux/sadgotchuSlice.js';
+import { setName, incrementAge, setStage, adjustHunger, adjustHappiness, setTimeAtHundredHunger, setTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed, resetSadGotchu } from 'src/redux/sadgotchuSlice.js';
 import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     const dispatch = useDispatch();
     const {
+        name,
         stage,
         age,
         evolutionLine,
@@ -52,6 +53,19 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         }
     };
 
+    // Pour nommer l'oeuf
+    const [showNameForm, setShowNameForm] = useState(!name && stage === 'oeuf');
+    const [newName, setNewName] = useState('');
+    // Gère la soumission du formulaire
+    const handleNameSubmit = (e) => {
+        e.preventDefault();
+        if (newName.trim()) {
+            dispatch(setName(newName));
+            setShowNameForm(false); // Cache le formulaire après la soumission
+        }
+    };
+
+
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
     // Pour update les states depuis la dernière intéraction
@@ -85,8 +99,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                     }
                 }
             }
-        }, 60000); // Simule le passage d'un an toutes les minutes
-
+        }, 86400000); // 24 heures en millisecondes pour simuler le passage d'un "jour" dans le jeu
         return () => clearInterval(evolutionInterval);
     }, [dispatch, stage, age, happiness, hunger, evolutionLine, isFinalStage]);
 
@@ -133,14 +146,14 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     // Fonctions d'interaction
     const feed = () => {
         if (isSleeping || isFinalStage) return;
-        dispatch(adjustHunger(-20)); // Notez l'absence de { amount: ... }
+        dispatch(adjustHunger(-30));
         const [min, max] = evolutionTree[stage].poopFrequency;
         setTimeout(() => dispatch(togglePoop(true)), Math.random() * (max - min) + min);
     };
 
     const play = () => {
         if (isSleeping || isFinalStage) return;
-        dispatch(adjustHappiness(20)); // De même ici
+        dispatch(adjustHappiness(30)); // De même ici
     };
     // Ajoute d'autres fonctions comme jouer ou dormir ici
 
@@ -162,7 +175,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
         let deathTimer;
 
         if (hasPoop) {
-            // Démarrer un timer pour marquer comme malade si le "poop" n'est pas nettoyé en 10 minutes
+            // Démarrer un timer pour marquer comme malade si le "poop" n'est pas nettoyé en 1 heure
             sicknessTimer = setTimeout(() => {
                 dispatch(setIsSick(true));
 
@@ -171,8 +184,8 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                     if (isSick) { // Vérifier si toujours malade
                         dispatch(setStage('demon')); // Passer au stade "démon"
                     }
-                }, 8640); // 24 heures
-            }, 6000); // 10 minutes
+                }, 3600000 * 24); // 24 heures
+            }, 3600000); // 1 heure
         }
 
         // Nettoyage : s'assurer d'annuler les timers si le composant est démonté ou si les conditions changent
@@ -238,6 +251,19 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
 
     return (
         <div className={styles.tamagotchiCore}>
+            {showNameForm && (
+                <form onSubmit={handleNameSubmit} className={styles.nameForm}>
+                    <label htmlFor="sadGotchuName">Nomme ton SadGotchu :</label>
+                    <input
+                        id="sadGotchuName"
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Nommer</button>
+                </form>
+            )}
             {!isMenuVisible ? (
                 <>
                     <Image
@@ -259,6 +285,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                 </>
             ) : (
                 <div className={styles.tamagotchiMenu}>
+                    <p>{name || 'SadGotchu'}</p>
                     <p>Stade: {stage}</p>
                     <p>Âge: {age} ans</p>
                     {/* Afficher les stats uniquement si ce n'est pas le stage final */}
@@ -271,6 +298,12 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                                 <button onClick={play}>Jouer</button>
                                 <button onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop || isFinalStage}>Nettoyer</button>
                                 <button onClick={() => dispatch(setIsSick(false))} disabled={!isSick || isFinalStage}>Soigner</button>
+                                <button onClick={() => {
+                                    if (window.confirm("Es-tu sûr de vouloir réinitialiser ton SadGotchu ?")) {
+                                        dispatch(resetSadGotchu());
+                                        setShowNameForm(true);
+                                    }
+                                }}>Réinitialiser</button>
                             </div>
                         </>
                     )}
