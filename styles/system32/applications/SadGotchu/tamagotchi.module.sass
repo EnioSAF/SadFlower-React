@@ -23,17 +23,58 @@
 
 .tamagotchiMenu
     position: absolute
-    top: 30%
-    right: 37%
+    top: 33%
+    left: 39%
     z-index: 1
-    line-height: 15%
+    line-height: 1%
 
-    .menuButtons
+    .tamagotchiStats
         display: flex
         flex-direction: column
+        align-items: center
+
+    .tamagotchiStats > *
+        margin-top: -0.05px
+
+    .statsContainer
+        width: 150%
+        position: absolute
+        left: -22%
+        top: 95%
+
+        .statItem
+            display: flex
+            flex-direction: column
+            align-items: center
+
+        .statBarContainer
+            background-color: #eee // Couleur de fond de la barre
+            width: 100% // Largeur maximale de la barre
+            height: 10px // Hauteur de la barre
+
+        .statBar
+            width: 100%
+            height: 100%
+            background-color: #4caf50 // Couleur de remplissage de la barre
+
+.menuButtonsContainer
+    display: flex
+    flex-direction: column
+    position: absolute
+    top: 38%
+    align-items: center
+
+    .menuButtonsGroup
+        display: flex
+
+    .menuButtons
+        min-width: 40px
+
+.menuButtonsReset
+    width: 100%
+    margin-top: 5px
 
 .nameForm
-
 
 .buttonOnOff, .buttonMiddle, .buttonLeft, .buttonRight
     position: absolute
@@ -71,11 +112,11 @@
 
 @keyframes animation-bebe
     0%, 100%
-        transform: translateY(0)
+        transform: translateX(0)
     33%
-        transform: translateY(-5px)
+        transform: translateX(-5px)
     66%
-        transform: translateY(5px)
+        transform: translateX(5px)
 
 @keyframes animation-adulte
     0%, 100%
@@ -86,7 +127,7 @@
         transform: rotate(5deg)
 
 .animation-bebe
-    animation: animation-bebe 1s infinite
+    animation: animation-bebe 3s infinite
 
 .animation-adulte
-    animation: animation-adulte 1s infinite
+    animation: animation-adulte 3s infinite
