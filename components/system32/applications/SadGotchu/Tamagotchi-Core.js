@@ -198,7 +198,7 @@ const TamagotchiCore = ({ currentMenu }) => {
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
     const checkIfSleeping = (stage) => {
         const currentHour = new Date().getHours();
-        const sleepStartTimes = { bébé: 23, enfant: 20, adulte: 23, vieux: 20 };
+        const sleepStartTimes = { bébé: 19, enfant: 20, adulte: 23, vieux: 20 };
         const sleepEndTimes = { bébé: 7, enfant: 8, adulte: 10, vieux: 9 }; // Supposons que tous se réveillent à 8h pour simplifier
 
         const sleepStartTime = sleepStartTimes[stage] || 22;
@@ -268,7 +268,7 @@ const TamagotchiCore = ({ currentMenu }) => {
                     <Image
                         src={getSprite()}
                         alt="Tamagotchi"
-                        className={`${isSleeping ? styles.dodoSprite : ''} ${styles[getAnimationClass(stage)]}`}
+                        className={`${isSleeping ? styles.dodoSprite : ''} ${isSleeping ? '' : styles[getAnimationClass(stage)]}]}`}
                         width={isSleeping ? '800' : '447'}
                         height={isSleeping ? '500' : '360'}
                         onDragStart={(e) => e.preventDefault()}
