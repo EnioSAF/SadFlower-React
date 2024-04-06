@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 import Image from 'next/image';
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
@@ -12,11 +13,7 @@ const TamagotchiWidget = ({ closeWindow }) => {
     // Pour gérer le tamagotchi
 
     const [isOn, setIsOn] = useState(true);
-    const [currentView, setCurrentView] = useState('core');
     const [isButtonMiddlePressed, setIsButtonMiddlePressed] = useState(false);
-    const [isMenuVisible, setIsMenuVisible] = useState(false);
-    const toggleView = () => setIsMenuVisible(!isMenuVisible);
-
 
     const togglePower = () => {
         closeWindow();
@@ -34,6 +31,28 @@ const TamagotchiWidget = ({ closeWindow }) => {
         sound.play();
     };
 
+    // Pour gérer les menus
+    const isSleeping = useSelector(state => state.sadGotchu.isSleeping);
+    const isFinalStage = useSelector(state => state.sadGotchu.isFinalStage);
+    const [currentMenu, setCurrentMenu] = useState('core'); // 'core', 'stats', 'actions'
+
+    const toggleView = () => {
+        setCurrentMenu(prevMenu => {
+            if(isSleeping || isFinalStage) {
+                // Si le SadGotchu est en train de dormir ou en état final, on ne permet pas d'accéder au menu 'actions'
+                if(prevMenu === 'core') return 'stats';
+                return 'core';
+            } else {
+                // Logique de navigation normale si le SadGotchu n'est pas en train de dormir ou en état final
+                switch (prevMenu) {
+                    case 'core': return 'stats';
+                    case 'stats': return 'actions';
+                    case 'actions': return 'core';
+                    default: return 'core';
+                }
+            }
+        });
+    };
     // Pour gérer la fenêtre
 
     const { bringToFront, zIndex: globalZIndex } = useZIndex();
@@ -114,7 +133,7 @@ const TamagotchiWidget = ({ closeWindow }) => {
                     />
                     {isOn && (
                         <div>
-                            <TamagotchiCore isMenuVisible={isMenuVisible} />
+                            <TamagotchiCore currentMenu={currentMenu} />
                         </div>
                     )}
                 </div>

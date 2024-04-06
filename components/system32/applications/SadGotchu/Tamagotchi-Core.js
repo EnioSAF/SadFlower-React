@@ -6,7 +6,7 @@ import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sas
 import { setName, incrementAge, setStage, adjustHunger, adjustHappiness, setTimeAtHundredHunger, setTimeAtZeroHappiness, togglePoop, setIsSick, setIsSleeping, setIsFinalStage, setEvolutionLine, adjustStateBasedOnTimeElapsed, resetSadGotchu } from 'src/redux/sadgotchuSlice.js';
 import { evolutionTree, determineNextStage } from './EvolutionTree';
 
-const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
+const TamagotchiCore = ({ currentMenu }) => {
     const dispatch = useDispatch();
     const {
         name,
@@ -64,7 +64,6 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
             setShowNameForm(false); // Cache le formulaire après la soumission
         }
     };
-
 
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
@@ -199,7 +198,7 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
     // Fonction pour déterminer si le Tamagotchi devrait être endormi
     const checkIfSleeping = (stage) => {
         const currentHour = new Date().getHours();
-        const sleepStartTimes = { bébé: 19, enfant: 20, adulte: 22, vieux: 20 };
+        const sleepStartTimes = { bébé: 23, enfant: 20, adulte: 23, vieux: 20 };
         const sleepEndTimes = { bébé: 7, enfant: 8, adulte: 10, vieux: 9 }; // Supposons que tous se réveillent à 8h pour simplifier
 
         const sleepStartTime = sleepStartTimes[stage] || 22;
@@ -264,12 +263,12 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                     <button type="submit">Nommer</button>
                 </form>
             )}
-            {!isMenuVisible ? (
+            {currentMenu === 'core' && (
                 <>
                     <Image
                         src={getSprite()}
                         alt="Tamagotchi"
-                        className={`${isSleeping ? styles.dodoSprite : ''} ${getAnimationClass(stage)}`}
+                        className={`${isSleeping ? styles.dodoSprite : ''} ${styles[getAnimationClass(stage)]}`}
                         width={isSleeping ? '800' : '447'}
                         height={isSleeping ? '500' : '360'}
                         onDragStart={(e) => e.preventDefault()}
@@ -283,34 +282,55 @@ const TamagotchiCore = ({ toggleView, isMenuVisible }) => {
                         </>
                     )}
                 </>
-            ) : (
+            )}
+            {currentMenu === 'stats' && (
                 <div className={styles.tamagotchiMenu}>
-                    <p>{name || 'SadGotchu'}</p>
-                    <p>Stade: {stage}</p>
-                    <p>Âge: {age} ans</p>
+                    <div className={styles.tamagotchiStats}>
+                        <p>{name || 'SadGotchu'}</p>
+                        <p>Stade: {stage}</p>
+                        <p>Âge: {age} ans</p>
+                    </div>
                     {/* Afficher les stats uniquement si ce n'est pas le stage final */}
                     {!isFinalStage && stage !== 'oeuf' && !isSleeping && (
-                        <>
-                            <p>Faim: {hunger}%</p>
-                            <p>Bonheur: {happiness}%</p>
-                            <div className={styles.menuButtons}>
-                                <button onClick={feed}>Nourrir</button>
-                                <button onClick={play}>Jouer</button>
-                                <button onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop || isFinalStage}>Nettoyer</button>
-                                <button onClick={() => dispatch(setIsSick(false))} disabled={!isSick || isFinalStage}>Soigner</button>
-                                <button onClick={() => {
-                                    if (window.confirm("Es-tu sûr de vouloir réinitialiser ton SadGotchu ?")) {
-                                        dispatch(resetSadGotchu());
-                                        setShowNameForm(true);
-                                    }
-                                }}>Réinitialiser</button>
+                        <div className={styles.statsContainer}>
+                            <div className={styles.statItem}>
+                                <p>Nourriture: </p>
+                                <div className={styles.statBarContainer}>
+                                    <div className={styles.statBar} style={{ width: `${100 - hunger}%` }}></div>
+                                </div>
                             </div>
-                        </>
+                            <div className={styles.statItem}>
+                                <p>Bonheur: </p>
+                                <div className={styles.statBarContainer}>
+                                    <div className={styles.statBar} style={{ width: `${happiness}%` }}></div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             )}
+            {currentMenu === 'actions' && (
+                <div className={styles.menuButtonsContainer}>
+                    <div className={styles.menuButtonsGroup}>
+                        <button className={styles.menuButtons} onClick={feed}>Nourrir</button>
+                        <button className={styles.menuButtons} onClick={play}>Jouer</button>
+                    </div>
+                    <div className={styles.menuButtonsGroup}>
+                        <button className={styles.menuButtons} onClick={() => dispatch(togglePoop(false))} disabled={!hasPoop || isFinalStage}>Nettoyer</button>
+                        <button className={styles.menuButtons} onClick={() => dispatch(setIsSick(false))} disabled={!isSick || isFinalStage}>Soigner</button>
+                    </div>
+                    <div className={styles.menuButtonsReset}>
+                        <button className={styles.menuButtonsReset} onClick={() => {
+                            if (window.confirm("Es-tu sûr de vouloir réinitialiser ton SadGotchu ?")) {
+                                dispatch(resetSadGotchu());
+                                setShowNameForm(true); // Remarque : Assurez-vous que la logique pour setShowNameForm est gérée correctement dans votre composant
+                            }
+                        }}>Réinitialiser</button>
+                    </div>
+                </div>
+            )}
         </div>
-    );
+    )
 };
 
 export default TamagotchiCore;
