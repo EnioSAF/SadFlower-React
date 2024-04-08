@@ -115,7 +115,16 @@ const TamagotchiWidget = ({ closeWindow }) => {
                         objectFit='cover'
                         onDragStart={(e) => e.preventDefault()}
                     />
-                    <img src="/SadGotchu/buttons/button-off.png" alt="On/Off" className={styles.buttonOnOff} onClick={togglePower} onDragStart={(e) => e.preventDefault()} />
+                    <img
+                    src="/SadGotchu/buttons/button-off.png"
+                    alt="On/Off"
+                    className={styles.buttonOnOff}
+                    onClick={togglePower}
+                    onDragStart={(e) => e.preventDefault()}
+                    onMouseDown={() => {
+                            playClickSound();
+                        }}
+                    />
                     <img
                         src={isButtonMiddlePressed ? "/SadGotchu/buttons/button-middle(pushed).png" : "/SadGotchu/buttons/button-middle.png"}
                         alt="Middle"
