@@ -32,18 +32,18 @@ const TamagotchiWidget = ({ closeWindow }) => {
     };
 
     // Pour gérer les menus
-    const isSleeping = useSelector(state => state.sadGotchu.isSleeping);
-    const isFinalStage = useSelector(state => state.sadGotchu.isFinalStage);
     const [currentMenu, setCurrentMenu] = useState('core'); // 'core', 'stats', 'actions'
+    const stage = useSelector(state => state.sadGotchu.stage);
+    const isSleeping = useSelector(state => state.sadGotchu.isSleeping);
 
     const toggleView = () => {
         setCurrentMenu(prevMenu => {
-            if(isSleeping || isFinalStage) {
-                // Si le SadGotchu est en train de dormir ou en état final, on ne permet pas d'accéder au menu 'actions'
-                if(prevMenu === 'core') return 'stats';
-                return 'core';
+            // Vérifie si le SadGotchu est au stage "oeuf", dort ou est en état final
+            if (stage === 'oeuf' || isSleeping ) {
+                // Si oui, ne permet pas d'accéder au menu 'actions' et saute directement à 'core' depuis n'importe quel autre menu
+                return prevMenu === 'core' ? 'stats' : 'core';
             } else {
-                // Logique de navigation normale si le SadGotchu n'est pas en train de dormir ou en état final
+                // Sinon, logique de navigation normale
                 switch (prevMenu) {
                     case 'core': return 'stats';
                     case 'stats': return 'actions';
@@ -116,12 +116,12 @@ const TamagotchiWidget = ({ closeWindow }) => {
                         onDragStart={(e) => e.preventDefault()}
                     />
                     <img
-                    src="/SadGotchu/buttons/button-off.png"
-                    alt="On/Off"
-                    className={styles.buttonOnOff}
-                    onClick={togglePower}
-                    onDragStart={(e) => e.preventDefault()}
-                    onMouseDown={() => {
+                        src="/SadGotchu/buttons/button-off.png"
+                        alt="On/Off"
+                        className={styles.buttonOnOff}
+                        onClick={togglePower}
+                        onDragStart={(e) => e.preventDefault()}
+                        onMouseDown={() => {
                             playClickSound();
                         }}
                     />
