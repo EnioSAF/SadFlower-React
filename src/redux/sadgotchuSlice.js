@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import SadGotchuService from '@/components/system32/applications/SadGotchu/SadGotchuService';
 import { evolutionTree } from '@/components/system32/applications/SadGotchu/EvolutionTree';
+
 
 // FONCTION d'ajustement du temps basé sur la dernière interaction
 export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
@@ -88,10 +90,54 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
     }
 );
 
+// Actions pour Strapi
+export const loadUserSadGotchu = createAsyncThunk(
+    'sadgotchu/loadUserSadGotchu',
+    async (userId, { dispatch, getState }) => {
+        try {
+            const sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
+            console.log('Réponse de fetchSadGotchu:', sadGotchu);
+            if (sadGotchu) {
+                dispatch(setSadGotchu(sadGotchu));
+            } else {
+                console.log("Aucun SadGotchu trouvé pour cet utilisateur");
+                // Vous pouvez également envisager de créer un nouveau SadGotchu ici si nécessaire
+            }
+        } catch (error) {
+            console.error("Erreur lors du chargement du SadGotchu:", error);
+        }
+    }
+);
+
+export const updateSadGotchuAction = createAsyncThunk(
+    'sadgotchu/update',
+    async ({ id, changes }, { rejectWithValue }) => {
+        try {
+            const data = await SadGotchuService.updateSadGotchu(id, changes);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.toString());
+        }
+    }
+);
+
+export const createSadGotchuAction = createAsyncThunk(
+    'sadgotchu/create',
+    async (sadGotchuData, { rejectWithValue }) => {
+        try {
+            const data = await SadGotchuService.createSadGotchu(sadGotchuData);
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.toString());
+        }
+    }
+);
+
 // Création de la slice pour le SadGotchu
 export const sadgotchuSlice = createSlice({
     name: 'SadGotchu',
     initialState: {
+        id: null,
         name: "",
         stage: 'oeuf',
         age: 0,
@@ -162,7 +208,99 @@ export const sadgotchuSlice = createSlice({
             state.isSleeping = false;
             state.isFinalStage = false;
         },
+        setSadGotchu: (state, action) => {
+            const { data } = action.payload;
+            if (data) {
+                const { id, attributes } = data;
+                if (attributes) {
+                    const {
+                        name,
+                        stage,
+                        age,
+                        evolutionLine,
+                        hunger,
+                        happiness,
+                        timeAtHundredHunger,
+                        timeAtZeroHappiness,
+                        isSleeping,
+                        isFinalStage,
+                    } = attributes;
+
+                    // Met à jour l'état avec les valeurs extraites
+                    state.id = id;
+                    state.name = name;
+                    state.stage = stage;
+                    state.age = parseInt(age, 10);
+                    state.evolutionLine = evolutionLine;
+                    state.hunger = parseInt(hunger, 10);
+                    state.happiness = happiness ? parseInt(happiness, 10) : state.happiness;
+                    state.timeAtHundredHunger = parseInt(timeAtHundredHunger, 10);
+                    state.timeAtZeroHappiness = parseInt(timeAtZeroHappiness, 10);
+                    state.isSleeping = isSleeping;
+                    state.isFinalStage = isFinalStage;
+                    // Assurez-vous de mettre à jour tous les champs nécessaires
+                }
+            }
+        },
         // Ajoute ici d'autres reducers selon les actions que ton Tamagotchi peut entreprendre
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadUserSadGotchu.fulfilled, (state, action) => {
+                console.log('Action payload dans loadUserSadGotchu.fulfilled:', action.payload);
+                // Assurez-vous d'abord que 'data' existe dans 'action.payload'
+                if (action.payload?.data) {
+                    // Ensuite, extrayez 'id' et 'attributes' de 'data'
+                    const { id, attributes } = action.payload.data;
+                    console.log('Attributes dans loadUserSadGotchu.fulfilled:', attributes);
+
+                    // Maintenant, vous pouvez vérifier si 'attributes' est défini
+                    if (attributes) {
+                        // Ici, vous pouvez destructurer 'attributes' pour obtenir vos champs
+                        const {
+                            name,
+                            stage,
+                            age,
+                            evolutionLine,
+                            hasPoop,
+                            isSick,
+                            hunger,
+                            happiness,
+                            timeAtHundredHunger,
+                            timeAtZeroHappiness,
+                            isSleeping,
+                            isFinalStage,
+                            // Ajoutez d'autres champs selon vos besoins
+                        } = attributes;
+
+                        // Mettez à jour l'état avec les nouvelles valeurs
+                        Object.assign(state, {
+                            id,
+                            name,
+                            stage,
+                            age,
+                            evolutionLine,
+                            hasPoop,
+                            isSick,
+                            hunger,
+                            happiness,
+                            timeAtHundredHunger,
+                            timeAtZeroHappiness,
+                            isSleeping,
+                            isFinalStage,
+                            // Continuez avec tous les champs nécessaires
+                        });
+                    }
+                } else {
+                    console.log("Aucun SadGotchu trouvé pour cet utilisateur ou structure de réponse inattendue.");
+                }
+            })
+            .addCase(createSadGotchuAction.fulfilled, (state, action) => {
+                // Gérer le SadGotchu créé
+            })
+            .addCase(updateSadGotchuAction.fulfilled, (state, action) => {
+                // Gérer le SadGotchu mis à jour
+            });
     },
 });
 
@@ -182,6 +320,7 @@ export const {
     setIsFinalStage,
     incrementAgeBy,
     resetSadGotchu,
+    setSadGotchu,
     // Exporte d'autres actions ici...
 } = sadgotchuSlice.actions;
 
