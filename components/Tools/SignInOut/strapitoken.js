@@ -1,5 +1,7 @@
 import { AUTH_TOKEN, USER } from "./constant";
 
+// Pour le User
+
 export const getToken = () => {
   if (typeof window !== "undefined") {
     return localStorage.getItem(AUTH_TOKEN);
@@ -34,4 +36,23 @@ export const removeToken = () => {
 
 export const removeUser = () => {
   localStorage.removeItem(USER);
+};
+
+// Pour le SadGotchu
+
+export const getSadGotchuId = () => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem('SADGOTCHU_ID');
+  }
+  return null;
+};
+
+export const setSadGotchuId = (sadGotchuId) => {
+  if (sadGotchuId) {
+    localStorage.setItem('SADGOTCHU_ID', sadGotchuId);
+  }
+};
+
+export const removeSadGotchuId = () => {
+  localStorage.removeItem('SADGOTCHU_ID');
 };

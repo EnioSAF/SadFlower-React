@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { persistor } from "src/redux/store.js"
 import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 import {
   setToken,
   removeToken,
   removeUser,
+  removeSadGotchuId
 } from "/components/Tools/SignInOut/strapitoken";
 import { useAuthContext } from "@/context/AuthContext";
 
@@ -48,9 +50,11 @@ const UserInfo = ({
     }
   }, [user]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     removeToken();
     removeUser();
+    removeSadGotchuId();
+    await persistor.purge();
     setLoginStatus(!loginStatus);
     window.location.reload();
   };
