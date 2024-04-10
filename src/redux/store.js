@@ -7,16 +7,22 @@ import sadgotchuSlice from 'src/redux/sadgotchuSlice.js';
 
 // Créez une transformation qui assure que hunger et happiness ne sont jamais null.
 const nonNullTransform = createTransform(
-    // transforme l'état entrant (vers le stockage)
-    (inboundState, key) => inboundState,
-    // transforme l'état sortant (depuis le stockage)
+    (inboundState, key) => {
+        // Pas de transformation à l'entrée
+        return inboundState;
+    },
     (outboundState, key) => {
-        if (key === 'hunger' || key === 'happiness') {
-            return outboundState != null ? outboundState : 50; // Utilisez 50 comme valeur par défaut
+        if (key === 'sadGotchu') {
+            const { hunger, happiness } = outboundState;
+            return {
+                ...outboundState,
+                hunger: hunger != null ? hunger : 50,
+                happiness: happiness != null ? happiness : 50,
+            };
         }
         return outboundState;
     },
-    { whitelist: ['sadGotchu'] } // Applique cette transformation uniquement au slice sadGotchu
+    { whitelist: ['sadGotchu'] }
 );
 
 // Ajoutez la transformation à votre persistConfig

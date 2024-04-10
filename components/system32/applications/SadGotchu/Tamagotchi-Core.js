@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import SadGotchuService from '@/components/system32/applications/SadGotchu/SadGotchuService';
@@ -73,17 +73,29 @@ const TamagotchiCore = ({ currentMenu }) => {
     };
 
     // FONCTION de Load / Save Strapi
+    const [isLoading, setIsLoading] = useState(true); // Ajout d'un état pour le chargement
 
     // Pour load
     useEffect(() => {
         const userStr = localStorage.getItem('user');
+        setIsLoading(true); // Commence par indiquer que le chargement est en cours
         if (userStr) {
             const user = JSON.parse(userStr);
             const userId = user.id;
             if (userId) {
-                console.log('UserID avant dispatch:', userId);
-                dispatch(loadUserSadGotchu(userId));
+                dispatch(loadUserSadGotchu(userId))
+                    .unwrap()
+                    .then(() => {
+                        setIsLoading(false); // Fin du chargement
+                    })
+                    .catch(() => {
+                        setIsLoading(false); // Fin du chargement même en cas d'erreur
+                    });
+            } else {
+                setIsLoading(false); // Aucun utilisateur trouvé, donc fin du chargement
             }
+        } else {
+            setIsLoading(false); // Aucune donnée utilisateur, donc fin du chargement
         }
     }, [dispatch]);
 
@@ -121,7 +133,9 @@ const TamagotchiCore = ({ currentMenu }) => {
     }, [dispatch, hunger, happiness, id]); // Incluez toutes les dépendances pertinentes ici
 
     // Pour nommer l'oeuf
-    const [showNameForm, setShowNameForm] = useState(!name && stage === 'oeuf');
+    const showNameForm = useMemo(() => {
+        return !isLoading && (!name && stage === 'oeuf');
+    }, [isLoading, name, stage]);
     const [newName, setNewName] = useState('');
 
     const handleNameSubmit = async (e) => {

@@ -3,7 +3,7 @@ import { Rnd } from "react-rnd";
 import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { useAuthContext } from "/context/AuthContext";
 import { API } from "/components/Tools/SignInOut/constant";
-import { setToken, setUser } from "components/Tools/SignInOut/strapitoken";
+import { setToken, setUser, setSadGotchuId } from "components/Tools/SignInOut/strapitoken";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -48,8 +48,12 @@ const SignIn = ({
       } else {
         setToken(data.jwt); // Stocke le JWT dans localStorage ou un endroit similaire
         setUser(data.user); // Met à jour l'état de l'utilisateur dans le contexte
+        console.log(data);
+        if (data.user.sadGotchuId) {
+          console.log("SadGotchu ID:", data.user.sadGotchuId);
+          setSadGotchuId(data.user.sadGotchuId); // Sauvegarde l'ID du SadGotchu
+        }
         setLoginStatus(!loginStatus);
-        alert(`Welcome back ${data.user.username}!`);
         window.location.reload();
       }
     } catch (error) {

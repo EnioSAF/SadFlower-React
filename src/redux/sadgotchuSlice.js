@@ -93,18 +93,22 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
 // Actions pour Strapi
 export const loadUserSadGotchu = createAsyncThunk(
     'sadgotchu/loadUserSadGotchu',
-    async (userId, { dispatch, getState }) => {
+    async (userId, { dispatch }) => {
         try {
             const sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
             console.log('Réponse de fetchSadGotchu:', sadGotchu);
             if (sadGotchu) {
+                // Ce dispatch met à jour l'état immédiatement, ce qui est bien.
                 dispatch(setSadGotchu(sadGotchu));
+
+                // Mais pour que le reducer de fulfilled fonctionne comme tu l'attends, tu dois aussi retourner sadGotchu ici.
+                return sadGotchu; // Assure-toi que c'est la structure attendue.
             } else {
                 console.log("Aucun SadGotchu trouvé pour cet utilisateur");
-                // Vous pouvez également envisager de créer un nouveau SadGotchu ici si nécessaire
             }
         } catch (error) {
             console.error("Erreur lors du chargement du SadGotchu:", error);
+            throw error; // Propage l'erreur pour que le thunk puisse la traiter.
         }
     }
 );
@@ -248,15 +252,13 @@ export const sadgotchuSlice = createSlice({
         builder
             .addCase(loadUserSadGotchu.fulfilled, (state, action) => {
                 console.log('Action payload dans loadUserSadGotchu.fulfilled:', action.payload);
-                // Assurez-vous d'abord que 'data' existe dans 'action.payload'
-                if (action.payload?.data) {
-                    // Ensuite, extrayez 'id' et 'attributes' de 'data'
-                    const { id, attributes } = action.payload.data;
+                // Assure-toi que l'action.payload contient l'objet attendu
+                if (action.payload) {
+                    const { id, attributes } = action.payload;
                     console.log('Attributes dans loadUserSadGotchu.fulfilled:', attributes);
 
-                    // Maintenant, vous pouvez vérifier si 'attributes' est défini
                     if (attributes) {
-                        // Ici, vous pouvez destructurer 'attributes' pour obtenir vos champs
+                        // Déstructuration des attributs pour mise à jour de l'état
                         const {
                             name,
                             stage,
@@ -270,25 +272,24 @@ export const sadgotchuSlice = createSlice({
                             timeAtZeroHappiness,
                             isSleeping,
                             isFinalStage,
-                            // Ajoutez d'autres champs selon vos besoins
+                            // ajoute ici d'autres champs selon le besoin
                         } = attributes;
 
-                        // Mettez à jour l'état avec les nouvelles valeurs
+                        // Mise à jour de l'état avec les nouvelles valeurs
                         Object.assign(state, {
                             id,
                             name,
                             stage,
-                            age,
+                            age: parseInt(age, 10), // S'assurer que les valeurs numériques sont correctement traitées
                             evolutionLine,
                             hasPoop,
                             isSick,
-                            hunger,
-                            happiness,
-                            timeAtHundredHunger,
-                            timeAtZeroHappiness,
+                            hunger: parseInt(hunger, 10),
+                            happiness: parseInt(happiness, 10),
+                            timeAtHundredHunger: parseInt(timeAtHundredHunger, 10),
+                            timeAtZeroHappiness: parseInt(timeAtZeroHappiness, 10),
                             isSleeping,
                             isFinalStage,
-                            // Continuez avec tous les champs nécessaires
                         });
                     }
                 } else {
