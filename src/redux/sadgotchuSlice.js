@@ -8,14 +8,14 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
     'sadgotchu/adjustStateBasedOnTimeElapsed',
     async (timeElapsed, { getState, dispatch }) => {
         const state = getState().sadGotchu;
-        let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage } = state;
+        let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage, evolutionLine } = state;
 
         if (['ange', 'demon', 'oeuf'].includes(stage)) {
             console.log('Pas d’ajustement nécessaire pour le stade final ou initial.');
             return;
         }
         console.log(`Début adjustStateBasedOnTimeElapsed avec timeElapsed: ${timeElapsed}`);
-        console.log(`État initial - stage: ${stage}, hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
+        console.log(`État initial - stage: ${stage}, evolutionLine: ${evolutionLine} hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
 
         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
         const daysElapsed = Math.floor(timeInMinutes / 1440); // Convertir les minutes en jours (1440 minutes par jour)
@@ -45,10 +45,12 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         }
 
         // Vérifiez si le Tamagotchi devrait évoluer
-        const evolutionResult = determineNextStage(stage, age, happiness, hunger);
+        const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
         if (evolutionResult) {
-            dispatch(incrementAge(evolutionResult.nextStage));
-            stage = evolutionResult.nextStage; // Mettre à jour la variable locale pour la suite de la logique
+            dispatch(setStage(evolutionResult.type));
+            if (evolutionResult.evolutionLine) {
+                dispatch(setEvolutionLine(evolutionResult.evolutionLine));
+            }
         }
 
         console.log(`Age après ajustement: ${age}`);
