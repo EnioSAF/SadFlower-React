@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import SadGotchuService from '@/components/system32/applications/SadGotchu/SadGotchuService';
-import { evolutionTree } from '@/components/system32/applications/SadGotchu/EvolutionTree';
+import { evolutionTree, determineNextStage } from '@/components/system32/applications/SadGotchu/EvolutionTree';
 
 
 // FONCTION d'ajustement du temps basé sur la dernière interaction
