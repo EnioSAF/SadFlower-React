@@ -77,26 +77,36 @@ const TamagotchiCore = ({ currentMenu }) => {
 
     // Pour load
     useEffect(() => {
-        const userStr = localStorage.getItem('user');
-        setIsLoading(true); // Commence par indiquer que le chargement est en cours
-        if (userStr) {
-            const user = JSON.parse(userStr);
-            const userId = user.id;
-            if (userId) {
-                dispatch(loadUserSadGotchu(userId))
-                    .unwrap()
-                    .then(() => {
-                        setIsLoading(false); // Fin du chargement
-                    })
-                    .catch(() => {
-                        setIsLoading(false); // Fin du chargement même en cas d'erreur
-                    });
+        async function fetchDataAndAdjustState() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                setIsLoading(true);  // Indiquer que le chargement est en cours
+                try {
+                    // Charger les données utilisateur et attendre la fin de cette opération
+                    await dispatch(loadUserSadGotchu(user.id)).unwrap();
+
+                    // Calculer le temps écoulé depuis la dernière interaction
+                    const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
+                    const currentTime = Date.now();
+                    const timeElapsed = currentTime - parseInt(lastInteractionTime);
+
+                    // Ajuster l'état basé sur le temps écoulé
+                    dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+
+                    // Mise à jour du timestamp de la dernière interaction
+                    localStorage.setItem('lastInteractionTime', currentTime.toString());
+                } catch (error) {
+                    console.error('Erreur lors du chargement ou de l’ajustement du SadGotchu:', error);
+                } finally {
+                    setIsLoading(false);  // Fin du chargement
+                }
             } else {
-                setIsLoading(false); // Aucun utilisateur trouvé, donc fin du chargement
+                setIsLoading(false);  // Aucune donnée utilisateur, donc fin du chargement
             }
-        } else {
-            setIsLoading(false); // Aucune donnée utilisateur, donc fin du chargement
         }
+
+        fetchDataAndAdjustState();
     }, [dispatch]);
 
     // useEffect pour sauvegarder les changements de SadGotchu
