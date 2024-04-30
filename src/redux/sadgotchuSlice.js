@@ -41,6 +41,7 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
 
         if (daysElapsed > 0) {
             // Incrémenter l'âge basé sur les jours écoulés
+            age += daysElapsed;
             dispatch(incrementAgeBy(daysElapsed));
         }
 
