@@ -82,20 +82,25 @@ const TamagotchiCore = ({ currentMenu }) => {
             if (userStr) {
                 const user = JSON.parse(userStr);
                 setIsLoading(true);  // Indiquer que le chargement est en cours
+
                 try {
                     // Charger les données utilisateur et attendre la fin de cette opération
                     await dispatch(loadUserSadGotchu(user.id)).unwrap();
 
-                    // Calculer le temps écoulé depuis la dernière interaction
-                    const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
+                    // Récupérer le temps de dernière interaction depuis Strapi
+                    const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(user.id);
                     const currentTime = Date.now();
-                    const timeElapsed = currentTime - parseInt(lastInteractionTime);
+                    const timeElapsed = currentTime - new Date(lastInteractionTime).getTime();
+
+                    console.log('Composant monté à :', new Date(currentTime).toLocaleString());
+                    console.log('Dernière interaction à :', new Date(lastInteractionTime).toLocaleString());
+                    console.log('Temps écoulé :', timeElapsed / 1000 / 60 / 60, 'heures');
 
                     // Ajuster l'état basé sur le temps écoulé
                     dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
 
-                    // Mise à jour du timestamp de la dernière interaction
-                    localStorage.setItem('lastInteractionTime', currentTime.toString());
+                    // Mettre à jour le timestamp de la dernière interaction dans Strapi
+                    await SadGotchuService.updateLastInteractionTime(user.id, currentTime);
                 } catch (error) {
                     console.error('Erreur lors du chargement ou de l’ajustement du SadGotchu:', error);
                 } finally {
@@ -109,98 +114,36 @@ const TamagotchiCore = ({ currentMenu }) => {
         fetchDataAndAdjustState();
     }, [dispatch]);
 
-    // useEffect pour sauvegarder les changements de SadGotchu
-    useEffect(() => {
-        const handleSave = async () => {
-            // Obtenez l'état actuel de SadGotchu depuis le store Redux
-            const currentSadGotchuState = {
-                name,
-                stage,
-                age,
-                evolutionLine,
-                hunger,
-                happiness,
-                hasPoop,
-                isSick,
-                isSleeping,
-                isFinalStage,
-                timeAtHundredHunger,
-                timeAtZeroHappiness,
-                // incluez d'autres propriétés de l'état que vous voulez sauvegarder
-            };
 
-            // Supposons que votre store Redux maintient un champ `id` pour l'identification de SadGotchu
-            if (id) {
-                dispatch(updateSadGotchuAction({ id, changes: currentSadGotchuState })).unwrap();
-            }
+
+// useEffect pour sauvegarder les changements de SadGotchu
+useEffect(() => {
+    async function handleSave() {
+        const currentSadGotchuState = {
+            name,
+            stage,
+            age,
+            evolutionLine,
+            hunger,
+            happiness,
+            hasPoop,
+            isSick,
+            isSleeping,
+            isFinalStage,
+            timeAtHundredHunger,
+            timeAtZeroHappiness,
         };
 
-        // Ici, vous devez décider quand appeler handleSave.
-        // Par exemple, si vous voulez sauvegarder chaque fois que l'utilisateur nourrit SadGotchu ou joue avec,
-        // vous pourriez ajouter `hunger` et `happiness` comme dépendances de useEffect.
-        // Ajustez selon vos besoins.
-        handleSave();
-    }, [dispatch, hunger, happiness, id]); // Incluez toutes les dépendances pertinentes ici
-
-    // Pour nommer l'oeuf
-    const showNameForm = useMemo(() => {
-        return !isLoading && (!name && stage === 'oeuf');
-    }, [isLoading, name, stage]);
-    const [newName, setNewName] = useState('');
-
-    const handleNameSubmit = async (e) => {
-        e.preventDefault();
-        if (newName.trim()) {
-            const userStr = localStorage.getItem('user');
-            let userId;
-            if (userStr) {
-                const user = JSON.parse(userStr);
-                userId = user.id;
-            }
-
-            if (!userId) {
-                console.error('UserID est introuvable. Assurez-vous que l’utilisateur est connecté.');
-                return;
-            }
-
-            // Tentative de charger un SadGotchu existant
-            try {
-                let sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
-
-                if (!sadGotchu) {
-                    // Aucun SadGotchu existant, donc en créer un nouveau
-                    const initialSadGotchuData = {
-                        name: newName,
-                        stage: 'oeuf',
-                        age: 0,
-                        evolutionLine: null,
-                        hasPoop: false,
-                        isSick: false,
-                        hunger: 50,
-                        happiness: 50,
-                        timeAtHundredHunger: 0,
-                        timeAtZeroHappiness: 0,
-                        isSleeping: false,
-                        isFinalStage: false,
-                        users_permissions_user: userId,
-                    };
-
-                    sadGotchu = await SadGotchuService.createSadGotchu(initialSadGotchuData);
-                } else {
-                    // SadGotchu existant, mise à jour du nom uniquement
-                    sadGotchu = await SadGotchuService.updateSadGotchu(sadGotchu.id, { ...sadGotchu, name: newName });
-                }
-
-                // Mettre à jour le store Redux avec le SadGotchu chargé ou créé
-                dispatch(setSadGotchu(sadGotchu));
-                setShowNameForm(false);
-            } catch (error) {
-                console.error('Erreur lors de la gestion du SadGotchu:', error);
-            }
+        if (id) {
+            await dispatch(updateSadGotchuAction({ id, changes: currentSadGotchuState })).unwrap();
+            // Également mettre à jour le timestamp dans Strapi pour garder la synchronisation
+            await SadGotchuService.updateLastInteractionTime(id, new Date().getTime());
         }
-    };
+    }
 
-    // FONCTION d'interval / Check-Intéractions / Passage du temps
+    // Planifiez la sauvegarde selon vos critères (ici, chaque fois que certains états changent)
+    handleSave();
+}, [dispatch, hunger, happiness, id]); // Incluez toutes les dépendances pertinentes    // FONCTION d'interval / Check-Intéractions / Passage du temps
 
     // Pour update les states depuis la dernière intéraction
     useEffect(() => {
@@ -277,7 +220,75 @@ const TamagotchiCore = ({ currentMenu }) => {
         return () => clearInterval(needsUpdateInterval);
     }, [dispatch, stage, hunger, happiness, timeAtHundredHunger, timeAtZeroHappiness, isSleeping, isFinalStage]);
 
-    // Fonctions d'interaction
+    // Pour nommer l'oeuf
+    const showNameForm = useMemo(() => {
+        return !isLoading && (!name && stage === 'oeuf');
+    }, [isLoading, name, stage]);
+    const [newName, setNewName] = useState('');
+
+    const handleNameSubmit = async (e) => {
+        e.preventDefault();
+        if (newName.trim()) {
+            const userStr = localStorage.getItem('user');
+            let userId;
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                userId = user.id;
+            }
+
+            if (!userId) {
+                console.error('UserID est introuvable. Assurez-vous que l’utilisateur est connecté.');
+                return;
+            }
+
+            // Tentative de charger un SadGotchu existant
+            try {
+                let sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
+
+                if (!sadGotchu) {
+                    // Aucun SadGotchu existant, donc en créer un nouveau
+                    const initialSadGotchuData = {
+                        name: newName,
+                        stage: 'oeuf',
+                        age: 0,
+                        evolutionLine: null,
+                        hasPoop: false,
+                        isSick: false,
+                        hunger: 50,
+                        happiness: 50,
+                        timeAtHundredHunger: 0,
+                        timeAtZeroHappiness: 0,
+                        isSleeping: false,
+                        isFinalStage: false,
+                        users_permissions_user: userId,
+                    };
+
+                    sadGotchu = await SadGotchuService.createSadGotchu(initialSadGotchuData);
+                } else {
+                    // SadGotchu existant, mise à jour du nom uniquement
+                    sadGotchu = await SadGotchuService.updateSadGotchu(sadGotchu.id, { ...sadGotchu, name: newName });
+                }
+
+                // Mettre à jour le store Redux avec le SadGotchu chargé ou créé
+                dispatch(setSadGotchu(sadGotchu));
+                setShowNameForm(false);
+            } catch (error) {
+                console.error('Erreur lors de la gestion du SadGotchu:', error);
+            }
+        }
+    };
+
+    // Fonctin pour récupérer l'heure exacte de la dernière intéraction
+    useEffect(() => {
+        // Fonction exécutée lorsque le composant se démonte
+        return () => {
+            const currentTime = Date.now();
+            localStorage.setItem('lastUpdateTime', currentTime.toString());
+            console.log('Composant démonté à :', new Date(currentTime).toLocaleString());
+        };
+    }, []);
+
+    // FONCTIONS d'interaction
     const feed = () => {
         if (isSleeping || isFinalStage) return;
         dispatch(adjustHunger(-30));
@@ -373,15 +384,6 @@ const TamagotchiCore = ({ currentMenu }) => {
 
         return spritePath;
     };
-
-    // Fonctin pour récupérer l'heure exacte de la dernière intéraction
-    useEffect(() => {
-        // Fonction exécutée lorsque le composant se démonte
-        return () => {
-            const currentTime = Date.now();
-            localStorage.setItem('lastUpdateTime', currentTime.toString());
-        };
-    }, []);
 
     return (
         <div className={styles.tamagotchiCore}>

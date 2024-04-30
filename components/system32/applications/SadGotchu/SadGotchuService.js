@@ -66,6 +66,41 @@ const SadGotchuService = {
             throw error;
         }
     },
+
+    updateLastInteractionTime: async (sadGotchuId, lastInteractionTime) => {
+        try {
+            const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
+                method: 'PUT',
+                headers: headers(),
+                body: JSON.stringify({ data: { lastInteractionTime } }),
+            });
+            if (!response.ok) {
+                throw new Error("Erreur lors de la mise à jour du temps de dernière interaction");
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Erreur dans updateLastInteractionTime:", error);
+            throw error;
+        }
+    },
+
+    fetchLastInteractionTime: async (sadGotchuId) => {
+        try {
+            const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
+                method: 'GET',
+                headers: headers(),
+            });
+            if (!response.ok) {
+                throw new Error("Erreur lors de la récupération du temps de dernière interaction");
+            }
+            const data = await response.json();
+            return data.lastInteractionTime;  // Assurez-vous que le chemin correspond à votre structure de réponse
+        } catch (error) {
+            console.error("Erreur lors de la récupération du temps de dernière interaction:", error);
+            throw error;
+        }
+    },
+
 };
 
 export default SadGotchuService;
