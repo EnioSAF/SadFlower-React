@@ -74,6 +74,7 @@ const TamagotchiCore = ({ currentMenu }) => {
 
     // FONCTION de Load / Save Strapi
     const [isLoading, setIsLoading] = useState(true); // Ajout d'un état pour le chargement
+    const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
     // Pour load
     useEffect(() => {
@@ -101,6 +102,8 @@ const TamagotchiCore = ({ currentMenu }) => {
 
                     // Mettre à jour le timestamp de la dernière interaction dans Strapi
                     await SadGotchuService.updateLastInteractionTime(user.id, currentTime);
+
+                    setInitialLoadComplete(true);  // Signale que le chargement initial est complet
                 } catch (error) {
                     console.error('Erreur lors du chargement ou de l’ajustement du SadGotchu:', error);
                 } finally {
@@ -112,38 +115,67 @@ const TamagotchiCore = ({ currentMenu }) => {
         }
 
         fetchDataAndAdjustState();
-    }, [dispatch]);
+    }, [dispatch, id]);
 
 
+    // useEffect pour sauvegarder les changements de SadGotchu
+    useEffect(() => {
+        if (initialLoadComplete) {
+        async function handleSave() {
+            const currentSadGotchuState = {
+                name,
+                stage,
+                age: Math.round(age),
+                evolutionLine,
+                hunger,
+                happiness,
+                hasPoop,
+                isSick,
+                isSleeping,
+                isFinalStage,
+                timeAtHundredHunger,
+                timeAtZeroHappiness,
+            };
 
-// useEffect pour sauvegarder les changements de SadGotchu
-useEffect(() => {
-    async function handleSave() {
-        const currentSadGotchuState = {
-            name,
-            stage,
-            age,
-            evolutionLine,
-            hunger,
-            happiness,
-            hasPoop,
-            isSick,
-            isSleeping,
-            isFinalStage,
-            timeAtHundredHunger,
-            timeAtZeroHappiness,
-        };
-
-        if (id) {
-            await dispatch(updateSadGotchuAction({ id, changes: currentSadGotchuState })).unwrap();
-            // Également mettre à jour le timestamp dans Strapi pour garder la synchronisation
-            await SadGotchuService.updateLastInteractionTime(id, new Date().getTime());
+            if (id) {
+                try {
+                    // Mise à jour du SadGotchu dans la base de données
+                    await dispatch(updateSadGotchuAction({ id, changes: currentSadGotchuState })).unwrap();
+                    // Mise à jour du timestamp de la dernière interaction dans la base de données
+                    const currentTime = new Date().getTime();
+                    await SadGotchuService.updateLastInteractionTime(id, currentTime);
+                } catch (error) {
+                    console.error("Erreur lors de la sauvegarde des changements de SadGotchu :", error);
+                }
+            }
         }
-    }
 
-    // Planifiez la sauvegarde selon vos critères (ici, chaque fois que certains états changent)
-    handleSave();
-}, [dispatch, hunger, happiness, id]); // Incluez toutes les dépendances pertinentes    // FONCTION d'interval / Check-Intéractions / Passage du temps
+        // Déclencher la sauvegarde lorsque des changements pertinents sont détectés
+        const saveInterval = setInterval(() => {
+            handleSave();
+        }, 60000); // Sauvegarder toutes les minutes
+
+        return () => clearInterval(saveInterval);
+     } // Nettoyage de l'intervalle lors du démontage du composant
+    }, [
+        dispatch,
+        id,
+        name,
+        stage,
+        age,
+        evolutionLine,
+        hunger,
+        happiness,
+        hasPoop,
+        isSick,
+        isSleeping,
+        isFinalStage,
+        timeAtHundredHunger,
+        timeAtZeroHappiness,
+        initialLoadComplete,
+    ]); // Incluez toutes les dépendances pertinentes
+
+    // FONCTION d'interval / Check-Intéractions / Passage du temps
 
     // Pour update les states depuis la dernière intéraction
     useEffect(() => {
@@ -179,6 +211,19 @@ useEffect(() => {
         }, 86400000); // 24 heures en millisecondes pour simuler le passage d'un "jour" dans le jeu
         return () => clearInterval(evolutionInterval);
     }, [dispatch, stage, age, happiness, hunger, evolutionLine, isFinalStage]);
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(id);
+            const currentTime = Date.now();
+            const timeElapsed = currentTime - lastInteractionTime;
+
+            dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+            await SadGotchuService.updateLastInteractionTime(id, currentTime);
+        }, 3600000); // Vérifie toutes les heures
+
+        return () => clearInterval(intervalId);
+    }, [dispatch, id]);
 
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
@@ -292,15 +337,22 @@ useEffect(() => {
     const feed = () => {
         if (isSleeping || isFinalStage) return;
         dispatch(adjustHunger(-30));
+        updateInteractionTime();
         const [min, max] = evolutionTree[stage].poopFrequency;
         setTimeout(() => dispatch(togglePoop(true)), Math.random() * (max - min) + min);
     };
 
     const play = () => {
         if (isSleeping || isFinalStage) return;
-        dispatch(adjustHappiness(30)); // De même ici
+        dispatch(adjustHappiness(30));
+        updateInteractionTime();
     };
-    // Ajoute d'autres fonctions comme jouer ou dormir ici
+
+    const updateInteractionTime = async () => {
+        const currentTime = Date.now();
+        await SadGotchuService.updateLastInteractionTime(id, currentTime);
+    };
+    // Ajoute d'autres fonctions
 
     // Pour les maladies et le caca
     useEffect(() => {
