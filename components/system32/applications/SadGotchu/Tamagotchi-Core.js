@@ -78,12 +78,11 @@ const TamagotchiCore = ({ currentMenu }) => {
 
     // Pour load
     useEffect(() => {
+        setIsLoading(true);  // Indiquer que le chargement est en cours
         async function fetchDataAndAdjustState() {
             const userStr = localStorage.getItem('user');
             if (userStr) {
                 const user = JSON.parse(userStr);
-                setIsLoading(true);  // Indiquer que le chargement est en cours
-
                 try {
                     // Charger les données utilisateur et attendre la fin de cette opération
                     await dispatch(loadUserSadGotchu(user.id)).unwrap();
