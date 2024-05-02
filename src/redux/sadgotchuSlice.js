@@ -15,10 +15,15 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             return;
         }
         console.log(`Début adjustStateBasedOnTimeElapsed avec timeElapsed: ${timeElapsed}`);
-        console.log(`État initial - stage: ${stage}, evolutionLine: ${evolutionLine} hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
+        console.log(`État initial - stage: ${stage}, evolutionLine: ${evolutionLine}, hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
 
         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
-        const daysElapsed = Math.floor(timeInMinutes / 1440); // Convertir les minutes en jours (1440 minutes par jour)
+        const ageIncrement = timeInMinutes / 1440; // Convertir les minutes en jours fractionnaires
+
+        // Incrémenter l'âge de façon fractionnaire
+        age += ageIncrement;
+        dispatch(incrementAgeBy(ageIncrement));
+
         const stageConfig = evolutionTree[stage];
         hunger = hunger ?? 50; // Valeur par défaut si null
         happiness = happiness ?? 50; // Valeur par défaut si null
@@ -35,14 +40,6 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             if (!isNaN(adjustedHappiness)) {
                 dispatch(adjustHappiness(adjustedHappiness - happiness));
             }
-        } else {
-            console.error('Valeurs calculées non valides', { adjustedHunger, adjustedHappiness });
-        }
-
-        if (daysElapsed > 0) {
-            // Incrémenter l'âge basé sur les jours écoulés
-            age += daysElapsed;
-            dispatch(incrementAgeBy(daysElapsed));
         }
 
         // Vérifiez si le Tamagotchi devrait évoluer
@@ -61,37 +58,42 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             console.log(`Pas d'évolution pour ${stage} à l'âge ${age}`);
         }
 
-        // Mise à jour pour la mort due à la faim ou au bonheur nul pendant plus de 12 heures
-        const currentTime = Date.now();
-        const deathByHungerThreshold = 12 * 60 * 60 * 1000; // 12 heures en millisecondes
-        const deathByUnhappinessThreshold = 12 * 60 * 60 * 1000;
-
-        if (hunger === 100 && (!timeAtHundredHunger || currentTime - timeAtHundredHunger >= deathByHungerThreshold)) {
-            dispatch(setStage('demon'));
-            isFinalStage = true;
-        } else if (happiness === 0 && (!timeAtZeroHappiness || currentTime - timeAtZeroHappiness >= deathByUnhappinessThreshold)) {
-            dispatch(setStage('demon'));
-            isFinalStage = true;
-        }
-
-        // Assurer la mise à jour de timeAtHundredHunger et timeAtZeroHappiness
-        if (hunger === 100 && !timeAtHundredHunger) {
-            dispatch(setTimeAtHundredHunger(currentTime));
-        } else if (hunger < 100) {
-            dispatch(setTimeAtHundredHunger(0));
-        }
-
-        if (happiness === 0 && !timeAtZeroHappiness) {
-            dispatch(setTimeAtZeroHappiness(currentTime));
-        } else if (happiness > 0) {
-            dispatch(setTimeAtZeroHappiness(0));
-        }
+        // Gérer la mort et les états de faim et de bonheur
+        handleStateBasedOnThresholds(dispatch, {
+            hunger, happiness, currentTime: Date.now(), timeAtHundredHunger, timeAtZeroHappiness, isFinalStage
+        });
 
         if (isFinalStage) {
             dispatch(setIsFinalStage(true));
         }
     }
 );
+
+function handleStateBasedOnThresholds(dispatch, { hunger, happiness, currentTime, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage }) {
+    const deathByHungerThreshold = 12 * 60 * 60 * 1000; // 12 heures en millisecondes
+    const deathByUnhappinessThreshold = 12 * 60 * 60 * 1000;
+
+    if (hunger === 100 && (!timeAtHundredHunger || currentTime - timeAtHundredHunger >= deathByHungerThreshold)) {
+        dispatch(setStage('demon'));
+        isFinalStage = true;
+    } else if (happiness === 0 && (!timeAtZeroHappiness || currentTime - timeAtZeroHappiness >= deathByUnhappinessThreshold)) {
+        dispatch(setStage('demon'));
+        isFinalStage = true;
+    }
+
+    // Assurer la mise à jour de timeAtHundredHunger et timeAtZeroHappiness
+    if (hunger === 100 && !timeAtHundredHunger) {
+        dispatch(setTimeAtHundredHunger(currentTime));
+    } else if (hunger < 100) {
+        dispatch(setTimeAtHundredHunger(0));
+    }
+
+    if (happiness === 0 && !timeAtZeroHappiness) {
+        dispatch(setTimeAtZeroHappiness(currentTime));
+    } else if (happiness > 0) {
+        dispatch(setTimeAtZeroHappiness(0));
+    }
+}
 
 // Actions pour Strapi
 export const loadUserSadGotchu = createAsyncThunk(
@@ -199,7 +201,7 @@ export const sadgotchuSlice = createSlice({
             state.isFinalStage = action.payload;
         },
         incrementAgeBy: (state, action) => {
-            state.age += action.payload; // action.payload contient le nombre de jours à ajouter
+            state.age += action.payload;
         },
         resetSadGotchu: (state) => {
             state.name = "";
