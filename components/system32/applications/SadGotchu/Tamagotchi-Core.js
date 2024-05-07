@@ -196,20 +196,6 @@ const TamagotchiCore = ({ currentMenu }) => {
 
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
-    // Pour update les states depuis la dernière intéraction
-    // useEffect(() => {
-    //     // Récupérer le timestamp de la dernière interaction depuis localStorage
-    //     const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
-    //     const currentTime = Date.now();
-    //     const timeElapsed = currentTime - parseInt(lastInteractionTime);
-
-    //     // Ajuster l'état basé sur le temps écoulé
-    //     dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-
-    // Mise à jour du timestamp de la dernière interaction
-    //     localStorage.setItem('lastInteractionTime', currentTime.toString());
-    // }, [dispatch]);
-
     // Simulation du temps qui passe
     useEffect(() => {
         const evolutionInterval = setInterval(() => {
@@ -230,19 +216,6 @@ const TamagotchiCore = ({ currentMenu }) => {
         }, 86400000); // 24 heures en millisecondes pour simuler le passage d'un "jour" dans le jeu
         return () => clearInterval(evolutionInterval);
     }, [dispatch, stage, age, happiness, hunger, evolutionLine, isFinalStage]);
-
-    // useEffect(() => {
-    //     const intervalId = setInterval(async () => {
-    //         const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(id);
-    //         const currentTime = Date.now();
-    //         const timeElapsed = currentTime - lastInteractionTime;
-
-    //         dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-    //         await SadGotchuService.updateLastInteractionTime(id, currentTime);
-    //     }, 3600000); // Vérifie toutes les heures
-
-    //     return () => clearInterval(intervalId);
-    // }, [dispatch, id]);
 
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
