@@ -24,7 +24,9 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         // Incrémenter l'âge de façon fractionnaire
         // age=parseFloat(age);
         age += ageIncrement;
+        console.log(`Avant l'incrementAgeBy : ${state.age}, Type: ${typeof state.age}`);
         dispatch(incrementAgeBy(ageIncrement));
+        console.log(`Après l'incrementAgeBy : ${state.age}, Type: ${typeof state.age}`);
 
         const stageConfig = evolutionTree[stage];
 
