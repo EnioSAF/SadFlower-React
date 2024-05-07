@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import SadGotchuService from '@/components/system32/applications/SadGotchu/SadGotchuService';
 import { evolutionTree, determineNextStage } from '@/components/system32/applications/SadGotchu/EvolutionTree';
 
+// TODO VERIFIER VALEUR AGE STRAPI FLOAT (décimales) - VERIFIER MOMENT SAUVEGARDE - VERIFIER MOMENT SetIsSleeping
 
 // FONCTION d'ajustement du temps basé sur la dernière interaction
 export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
@@ -21,12 +22,11 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         const ageIncrement = timeInMinutes / 1440; // Convertir les minutes en jours fractionnaires
 
         // Incrémenter l'âge de façon fractionnaire
+        // age=parseFloat(age);
         age += ageIncrement;
         dispatch(incrementAgeBy(ageIncrement));
 
         const stageConfig = evolutionTree[stage];
-        hunger = hunger ?? 50; // Valeur par défaut si null
-        happiness = happiness ?? 50; // Valeur par défaut si null
 
         if (stageConfig?.needsUpdate) {
             const { hungerIncrement, happinessDecrement, updateInterval } = stageConfig.needsUpdate;
@@ -98,7 +98,7 @@ function handleStateBasedOnThresholds(dispatch, { hunger, happiness, currentTime
 // Actions pour Strapi
 export const loadUserSadGotchu = createAsyncThunk(
     'sadgotchu/loadUserSadGotchu',
-    async (userId, { dispatch }) => {
+    async ({userId, setDataLoaded}, { dispatch }) => {
         try {
             const sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
             console.log('Réponse de fetchSadGotchu:', sadGotchu);
@@ -107,6 +107,8 @@ export const loadUserSadGotchu = createAsyncThunk(
                 dispatch(setSadGotchu(sadGotchu));
 
                 // Mais pour que le reducer de fulfilled fonctionne comme tu l'attends, tu dois aussi retourner sadGotchu ici.
+                console.log('returning SadGotchu')
+                setDataLoaded(true)
                 return sadGotchu; // Assure-toi que c'est la structure attendue.
             } else {
                 console.log("Aucun SadGotchu trouvé pour cet utilisateur");
@@ -201,6 +203,10 @@ export const sadgotchuSlice = createSlice({
             state.isFinalStage = action.payload;
         },
         incrementAgeBy: (state, action) => {
+            console.log('STATE:', state)
+            console.log('STATE.AGE:', state.age)
+            console.log('ACTION:', action)
+            console.log('ACTION.PAYLOAD:', action.payload)
             state.age += action.payload;
         },
         resetSadGotchu: (state) => {
