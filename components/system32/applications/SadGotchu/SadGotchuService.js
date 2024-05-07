@@ -86,6 +86,7 @@ const SadGotchuService = {
 
     fetchLastInteractionTime: async (sadGotchuId) => {
         try {
+            console.log('SADGOTCHU :', sadGotchuId)
             const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
                 method: 'GET',
                 headers: headers(),
@@ -94,7 +95,8 @@ const SadGotchuService = {
                 throw new Error("Erreur lors de la récupération du temps de dernière interaction");
             }
             const data = await response.json();
-            return data.lastInteractionTime;  // Assurez-vous que le chemin correspond à votre structure de réponse
+            console.log('DATA:', data)
+            return data.data.attributes.lastInteractionTime;  // Assurez-vous que le chemin correspond à votre structure de réponse
         } catch (error) {
             console.error("Erreur lors de la récupération du temps de dernière interaction:", error);
             throw error;

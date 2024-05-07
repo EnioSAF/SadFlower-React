@@ -75,87 +75,107 @@ const TamagotchiCore = ({ currentMenu }) => {
     // FONCTION de Load / Save Strapi
     const [isLoading, setIsLoading] = useState(true); // Ajout d'un état pour le chargement
     const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+    const [dataLoaded, setDataLoaded] = useState(false);
 
     // Pour load
     useEffect(() => {
         setIsLoading(true);  // Indiquer que le chargement est en cours
         async function fetchDataAndAdjustState() {
+            console.log('fetchData appelé')
             const userStr = localStorage.getItem('user');
             if (userStr) {
+                console.log('user exist')
                 const user = JSON.parse(userStr);
                 try {
                     // Charger les données utilisateur et attendre la fin de cette opération
-                    await dispatch(loadUserSadGotchu(user.id)).unwrap();
-
-                    // Récupérer le temps de dernière interaction depuis Strapi
-                    const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(user.id);
-                    const currentTime = Date.now();
-                    const timeElapsed = currentTime - new Date(lastInteractionTime).getTime();
-
-                    console.log('Composant monté à :', new Date(currentTime).toLocaleString());
-                    console.log('Dernière interaction à :', new Date(lastInteractionTime).toLocaleString());
-                    console.log('Temps écoulé :', timeElapsed / 1000 / 60 / 60, 'heures');
-
-                    // Ajuster l'état basé sur le temps écoulé
-                    dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-
-                    // Mettre à jour le timestamp de la dernière interaction dans Strapi
-                    await SadGotchuService.updateLastInteractionTime(user.id, currentTime);
-
-                    setInitialLoadComplete(true);  // Signale que le chargement initial est complet
+                    var sadGotchuData = await loadUserSadGotchu({userId:user.id, setDataLoaded:setDataLoaded});
+                    dispatch(sadGotchuData);
+                    console.log('Load User OK')
                 } catch (error) {
                     console.error('Erreur lors du chargement ou de l’ajustement du SadGotchu:', error);
                 } finally {
-                    setIsLoading(false);  // Fin du chargement
+                    setIsLoading(false);
+                    // setDataLoaded(true);    // Fin du chargement
                 }
             } else {
                 setIsLoading(false);  // Aucune donnée utilisateur, donc fin du chargement
             }
         }
+        if (dataLoaded == false) {
+            fetchDataAndAdjustState();
+        }
+    }, [dispatch, id, dataLoaded]);
 
-        fetchDataAndAdjustState();
-    }, [dispatch, id]);
+    useEffect(() => {
+        const adjustState = async () => {
+            // Récupérer le temps de dernière interaction depuis Strapi
+            const lastInteractionTime = parseInt(await SadGotchuService.fetchLastInteractionTime(id));
+            const currentTime = Date.now();
+            const timeElapsed = currentTime - new Date(lastInteractionTime).getTime();
+
+
+            console.log('LastInteractionTime:', lastInteractionTime)
+            console.log('CurrentTime:', currentTime)
+            console.log('TimeElapsed:', timeElapsed)
+            console.log('Composant monté à :', new Date(currentTime).toLocaleString());
+            console.log('Dernière interaction à :', new Date(lastInteractionTime).toLocaleString());
+            console.log('Temps écoulé :', timeElapsed / 1000 / 60 / 60, 'heures');
+
+            // Ajuster l'état basé sur le temps écoulé
+            dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+            console.log('adjustState à été appelé')
+
+            // Mettre à jour le timestamp de la dernière interaction dans Strapi
+            await SadGotchuService.updateLastInteractionTime(id, currentTime);
+
+            setInitialLoadComplete(true);  // Signale que le chargement initial est complet
+        }
+        if (dataLoaded) {
+            adjustState();
+        }
+    }, [dispatch, id, dataLoaded]);
 
 
     // useEffect pour sauvegarder les changements de SadGotchu
     useEffect(() => {
         if (initialLoadComplete) {
-        async function handleSave() {
-            const currentSadGotchuState = {
-                name,
-                stage,
-                age: Math.round(age),
-                evolutionLine,
-                hunger,
-                happiness,
-                hasPoop,
-                isSick,
-                isSleeping,
-                isFinalStage,
-                timeAtHundredHunger,
-                timeAtZeroHappiness,
-            };
+            async function handleSave() {
+                const currentSadGotchuState = {
+                    name,
+                    stage,
+                    age: Math.round(age),
+                    evolutionLine,
+                    hunger,
+                    happiness,
+                    hasPoop,
+                    isSick,
+                    isSleeping,
+                    isFinalStage,
+                    timeAtHundredHunger,
+                    timeAtZeroHappiness,
+                };
 
-            if (id) {
-                try {
-                    // Mise à jour du SadGotchu dans la base de données
-                    await dispatch(updateSadGotchuAction({ id, changes: currentSadGotchuState })).unwrap();
-                    // Mise à jour du timestamp de la dernière interaction dans la base de données
-                    const currentTime = new Date().getTime();
-                    await SadGotchuService.updateLastInteractionTime(id, currentTime);
-                } catch (error) {
-                    console.error("Erreur lors de la sauvegarde des changements de SadGotchu :", error);
+                if (id) {
+                    try {
+                        // Mise à jour du SadGotchu dans la base de données
+                        var updatedSadGotchuData = await updateSadGotchuAction({ id, changes: currentSadGotchuState });
+                        dispatch(updatedSadGotchuData);
+                        // Mise à jour du timestamp de la dernière interaction dans la base de données
+                        const currentTime = new Date().getTime();
+                        await SadGotchuService.updateLastInteractionTime(id, currentTime);
+                    } catch (error) {
+                        console.error("Erreur lors de la sauvegarde des changements de SadGotchu :", error);
+                    }
                 }
             }
-        }
 
-        // Déclencher la sauvegarde lorsque des changements pertinents sont détectés
-        const saveInterval = setInterval(() => {
-            handleSave();
-        }, 60000); // Sauvegarder toutes les minutes
+            // Déclencher la sauvegarde lorsque des changements pertinents sont détectés
+            const saveInterval = setInterval(() => {
+                handleSave();
+            }, 60000); // Sauvegarder toutes les minutes
 
-        return () => clearInterval(saveInterval);
-     } // Nettoyage de l'intervalle lors du démontage du composant
+            return () => clearInterval(saveInterval);
+        } // Nettoyage de l'intervalle lors du démontage du composant
     }, [
         dispatch,
         id,
@@ -177,18 +197,18 @@ const TamagotchiCore = ({ currentMenu }) => {
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
     // Pour update les states depuis la dernière intéraction
-    useEffect(() => {
-        // Récupérer le timestamp de la dernière interaction depuis localStorage
-        const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
-        const currentTime = Date.now();
-        const timeElapsed = currentTime - parseInt(lastInteractionTime);
+    // useEffect(() => {
+    //     // Récupérer le timestamp de la dernière interaction depuis localStorage
+    //     const lastInteractionTime = localStorage.getItem('lastInteractionTime') || Date.now();
+    //     const currentTime = Date.now();
+    //     const timeElapsed = currentTime - parseInt(lastInteractionTime);
 
-        // Ajuster l'état basé sur le temps écoulé
-        dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+    //     // Ajuster l'état basé sur le temps écoulé
+    //     dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
 
-        // Mise à jour du timestamp de la dernière interaction
-        localStorage.setItem('lastInteractionTime', currentTime.toString());
-    }, [dispatch]);
+    // Mise à jour du timestamp de la dernière interaction
+    //     localStorage.setItem('lastInteractionTime', currentTime.toString());
+    // }, [dispatch]);
 
     // Simulation du temps qui passe
     useEffect(() => {
@@ -211,18 +231,18 @@ const TamagotchiCore = ({ currentMenu }) => {
         return () => clearInterval(evolutionInterval);
     }, [dispatch, stage, age, happiness, hunger, evolutionLine, isFinalStage]);
 
-    useEffect(() => {
-        const intervalId = setInterval(async () => {
-            const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(id);
-            const currentTime = Date.now();
-            const timeElapsed = currentTime - lastInteractionTime;
+    // useEffect(() => {
+    //     const intervalId = setInterval(async () => {
+    //         const lastInteractionTime = await SadGotchuService.fetchLastInteractionTime(id);
+    //         const currentTime = Date.now();
+    //         const timeElapsed = currentTime - lastInteractionTime;
 
-            dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-            await SadGotchuService.updateLastInteractionTime(id, currentTime);
-        }, 3600000); // Vérifie toutes les heures
+    //         dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
+    //         await SadGotchuService.updateLastInteractionTime(id, currentTime);
+    //     }, 3600000); // Vérifie toutes les heures
 
-        return () => clearInterval(intervalId);
-    }, [dispatch, id]);
+    //     return () => clearInterval(intervalId);
+    // }, [dispatch, id]);
 
     // Ce useEffect gère la mise à jour régulière de la faim et du bonheur
     useEffect(() => {
@@ -322,7 +342,7 @@ const TamagotchiCore = ({ currentMenu }) => {
         }
     };
 
-    // Fonctin pour récupérer l'heure exacte de la dernière intéraction
+    // Fonction pour récupérer l'heure exacte de la dernière intéraction
     useEffect(() => {
         // Fonction exécutée lorsque le composant se démonte
         return () => {
@@ -436,6 +456,7 @@ const TamagotchiCore = ({ currentMenu }) => {
         return spritePath;
     };
 
+    console.log('LE SHOWNAMEFORM :', showNameForm);
     return (
         <div className={styles.tamagotchiCore}>
             {showNameForm && (
