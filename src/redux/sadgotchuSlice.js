@@ -22,11 +22,9 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         const ageIncrement = timeInMinutes / 1440; // Convertir les minutes en jours fractionnaires
 
         // Incrémenter l'âge de façon fractionnaire
-        // age=parseFloat(age);
-        age += ageIncrement;
-        console.log(`Avant l'incrementAgeBy : ${state.age}, Type: ${typeof state.age}`);
+        console.log(`Avant l'incrementAgeBy : ${age}, Type: ${typeof age}`);
         dispatch(incrementAgeBy(ageIncrement));
-        console.log(`Après l'incrementAgeBy : ${state.age}, Type: ${typeof state.age}`);
+        console.log(`Après l'incrementAgeBy : ${state.age.toFixed(3)}, Type: ${typeof state.age}`);
 
         const stageConfig = evolutionTree[stage];
 
@@ -100,7 +98,7 @@ function handleStateBasedOnThresholds(dispatch, { hunger, happiness, currentTime
 // Actions pour Strapi
 export const loadUserSadGotchu = createAsyncThunk(
     'sadgotchu/loadUserSadGotchu',
-    async ({userId, setDataLoaded}, { dispatch }) => {
+    async ({ userId, setDataLoaded }, { dispatch }) => {
         try {
             const sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
             console.log('Réponse de fetchSadGotchu:', sadGotchu);
@@ -205,11 +203,9 @@ export const sadgotchuSlice = createSlice({
             state.isFinalStage = action.payload;
         },
         incrementAgeBy: (state, action) => {
-            console.log('STATE:', state)
-            console.log('STATE.AGE:', state.age)
-            console.log('ACTION:', action)
-            console.log('ACTION.PAYLOAD:', action.payload)
+            console.log(`Avant incrementAgeBy, Age : ${state.age}, Type: ${typeof state.age}`);
             state.age += action.payload;
+            console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(3)}, Type: ${typeof state.age}`);
         },
         resetSadGotchu: (state) => {
             state.name = "";
