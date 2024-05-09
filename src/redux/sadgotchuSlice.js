@@ -11,21 +11,14 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         const state = getState().sadGotchu;
         let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage, evolutionLine } = state;
 
-        if (['ange', 'demon', 'oeuf'].includes(stage)) {
-            console.log('Pas d’ajustement nécessaire pour le stade final ou initial.');
+        if (['ange', 'demon'].includes(stage)) {
             return;
         }
-        console.log(`Début adjustStateBasedOnTimeElapsed avec timeElapsed: ${timeElapsed}`);
-        console.log(`État initial - stage: ${stage}, evolutionLine: ${evolutionLine}, hunger: ${hunger}, happiness: ${happiness}, age: ${age}, timeAtHundredHunger: ${timeAtHundredHunger}, timeAtZeroHappiness: ${timeAtZeroHappiness}`);
-
         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
         const ageIncrement = timeInMinutes / 1440; // Convertir les minutes en jours fractionnaires
 
         // Incrémenter l'âge de façon fractionnaire
-        console.log(`Avant l'incrementAgeBy : ${age}, Type: ${typeof age}`);
         dispatch(incrementAgeBy(ageIncrement));
-        console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(12)}, Type: ${typeof state.age}`);
-
         const stageConfig = evolutionTree[stage];
 
         if (stageConfig?.needsUpdate) {
@@ -49,13 +42,6 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             if (evolutionResult.evolutionLine) {
                 dispatch(setEvolutionLine(evolutionResult.evolutionLine));
             }
-        }
-
-        console.log(`Age après ajustement: ${age}`);
-        if (evolutionResult) {
-            console.log(`Résultat de l'évolution:`, evolutionResult);
-        } else {
-            console.log(`Pas d'évolution pour ${stage} à l'âge ${age}`);
         }
 
         // Gérer la mort et les états de faim et de bonheur
@@ -101,17 +87,13 @@ export const loadUserSadGotchu = createAsyncThunk(
     async ({ userId, setDataLoaded }, { dispatch }) => {
         try {
             const sadGotchu = await SadGotchuService.fetchSadGotchu(userId);
-            console.log('Réponse de fetchSadGotchu:', sadGotchu);
             if (sadGotchu) {
                 // Ce dispatch met à jour l'état immédiatement, ce qui est bien.
                 dispatch(setSadGotchu(sadGotchu));
 
                 // Mais pour que le reducer de fulfilled fonctionne comme tu l'attends, tu dois aussi retourner sadGotchu ici.
-                console.log('returning SadGotchu')
                 setDataLoaded(true)
                 return sadGotchu; // Assure-toi que c'est la structure attendue.
-            } else {
-                console.log("Aucun SadGotchu trouvé pour cet utilisateur");
             }
         } catch (error) {
             console.error("Erreur lors du chargement du SadGotchu:", error);
@@ -203,10 +185,8 @@ export const sadgotchuSlice = createSlice({
             state.isFinalStage = action.payload;
         },
         incrementAgeBy: (state, action) => {
-            console.log(`Avant incrementAgeBy, Age : ${state.age}, Type: ${typeof state.age}`);
             let updatedAge = parseFloat((state.age + action.payload).toFixed(12)); // Utiliser toFixed(12) pour contrôler la précision
             state.age = updatedAge;
-            console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(12)}, Type: ${typeof state.age}`);
         },
         resetSadGotchu: (state) => {
             state.name = "";
@@ -261,12 +241,9 @@ export const sadgotchuSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loadUserSadGotchu.fulfilled, (state, action) => {
-                console.log('Action payload dans loadUserSadGotchu.fulfilled:', action.payload);
                 // Assure-toi que l'action.payload contient l'objet attendu
                 if (action.payload) {
                     const { id, attributes } = action.payload;
-                    console.log('Attributes dans loadUserSadGotchu.fulfilled:', attributes);
-
                     if (attributes) {
                         // Déstructuration des attributs pour mise à jour de l'état
                         const {
@@ -302,8 +279,6 @@ export const sadgotchuSlice = createSlice({
                             isFinalStage,
                         });
                     }
-                } else {
-                    console.log("Aucun SadGotchu trouvé pour cet utilisateur ou structure de réponse inattendue.");
                 }
             })
             .addCase(createSadGotchuAction.fulfilled, (state, action) => {

@@ -81,18 +81,14 @@ const TamagotchiCore = ({ currentMenu }) => {
     useEffect(() => {
         setIsLoading(true);  // Indiquer que le chargement est en cours
         async function fetchDataAndAdjustState() {
-            console.log('fetchData appelé')
             const userStr = localStorage.getItem('user');
             if (userStr) {
-                console.log('user exist')
                 const user = JSON.parse(userStr);
                 try {
                     // Charger les données utilisateur et attendre la fin de cette opération
                     var sadGotchuData = await loadUserSadGotchu({ userId: user.id, setDataLoaded: setDataLoaded });
                     dispatch(sadGotchuData);
-                    console.log('Load User OK')
                 } catch (error) {
-                    console.error('Erreur lors du chargement ou de l’ajustement du SadGotchu:', error);
                 } finally {
                     setIsLoading(false);
                     // setDataLoaded(true);    // Fin du chargement
@@ -112,19 +108,8 @@ const TamagotchiCore = ({ currentMenu }) => {
             const lastInteractionTime = parseFloat(await SadGotchuService.fetchLastInteractionTime(id));
             const currentTime = Date.now();
             const timeElapsed = currentTime - new Date(lastInteractionTime).getTime();
-
-
-            console.log('LastInteractionTime:', lastInteractionTime)
-            console.log('CurrentTime:', currentTime)
-            console.log('TimeElapsed:', timeElapsed)
-            console.log('Composant monté à :', new Date(currentTime).toLocaleString());
-            console.log('Dernière interaction à :', new Date(lastInteractionTime).toLocaleString());
-            console.log('Temps écoulé :', timeElapsed / 1000 / 60 / 60, 'heures');
-
             // Ajuster l'état basé sur le temps écoulé
             dispatch(adjustStateBasedOnTimeElapsed(timeElapsed));
-            console.log('adjustState à été appelé')
-
             // Mettre à jour le timestamp de la dernière interaction dans Strapi
             await SadGotchuService.updateLastInteractionTime(id, currentTime);
 
@@ -206,11 +191,10 @@ const TamagotchiCore = ({ currentMenu }) => {
     // Simulation du temps qui passe
     useEffect(() => {
         const evolutionInterval = setInterval(() => {
-            if (!isFinalStage) {
+            if (!isFinalStage || stage === 'oeuf') { // Assurez-vous que l'âge s'incrémente même pour l'œuf
                 dispatch(incrementAge());
 
                 // Utilise l'état actuel depuis Redux pour la logique d'évolution
-                // Note : Tu dois obtenir age, stage, etc., via useSelector au début de ton composant.
                 const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
                 if (evolutionResult) {
                     dispatch(setStage(evolutionResult.type)); // Dispatch l'action pour changer le stage
@@ -328,7 +312,6 @@ const TamagotchiCore = ({ currentMenu }) => {
         return () => {
             const currentTime = Date.now();
             localStorage.setItem('lastUpdateTime', currentTime.toString());
-            console.log('Composant démonté à :', new Date(currentTime).toLocaleString());
         };
     }, []);
 
@@ -437,8 +420,6 @@ const TamagotchiCore = ({ currentMenu }) => {
     };
 
 
-
-    console.log('LE SHOWNAMEFORM :', showNameForm);
     return (
         <div className={styles.tamagotchiCore}>
             {showNameForm && (
