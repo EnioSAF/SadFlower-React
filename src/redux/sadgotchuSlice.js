@@ -244,7 +244,7 @@ export const sadgotchuSlice = createSlice({
                     state.id = id;
                     state.name = name;
                     state.stage = stage;
-                    state.age = parseInt(age, 10);
+                    state.age = parseFloat(attributes.age);
                     state.evolutionLine = evolutionLine;
                     state.hunger = parseInt(hunger, 10);
                     state.happiness = happiness ? parseInt(happiness, 10) : state.happiness;
@@ -290,7 +290,7 @@ export const sadgotchuSlice = createSlice({
                             id,
                             name,
                             stage,
-                            age: parseInt(age, 10), // S'assurer que les valeurs numériques sont correctement traitées
+                            age: parseFloat(attributes.age), // S'assurer que les valeurs numériques sont correctement traitées
                             evolutionLine,
                             hasPoop,
                             isSick,
