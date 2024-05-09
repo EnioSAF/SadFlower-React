@@ -109,7 +109,7 @@ const TamagotchiCore = ({ currentMenu }) => {
     useEffect(() => {
         const adjustState = async () => {
             // Récupérer le temps de dernière interaction depuis Strapi
-            const lastInteractionTime = parseInt(await SadGotchuService.fetchLastInteractionTime(id));
+            const lastInteractionTime = parseFloat(await SadGotchuService.fetchLastInteractionTime(id));
             const currentTime = Date.now();
             const timeElapsed = currentTime - new Date(lastInteractionTime).getTime();
 
@@ -143,7 +143,7 @@ const TamagotchiCore = ({ currentMenu }) => {
                 const currentSadGotchuState = {
                     name,
                     stage,
-                    age: Math.round(age),
+                    age,
                     evolutionLine,
                     hunger,
                     happiness,
