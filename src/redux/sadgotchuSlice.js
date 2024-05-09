@@ -24,7 +24,7 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         // Incrémenter l'âge de façon fractionnaire
         console.log(`Avant l'incrementAgeBy : ${age}, Type: ${typeof age}`);
         dispatch(incrementAgeBy(ageIncrement));
-        console.log(`Après l'incrementAgeBy : ${state.age.toFixed(3)}, Type: ${typeof state.age}`);
+        console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(12)}, Type: ${typeof state.age}`);
 
         const stageConfig = evolutionTree[stage];
 
@@ -204,8 +204,9 @@ export const sadgotchuSlice = createSlice({
         },
         incrementAgeBy: (state, action) => {
             console.log(`Avant incrementAgeBy, Age : ${state.age}, Type: ${typeof state.age}`);
-            state.age += action.payload;
-            console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(3)}, Type: ${typeof state.age}`);
+            let updatedAge = parseFloat((state.age + action.payload).toFixed(12)); // Utiliser toFixed(12) pour contrôler la précision
+            state.age = updatedAge;
+            console.log(`Après incrementAgeBy, Age : ${state.age.toFixed(12)}, Type: ${typeof state.age}`);
         },
         resetSadGotchu: (state) => {
             state.name = "";
