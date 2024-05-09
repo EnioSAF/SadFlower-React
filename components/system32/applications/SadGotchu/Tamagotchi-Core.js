@@ -88,7 +88,7 @@ const TamagotchiCore = ({ currentMenu }) => {
                 const user = JSON.parse(userStr);
                 try {
                     // Charger les données utilisateur et attendre la fin de cette opération
-                    var sadGotchuData = await loadUserSadGotchu({userId:user.id, setDataLoaded:setDataLoaded});
+                    var sadGotchuData = await loadUserSadGotchu({ userId: user.id, setDataLoaded: setDataLoaded });
                     dispatch(sadGotchuData);
                     console.log('Load User OK')
                 } catch (error) {
@@ -158,7 +158,7 @@ const TamagotchiCore = ({ currentMenu }) => {
                 if (id) {
                     try {
                         // Mise à jour du SadGotchu dans la base de données
-                        var updatedSadGotchuData = await updateSadGotchuAction({ id, changes: currentSadGotchuState });
+                        const updatedSadGotchuData = await updateSadGotchuAction({ id, changes: currentSadGotchuState });
                         dispatch(updatedSadGotchuData);
                         // Mise à jour du timestamp de la dernière interaction dans la base de données
                         const currentTime = new Date().getTime();
@@ -174,8 +174,12 @@ const TamagotchiCore = ({ currentMenu }) => {
                 handleSave();
             }, 60000); // Sauvegarder toutes les minutes
 
-            return () => clearInterval(saveInterval);
-        } // Nettoyage de l'intervalle lors du démontage du composant
+            // Cette fonction sera appelée lors du démontage du composant
+            return () => {
+                clearInterval(saveInterval);
+                handleSave(); // Force une dernière sauvegarde lors de la fermeture du composant
+            };
+        }
     }, [
         dispatch,
         id,
@@ -193,6 +197,7 @@ const TamagotchiCore = ({ currentMenu }) => {
         timeAtZeroHappiness,
         initialLoadComplete,
     ]); // Incluez toutes les dépendances pertinentes
+
 
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
@@ -407,10 +412,10 @@ const TamagotchiCore = ({ currentMenu }) => {
             dispatch(setIsSleeping(sleeping));
         };
 
-        updateSleepStatus();
-        const interval = setInterval(updateSleepStatus, 60000);
+        updateSleepStatus(); // Appeler immédiatement au montage
+        const interval = setInterval(updateSleepStatus, 60000); // Et ensuite toutes les minutes
 
-        return () => clearInterval(interval);
+        return () => clearInterval(interval); // Nettoyage à la désinscription
     }, [dispatch, stage]);
 
     // Désactivation des boutons et ajustement des sprites si endormi
