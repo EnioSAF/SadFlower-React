@@ -12,7 +12,6 @@ const headers = () => ({
 const SadGotchuService = {
     // Récupérer le SadGotchu d'un utilisateur
     fetchSadGotchu: async (userId) => {
-        console.log('fetchSadGotchu avec userID:', userId);
         try {
             const response = await fetch(`${SADGOTCHU_ENDPOINT}?filters[users_permissions_user][id][$eq]=${userId}`, {
                 method: 'GET',
@@ -31,7 +30,6 @@ const SadGotchuService = {
 
     // Créer un nouveau SadGotchu pour un utilisateur
     createSadGotchu: async (sadGotchuData) => {
-        console.log(`Données avant création SadGotchu : ${JSON.stringify(sadGotchuData)}`);
         try {
             const response = await fetch(SADGOTCHU_ENDPOINT, {
                 method: 'POST',
@@ -51,7 +49,6 @@ const SadGotchuService = {
 
     // Mettre à jour un SadGotchu existant
     updateSadGotchu: async (sadGotchuId, sadGotchuData) => {
-        console.log(`Données avant mise à jour API : ${JSON.stringify(sadGotchuData)}`);
         try {
             const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
                 method: 'PUT',
@@ -62,7 +59,6 @@ const SadGotchuService = {
                 throw new Error("Erreur lors de la mise à jour du SadGotchu");
             }
             const data = await response.json();
-            console.log(`Réponse de la mise à jour API : ${JSON.stringify(data)}`);
             return data;
         } catch (error) {
             console.error("Erreur dans updateSadGotchu:", error);
@@ -89,7 +85,6 @@ const SadGotchuService = {
 
     fetchLastInteractionTime: async (sadGotchuId) => {
         try {
-            console.log('SADGOTCHU :', sadGotchuId)
             const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
                 method: 'GET',
                 headers: headers(),
@@ -98,7 +93,6 @@ const SadGotchuService = {
                 throw new Error("Erreur lors de la récupération du temps de dernière interaction");
             }
             const data = await response.json();
-            console.log(`Données reçues de Strapi après fetch : ${JSON.stringify(data)}`);
             return data.data.attributes.lastInteractionTime;  // Assurez-vous que le chemin correspond à votre structure de réponse
         } catch (error) {
             console.error("Erreur lors de la récupération du temps de dernière interaction:", error);
