@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import SadGotchuService from '@/components/system32/applications/SadGotchu/SadGotchuService';
@@ -136,49 +136,34 @@ const TamagotchiCore = ({ currentMenu }) => {
     }, [dispatch, id, dataLoaded]);
 
 
-    // useEffect pour sauvegarder les changements de SadGotchu
-    useEffect(() => {
-        if (initialLoadComplete) {
-            async function handleSave() {
-                const currentSadGotchuState = {
-                    name,
-                    stage,
-                    age,
-                    evolutionLine,
-                    hunger,
-                    happiness,
-                    hasPoop,
-                    isSick,
-                    isSleeping,
-                    isFinalStage,
-                    timeAtHundredHunger,
-                    timeAtZeroHappiness,
-                };
+    // Utilisation de useCallback pour définir handleSave
+    const handleSave = useCallback(async () => {
+        const currentSadGotchuState = {
+            name,
+            stage,
+            age,
+            evolutionLine,
+            hunger,
+            happiness,
+            hasPoop,
+            isSick,
+            isSleeping,
+            isFinalStage,
+            timeAtHundredHunger,
+            timeAtZeroHappiness,
+        };
 
-                if (id) {
-                    try {
-                        // Mise à jour du SadGotchu dans la base de données
-                        const updatedSadGotchuData = await updateSadGotchuAction({ id, changes: currentSadGotchuState });
-                        dispatch(updatedSadGotchuData);
-                        // Mise à jour du timestamp de la dernière interaction dans la base de données
-                        const currentTime = new Date().getTime();
-                        await SadGotchuService.updateLastInteractionTime(id, currentTime);
-                    } catch (error) {
-                        console.error("Erreur lors de la sauvegarde des changements de SadGotchu :", error);
-                    }
-                }
+        if (id) {
+            try {
+                // Mise à jour du SadGotchu dans la base de données
+                const updatedSadGotchuData = await updateSadGotchuAction({ id, changes: currentSadGotchuState });
+                dispatch(updatedSadGotchuData);
+                // Mise à jour du timestamp de la dernière interaction dans la base de données
+                const currentTime = new Date().getTime();
+                await SadGotchuService.updateLastInteractionTime(id, currentTime);
+            } catch (error) {
+                console.error("Erreur lors de la sauvegarde des changements de SadGotchu :", error);
             }
-
-            // Déclencher la sauvegarde lorsque des changements pertinents sont détectés
-            const saveInterval = setInterval(() => {
-                handleSave();
-            }, 60000); // Sauvegarder toutes les minutes
-
-            // Cette fonction sera appelée lors du démontage du composant
-            return () => {
-                clearInterval(saveInterval);
-                handleSave(); // Force une dernière sauvegarde lors de la fermeture du composant
-            };
         }
     }, [
         dispatch,
@@ -194,10 +179,27 @@ const TamagotchiCore = ({ currentMenu }) => {
         isSleeping,
         isFinalStage,
         timeAtHundredHunger,
-        timeAtZeroHappiness,
-        initialLoadComplete,
-    ]); // Incluez toutes les dépendances pertinentes
+        timeAtZeroHappiness
+    ]);
 
+    // useEffect pour la sauvegarde automatique et à la fermeture du composant
+    useEffect(() => {
+        const saveInterval = setInterval(handleSave, 60000); // Sauvegarder toutes les minutes
+
+        // Ajouter l'écouteur d'événement beforeunload pour sauvegarder avant de quitter la page
+        const handleBeforeUnload = async (event) => {
+            event.preventDefault();
+            event.returnValue = ''; // Chrome requiert returnValue à être défini
+            await handleSave();
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            clearInterval(saveInterval); // Arrêter l'intervalle de sauvegarde
+            window.removeEventListener('beforeunload', handleBeforeUnload); // Retirer l'écouteur d'événement
+            handleSave(); // Sauvegarde finale lors du démontage du composant
+        };
+    }, [handleSave]);
 
     // FONCTION d'interval / Check-Intéractions / Passage du temps
 
