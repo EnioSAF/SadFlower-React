@@ -429,6 +429,8 @@ const TamagotchiCore = ({ currentMenu }) => {
         return spritePath;
     };
 
+
+
     console.log('LE SHOWNAMEFORM :', showNameForm);
     return (
         <div className={styles.tamagotchiCore}>
@@ -470,7 +472,7 @@ const TamagotchiCore = ({ currentMenu }) => {
                     <div className={styles.tamagotchiStats}>
                         <p>{name || 'SadGotchu'}</p>
                         <p>Stade: {stage}</p>
-                        <p>Âge: {age} ans</p>
+                        <p>Âge: {Math.floor(age)} ans</p>
                     </div>
                     {/* Afficher les stats uniquement si ce n'est pas le stage final */}
                     {!isFinalStage && stage !== 'oeuf' && !isSleeping && (
