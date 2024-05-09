@@ -77,6 +77,30 @@ const TamagotchiCore = ({ currentMenu }) => {
     const [initialLoadComplete, setInitialLoadComplete] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
 
+    // Pour initialiser le SadGotchu si aucuns en localstorage
+    useEffect(() => {
+        const initializeSadGotchu = async () => {
+            setIsLoading(true);
+            const localSadGotchu = localStorage.getItem('sadGotchu');
+            let sadGotchuData;
+            if (localSadGotchu) {
+                sadGotchuData = JSON.parse(localSadGotchu);
+            } else {
+                const userStr = localStorage.getItem('user');
+                const user = JSON.parse(userStr);
+                sadGotchuData = await SadGotchuService.fetchSadGotchu(user.id);
+                if (!sadGotchuData) {
+                    sadGotchuData = await SadGotchuService.createSadGotchu(initialSadGotchuData(user.id));
+                }
+                localStorage.setItem('sadGotchu', JSON.stringify(sadGotchuData));
+            }
+            dispatch(setSadGotchu(sadGotchuData)); // Met à jour Redux store
+            setIsLoading(false);
+        };
+
+        initializeSadGotchu();
+    }, [dispatch]);
+
     // Pour load
     useEffect(() => {
         setIsLoading(true);  // Indiquer que le chargement est en cours
