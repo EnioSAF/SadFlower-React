@@ -146,7 +146,7 @@ const BootsScreen = () => {
                   }
                 })
                 .options({ speed: 50, lifeLike: true })
-                .type("INITIALISATION SADFLOWER CORE 1.0.1", { lifeLike: true })
+                .type("INITIALISATION SADFLOWER CORE 1.0.2", { lifeLike: true })
                 .break()
                 .pause(3000)
                 .delete(null, { instant: true })
@@ -155,11 +155,14 @@ const BootsScreen = () => {
                 .type("ADDED :")
                 .pause(2000)
                 .break()
+                .options({ speed: 0.1})
                 .type(
                   " 1.0.0 : -Sadflower™ HUB first update !",
                 )
                 .break()
                 .type(" 1.0.1 : -Added SadGotchu to created users !")
+                .break()
+                .type(" 1.0.2 : -SadGotchu V.1.0 ! Welcome to our little creatures")
                 .break()
                 .type("(for registered user only)")
                 .pause(2000)
@@ -187,8 +190,8 @@ const BootsScreen = () => {
                 })
                 .pause(1500)
                 .delete(null, { instant: true })
-                .options({ speed: 1, lifeLike: false, instant: true })
-                .type("PRESS ANY KEY TO ENTER THE :")
+                .options({ speed: 1, lifeLike: true})
+                .type("PRESS ANY KEY OR TOUCH THE SCREEN TO ENTER THE :")
                 .break()
                 .options({ speed: 250, lifeLike: true })
                 .type("S A D F L O W E R  W O R L D");
