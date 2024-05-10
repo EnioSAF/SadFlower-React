@@ -15,7 +15,7 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             return;
         }
         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
-        const ageIncrement = timeInMinutes / 1440; // Convertir les minutes en jours fractionnaires
+        const ageIncrement = timeInMinutes / 720; // Convertir les minutes en moitié d'un jour (12 heures)
 
         // Incrémenter l'âge de façon fractionnaire
         dispatch(incrementAgeBy(ageIncrement));
