@@ -19,7 +19,6 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
 
         // Incrémenter l'âge de façon fractionnaire
         dispatch(incrementAgeBy(ageIncrement));
-        const stageConfig = evolutionTree[stage];
 
         if (stageConfig?.needsUpdate) {
             const { hungerIncrement, happinessDecrement, updateInterval } = stageConfig.needsUpdate;
@@ -51,6 +50,17 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
 
         if (isFinalStage) {
             dispatch(setIsFinalStage(true));
+        }
+    }
+);
+
+export const deleteSadGotchuAction = createAsyncThunk(
+    'sadgotchu/delete',
+    async (id, { dispatch, rejectWithValue }) => {
+        try {
+            await SadGotchuService.deleteSadGotchu(id);
+        } catch (error) {
+            return rejectWithValue(error.toString());
         }
     }
 );
@@ -143,6 +153,7 @@ export const sadgotchuSlice = createSlice({
         timeAtZeroHappiness: 0,
         isSleeping: false,
         isFinalStage: false,
+        lastInteractionTime: Date.now(),
     },
     reducers: {
         setName: (state, action) => {
@@ -187,20 +198,6 @@ export const sadgotchuSlice = createSlice({
         incrementAgeBy: (state, action) => {
             let updatedAge = parseFloat((state.age + action.payload).toFixed(12)); // Utiliser toFixed(12) pour contrôler la précision
             state.age = updatedAge;
-        },
-        resetSadGotchu: (state) => {
-            state.name = "";
-            state.stage = 'oeuf';
-            state.age = 0;
-            state.evolutionLine = null;
-            state.hasPoop = false;
-            state.isSick = false;
-            state.hunger = 50;
-            state.happiness = 50;
-            state.timeAtHundredHunger = 0;
-            state.timeAtZeroHappiness = 0;
-            state.isSleeping = false;
-            state.isFinalStage = false;
         },
         setSadGotchu: (state, action) => {
             const { data } = action.payload;

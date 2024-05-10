@@ -19,7 +19,7 @@ import {
     resetSadGotchu,
     setSadGotchu
 } from 'src/redux/sadgotchuSlice.js';
-import { loadUserSadGotchu, updateSadGotchuAction, createSadGotchuAction } from 'src/redux/sadgotchuSlice.js';
+import { loadUserSadGotchu, updateSadGotchuAction, createSadGotchuAction, deleteSadGotchuAction } from 'src/redux/sadgotchuSlice.js';
 import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
@@ -516,10 +516,14 @@ const TamagotchiCore = ({ currentMenu }) => {
                         <button className={styles.menuButtons} onClick={() => dispatch(setIsSick(false))} disabled={!isSick || isFinalStage}>Soigner</button>
                     </div>
                     <div className={styles.menuButtonsReset}>
-                        <button className={styles.menuButtonsReset} onClick={() => {
+                        <button className={styles.menuButtonsReset} onClick={async () => {
                             if (window.confirm("Es-tu sûr de vouloir réinitialiser ton SadGotchu ?")) {
-                                dispatch(resetSadGotchu());
-                                setShowNameForm(true); // Remarque : Assurez-vous que la logique pour setShowNameForm est gérée correctement dans votre composant
+                                if (id) {
+                                    await dispatch(deleteSadGotchuAction(id));
+                                    localStorage.removeItem('persist:root');
+                                    localStorage.removeItem('sadGotchu');
+                                    window.location.reload();
+                                }
                             }
                         }}>Réinitialiser</button>
                     </div>
