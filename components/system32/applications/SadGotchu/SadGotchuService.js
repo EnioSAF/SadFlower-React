@@ -66,6 +66,23 @@ const SadGotchuService = {
         }
     },
 
+    // Supprimer un SadGotchu existant
+    deleteSadGotchu: async (sadGotchuId) => {
+        try {
+            const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
+                method: 'DELETE',
+                headers: headers(),
+            });
+            if (!response.ok) {
+                throw new Error("Erreur lors de la suppression du SadGotchu");
+            }
+            return await response.json();
+        } catch (error) {
+            console.error("Erreur dans deleteSadGotchu:", error);
+            throw error;
+        }
+    },
+
     updateLastInteractionTime: async (sadGotchuId, lastInteractionTime) => {
         try {
             const response = await fetch(`${SADGOTCHU_ENDPOINT}/${sadGotchuId}`, {
