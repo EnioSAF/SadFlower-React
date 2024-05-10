@@ -116,57 +116,59 @@ const SignIn = ({
         </div>
       </div>
       <div className='window-body'>
-        <div className='signin-container'>
-          <div className='signin-form'>
-            <h2>SignIn</h2>
-            {error && (
-              <div className='alert alert-error'>
-                {error}
-                <button onClick={() => setError("")}>X</button>
-              </div>
-            )}
-            <form onSubmit={onFinish}>
-              <div className='form-group'>
-                <label>Email</label>
-                <input
-                  name='email'
-                  type='email'
-                  required
-                  placeholder='Email address'
-                />
-              </div>
-              <div className='form-group'>
-                <label>Password</label>
-                <input
-                  name='password'
-                  type='password'
-                  required
-                  placeholder='Password'
-                />
-              </div>
-              <button type='submit' disabled={isLoading}>
-                Login {isLoading && "Loading..."}
-              </button>
-            </form>
-            <p>
-              New to the SadFlower World?{" "}
-              <span
-                onClick={switchToSignUp}
-                style={{
-                  cursor: "pointer",
-                  color: "blue",
-                  textDecoration: "underline",
-                }}
-              >
-                Sign Up
-              </span>
-            </p>
+        <div style={{ textAlign: "center", marginTop: "20px" }}>
+          <div className='signin-container'>
+            <div className='signin-form'>
+              <h2>SignIn</h2>
+              {error && (
+                <div className='alert alert-error'>
+                  {error}
+                  <button onClick={() => setError("")}>X</button>
+                </div>
+              )}
+              <form onSubmit={onFinish}>
+                <div className='form-group'>
+                  <label>Email</label>
+                  <input
+                    name='email'
+                    type='email'
+                    required
+                    placeholder='Email address'
+                  />
+                </div>
+                <div className='form-group'>
+                  <label>Password</label>
+                  <input
+                    name='password'
+                    type='password'
+                    required
+                    placeholder='Password'
+                  />
+                </div>
+                <button type='submit' disabled={isLoading}>
+                  Login {isLoading && "Loading..."}
+                </button>
+              </form>
+              <p>
+                New to the SadFlower World?{" "}
+                <span
+                  onClick={switchToSignUp}
+                  style={{
+                    cursor: "pointer",
+                    color: "blue",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Sign Up
+                </span>
+              </p>
+            </div>
           </div>
-        </div>
-        <div className='status-bar'>
-          <p className='status-bar-field'>AboutMe</p>
-          <p className='status-bar-field'>Slide 1</p>
-          <p className='status-bar-field'>CPU Usage: 14%</p>
+          <div className='status-bar'>
+            <p className='status-bar-field'>AboutMe</p>
+            <p className='status-bar-field'>Slide 1</p>
+            <p className='status-bar-field'>CPU Usage: 14%</p>
+          </div>
         </div>
       </div>
     </Rnd>
