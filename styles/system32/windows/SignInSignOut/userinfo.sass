@@ -13,18 +13,17 @@
     display: flex
     flex-direction: column
     border: 2px solid #fff // Cadre blanc pour l'effet "fenêtre"
-    padding: 8px
     background: darken($color: #808080, $amount: 10%) // Un peu plus sombre pour faire ressortir l'avatar
 
     .avatar
         display: flex
         align-self: center
-        position: sticky
 
     .username
-        color: #fff // Blanc, basique, efficace
-        text-align: center // Rien ne bouge, tout est calé
-        margin-top: 1rem // Espace après l'avatar pour pas que ça se touche
+        color: #fff
+        font-weight: bold
+        font-size: 15px
+        text-align: center
 
 
 
@@ -34,7 +33,10 @@
     padding: 8px
     gap: 5px
 
-    .auth_button_logout
+    .sadgotchu_button
+        background-color: #ccbad6 // Orange qui claque pour les boutons
+
+    .authlogout_button
         background-color: #757575 // Orange qui claque pour les boutons
         border: none // Pas de frontières dans le pixel art
         color: white

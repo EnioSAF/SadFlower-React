@@ -149,7 +149,7 @@ const SignIn = ({
               </button>
             </form>
             <p>
-              New to Social Cards?{" "}
+              New to the SadFlower World?{" "}
               <span
                 onClick={switchToSignUp}
                 style={{
