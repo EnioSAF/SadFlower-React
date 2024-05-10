@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PixelArtCard } from "react-pixelart-face-card";
+import '/styles/system32/windows/SignInSignOut/editavatar.sass'
 
 const EditAvatar = ({ initialAvatar, onSave }) => {
   const [avatar, setAvatar] = useState(initialAvatar);
@@ -49,7 +50,7 @@ const EditAvatar = ({ initialAvatar, onSave }) => {
 
   return (
     <div className='edit-avatar-container'>
-      <PixelArtCard
+      <PixelArtCard className='avatar'
         size={100}
         color={avatar.baseColor}
         hoverColor={avatar.hoverColor}

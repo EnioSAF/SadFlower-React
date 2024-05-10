@@ -162,14 +162,14 @@ const UserInfo = ({
               <p>{username}</p>
             </div>
           </div>
-          <button className='auth_button' onClick={() => openTamagotchiWidget()}>
+          <div className='buttons'>
+          <button className='sadgotchu_button' onClick={() => openTamagotchiWidget()}>
               Open Tamagotchi
             </button>
-          <div className='buttons'>
-            <button className='auth_button_logout' onClick={onEditProfileClick}>
+            <button className='editprofile_button' onClick={onEditProfileClick}>
               Edit Profile
             </button>
-            <button className='auth_button_logout' onClick={handleLogout}>
+            <button className='authlogout_button' onClick={handleLogout}>
               Logout
             </button>
           </div>

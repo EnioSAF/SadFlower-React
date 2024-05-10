@@ -9,6 +9,7 @@ import EditAvatar from "@/components/Tools/SignInOut/EditAvatar";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
+import "/styles/system32/windows/SignInSignOut/editprofile.sass"
 
 const EditProfile = ({ closeWindow }) => {
   const { user, setUser } = useAuthContext();
@@ -19,8 +20,8 @@ const EditProfile = ({ closeWindow }) => {
   const [zIndex, setZIndex] = useState(globalZIndex);
 
   const updateZIndex = () => {
-    const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
-    setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
+    const newZIndex = bringToFront();
+    setZIndex(newZIndex);
   };
 
 
@@ -116,15 +117,15 @@ const EditProfile = ({ closeWindow }) => {
   return (
     <Rnd
       style={{
-        zIndex: zIndex
+        zIndex: isMobileScreen() ? 999 : zIndex
       }}
       default={{
         ...getCenterPosition(),
         width: 360,
-        height: 550,
+        height: 534,
       }}
-      minWidth={350}
-      minHeight={220}
+      minWidth={369}
+      minHeight={534}
       className='window'
       onClick={updateZIndex}
       disableDragging={isMobileScreen()}
@@ -144,25 +145,29 @@ const EditProfile = ({ closeWindow }) => {
       </div>
       <div className='window-body'>
         <div className='profile_page'>
-          <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
-          <form onSubmit={handleSubmit}>
-            <input
-              type='text'
-              name='username'
-              value={formData.username}
-              onChange={handleChange}
-              placeholder='Username'
-            />
-            <input
-              type='email'
-              name='email'
-              value={formData.email}
-              onChange={handleChange}
-              placeholder='Email'
-            />
-            {/* Ajoute d'autres champs si nécessaire */}
-            <button type='submit'>Mettre à jour</button>
-          </form>
+          <div className='edit_avatar'>
+            <EditAvatar initialAvatar={user.avatar} onSave={handleSaveAvatar} />
+          </div>
+          <div className='edit_informations'>
+            <form onSubmit={handleSubmit}>
+              <input
+                type='text'
+                name='username'
+                value={formData.username}
+                onChange={handleChange}
+                placeholder='Username'
+              />
+              <input
+                type='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
+                placeholder='Email'
+              />
+              {/* Ajoute d'autres champs si nécessaire */}
+              <button type='submit'>Mettre à jour</button>
+            </form>
+          </div>
           <div className='status-bar'>
             <p className='status-bar-field'>AboutMe</p>
             <p className='status-bar-field'>Slide 1</p>
