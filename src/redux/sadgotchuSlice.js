@@ -11,16 +11,20 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         const state = getState().sadGotchu;
         let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage, evolutionLine } = state;
 
-        if (['ange', 'demon'].includes(stage)) {
+        // Récupérer la configuration du stage actuel
+        const stageConfig = evolutionTree[stage];
+
+        if (!stageConfig || ['ange', 'demon'].includes(stage)) {
             return;
         }
+
         const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
         const ageIncrement = timeInMinutes / 720; // Convertir les minutes en moitié d'un jour (12 heures)
 
         // Incrémenter l'âge de façon fractionnaire
         dispatch(incrementAgeBy(ageIncrement));
 
-        if (stageConfig?.needsUpdate) {
+        if (stageConfig.needsUpdate) {
             const { hungerIncrement, happinessDecrement, updateInterval } = stageConfig.needsUpdate;
             let adjustedHunger = Math.min(100, Math.max(0, hunger + (hungerIncrement * timeInMinutes / (updateInterval / 60000))));
             let adjustedHappiness = Math.max(0, Math.min(100, happiness - (happinessDecrement * timeInMinutes / (updateInterval / 60000))));

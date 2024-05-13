@@ -414,18 +414,20 @@ const TamagotchiCore = ({ currentMenu }) => {
         return false; // Le Tamagotchi est éveillé
     };
 
-    // Mettre à jour l'état de sommeil en fonction du stade et de l'heure
-    useEffect(() => {
-        const updateSleepStatus = () => {
+// Mettre à jour l'état de sommeil en fonction du stade et de l'heure
+useEffect(() => {
+    const updateSleepStatus = () => {
+        if (dataLoaded) {  // Ne met à jour que si les données sont complètement chargées
             const sleeping = checkIfSleeping(stage);
             dispatch(setIsSleeping(sleeping));
-        };
+        }
+    };
 
-        updateSleepStatus(); // Appeler immédiatement au montage
-        const interval = setInterval(updateSleepStatus, 60000); // Et ensuite toutes les minutes
+    updateSleepStatus(); // Appeler immédiatement au montage, mais seulement exécuté si les données sont chargées
+    const interval = setInterval(updateSleepStatus, 60000); // Et ensuite toutes les minutes
 
-        return () => clearInterval(interval); // Nettoyage à la désinscription
-    }, [dispatch, stage]);
+    return () => clearInterval(interval); // Nettoyage à la désinscription
+}, [dispatch, stage, dataLoaded]);  // Ajout de dataLoaded aux dépendances
 
     // Désactivation des boutons et ajustement des sprites si endormi
     const getSprite = () => {
