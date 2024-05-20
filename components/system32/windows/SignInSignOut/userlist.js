@@ -5,6 +5,7 @@ import { API } from "/components/Tools/SignInOut/constant";
 
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
+import { sprites } from "@/components/system32/applications/SadGotchu/Tamagotchi-Core.js";
 
 import "98.css";
 import "/styles/system32/windows/window.sass";
@@ -12,6 +13,57 @@ import "/styles/system32/windows/SignInSignOut/userlist.sass";
 
 const UserList = ({ closeWindow }) => {
   const [users, setUsers] = useState([]);
+
+  // POur fetch le user et les SadGotchus
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${API}/users`);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const users = await response.json();
+
+        const usersWithSadGotchu = await Promise.all(users.map(async (user) => {
+          try {
+            const sadGotchuResponse = await fetch(`${API}/sad-gotchus?filters[users_permissions_user][id][$eq]=${user.id}`);
+            if (!sadGotchuResponse.ok) throw new Error("Failed to fetch SadGotchu");
+            const sadGotchuResult = await sadGotchuResponse.json();
+
+            // Assurons-nous d'accéder correctement aux données
+            const sadGotchuData = sadGotchuResult.data && sadGotchuResult.data.length > 0 ? sadGotchuResult.data[0].attributes : null;
+
+            return {
+              ...user,
+              sadGotchu: sadGotchuData,
+              sprite: sadGotchuData ? sprites[sadGotchuData.stage] : 'default-image.png'
+            };
+          } catch (error) {
+            console.error(`Error fetching SadGotchu for user ${user.id}:`, error);
+            return { ...user, sadGotchu: null, sprite: 'default-image.png' };
+          }
+        }));
+
+        setUsers(usersWithSadGotchu);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // Pour les détails des SadGotchus
+  const [selectedSadGotchu, setSelectedSadGotchu] = useState(null);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+
+  const showSadGotchuDetails = (sadGotchu, userId) => {
+    setSelectedSadGotchu(sadGotchu);
+    setSelectedUserId(userId); // Stocke l'ID de l'utilisateur dont les détails sont affichés
+  };
+
+  const closeSadGotchuDetails = () => {
+    setSelectedSadGotchu(null);
+    setSelectedUserId(null);
+  };
 
   // Pour gérer le Z-index
   const { bringToFront, zIndex: globalZIndex } = useZIndex();
@@ -21,24 +73,6 @@ const UserList = ({ closeWindow }) => {
     const newZIndex = bringToFront(); // Cette fonction devrait maintenant te retourner et setter le nouveau Z-index global
     setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
   };
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch(`${API}/users`);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des utilisateurs:",
-          error,
-        );
-      }
-    };
-
-    fetchUsers();
-  }, []);
 
   // Fonction pour vérifier la taille de l'écran
   const isMobileScreen = () => window.innerWidth <= 600;
@@ -146,6 +180,30 @@ const UserList = ({ closeWindow }) => {
                 <div className='user-info'>
                   <h3>{user.username}</h3>
                   {/* Autres informations de l'utilisateur si nécessaire */}
+                </div>
+                {user.sadGotchu && (
+                  <div className='user-sadgotchu' onClick={() => showSadGotchuDetails(user.sadGotchu, user.id)}>
+                    <div className='capsule-container'>
+                      <img src='/SadGotchu/capsule.png' alt='Capsule' className='capsule-image' />
+                      <img src={sprites[user.sadGotchu.stage]} alt='SadGotchu' className='sadgotchu-sprite' />
+                    </div>
+                    <div className='sadgotchu-name'>{user.sadGotchu.name}</div>
+                  </div>
+                )}
+                <div>
+                  {user.id === selectedUserId && selectedSadGotchu && (
+                    <div className="modal-background" onClick={closeSadGotchuDetails}>
+                      <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <h2>Détails de SadGotchu</h2>
+                        <p>Nom : {selectedSadGotchu.name}</p>
+                        <p>Stade : {selectedSadGotchu.stage}</p>
+                        <p>Âge : {selectedSadGotchu.age}</p>
+                        <p>Faim : {selectedSadGotchu.hunger}</p>
+                        <p>Bonheur : {selectedSadGotchu.happiness}</p>
+                        <button onClick={closeSadGotchuDetails}>Fermer</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </Tilt>
