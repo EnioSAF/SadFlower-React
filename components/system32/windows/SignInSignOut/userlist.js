@@ -65,6 +65,22 @@ const UserList = ({ closeWindow }) => {
     setSelectedUserId(null);
   };
 
+  // Pour les animations des SadGotchus
+
+  const getRandomAnimationStyle = () => {
+    const duration = Math.random() * 4 + 4; // Durée entre 4 et 8 secondes
+    const translateY = Math.random() * 5 + 5; // Translation entre 5px et 10px
+    const rotate = Math.random() * 4 - 2; // Rotation entre -2deg et 2deg
+
+    return {
+        animationDuration: `${duration}s`,
+        animationName: 'floatAndTilt',
+        animationTimingFunction: 'ease-in-out',
+        animationIterationCount: 'infinite',
+        transform: `translateY(-${translateY}px) rotate(${rotate}deg)`
+    };
+};
+
   // Pour gérer le Z-index
   const { bringToFront, zIndex: globalZIndex } = useZIndex();
   const [zIndex, setZIndex] = useState(globalZIndex);
@@ -185,7 +201,7 @@ const UserList = ({ closeWindow }) => {
                   <div className='user-sadgotchu' onClick={() => showSadGotchuDetails(user.sadGotchu, user.id)}>
                     <div className='capsule-container'>
                       <img src='/SadGotchu/capsule.png' alt='Capsule' className='capsule-image' />
-                      <img src={sprites[user.sadGotchu.stage]} alt='SadGotchu' className='sadgotchu-sprite' />
+                      <img src={sprites[user.sadGotchu.stage]} alt='SadGotchu' className='sadgotchu-sprite' style={getRandomAnimationStyle()} />
                     </div>
                     <div className='sadgotchu-name'>{user.sadGotchu.name}</div>
                   </div>
@@ -212,7 +228,7 @@ const UserList = ({ closeWindow }) => {
       </div>
       <div className='status-bar'>
         <p className='status-bar-field'>UserList</p>
-        <p className='status-bar-field'>Slide 1</p>
+        <p className='status-bar-field'>Compilation Ext.</p>
         <p className='status-bar-field'>CPU Usage: 14%</p>
       </div>
     </Rnd>
