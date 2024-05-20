@@ -24,6 +24,18 @@ import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
+    // Sprites pour chaque stade
+    export const sprites = {
+        oeuf: '/SadGotchu/tamas/egg(enio).png',
+        bébé: '/SadGotchu/tamas/baby/baby(enio).png',
+        enfant: '/SadGotchu/tamas/child/child(enio).png',
+        adulteGood: '/SadGotchu/tamas/adult/adult(good-julie).png',
+        adulteBad: '/SadGotchu/tamas/adult/adult(bad-enio).png',
+        vieux: '/SadGotchu/tamas/old/old(enio-tama).png',
+        ange: '/SadGotchu/tamas/death/gooddeath(enio).png',
+        demon: '/SadGotchu/tamas/death/baddeath(enio).png',
+    };
+
 const TamagotchiCore = ({ currentMenu }) => {
     const dispatch = useDispatch();
     const {
@@ -41,18 +53,6 @@ const TamagotchiCore = ({ currentMenu }) => {
         timeAtHundredHunger,
         timeAtZeroHappiness,
     } = useSelector((state) => state.sadGotchu);
-
-    // Sprites pour chaque stade
-    const sprites = {
-        oeuf: '/SadGotchu/tamas/egg(enio).png',
-        bébé: '/SadGotchu/tamas/baby/baby(enio).png',
-        enfant: '/SadGotchu/tamas/child/child(enio).png',
-        adulteGood: '/SadGotchu/tamas/adult/adult(good-julie).png',
-        adulteBad: '/SadGotchu/tamas/adult/adult(bad-enio).png',
-        vieux: '/SadGotchu/tamas/old/old(enio-tama).png',
-        ange: '/SadGotchu/tamas/death/gooddeath(enio).png',
-        demon: '/SadGotchu/tamas/death/baddeath(enio).png',
-    };
 
     const extraSprites = {
         sick: '/SadGotchu/tamas/other/sick.png',
