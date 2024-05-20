@@ -35,8 +35,8 @@
         position: relative
         height: 260px
         width: 200px
-        background: #d6d6d6
-        border-radius: 10px
+        // background: #d6d6d6
+        // border-radius: 10px
 
         .capsule-image
             position: absolute
@@ -59,3 +59,16 @@
     top: 5px
     font-size: 20px
 
+@keyframes floatAndTilt
+    0%, 100%
+        transform: translateY(0) rotate(0deg)
+    25%
+        transform: translateY(-5px) rotate(-3deg)
+    50%
+        transform: translateY(-10px) rotate(0deg)
+    75%
+        transform: translateY(-5px) rotate(3deg)
+
+.user-sadgotchu
+    .sadgotchu-sprite
+        animation: floatAndTilt 6s ease-in-out infinite
