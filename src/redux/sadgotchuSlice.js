@@ -11,17 +11,21 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
         const state = getState().sadGotchu;
         let { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage, evolutionLine } = state;
 
-        // Récupérer la configuration du stage actuel
+        // Log pour vérifier l'état initial
+        console.log('State on entry:', { stage, hunger, happiness, age, timeAtHundredHunger, timeAtZeroHappiness, isFinalStage, evolutionLine });
+
         const stageConfig = evolutionTree[stage];
 
         if (!stageConfig || ['ange', 'demon'].includes(stage)) {
+            console.log('Stage config is null or forbidden stage:', stage);
             return;
         }
 
-        const timeInMinutes = timeElapsed / 60000; // Convertir le temps écoulé en minutes
-        const ageIncrement = timeInMinutes / 720; // Convertir les minutes en moitié d'un jour (12 heures)
+        const timeInMinutes = timeElapsed / 60000;
+        const ageIncrement = timeInMinutes / 720;
 
-        // Incrémenter l'âge de façon fractionnaire
+        console.log('Computed age increment:', ageIncrement);  // Log pour vérifier l'incrément d'âge calculé
+
         dispatch(incrementAgeBy(ageIncrement));
 
         if (stageConfig.needsUpdate) {
@@ -29,7 +33,8 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             let adjustedHunger = Math.min(100, Math.max(0, hunger + (hungerIncrement * timeInMinutes / (updateInterval / 60000))));
             let adjustedHappiness = Math.max(0, Math.min(100, happiness - (happinessDecrement * timeInMinutes / (updateInterval / 60000))));
 
-            // Dispatch seulement si les valeurs sont valides
+            console.log('Adjusted values:', { adjustedHunger, adjustedHappiness });  // Log pour vérifier les valeurs ajustées
+
             if (!isNaN(adjustedHunger)) {
                 dispatch(adjustHunger(adjustedHunger - hunger));
             }
@@ -38,8 +43,9 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             }
         }
 
-        // Vérifiez si le Tamagotchi devrait évoluer
         const evolutionResult = determineNextStage(stage, age, happiness, hunger, evolutionLine);
+        console.log('Evolution result:', evolutionResult);  // Log pour vérifier le résultat de l'évolution
+
         if (evolutionResult) {
             dispatch(setStage(evolutionResult.type));
             if (evolutionResult.evolutionLine) {
@@ -47,7 +53,6 @@ export const adjustStateBasedOnTimeElapsed = createAsyncThunk(
             }
         }
 
-        // Gérer la mort et les états de faim et de bonheur
         handleStateBasedOnThresholds(dispatch, {
             hunger, happiness, currentTime: Date.now(), timeAtHundredHunger, timeAtZeroHappiness, isFinalStage
         });
@@ -200,7 +205,9 @@ export const sadgotchuSlice = createSlice({
             state.isFinalStage = action.payload;
         },
         incrementAgeBy: (state, action) => {
-            let updatedAge = parseFloat((state.age + action.payload).toFixed(12)); // Utiliser toFixed(12) pour contrôler la précision
+            // Vérifier si action.payload est null ou indéfini et utiliser 0.420 comme valeur par défaut
+            const ageIncrement = action.payload == null ? 0.420 : action.payload;
+            let updatedAge = parseFloat((state.age + ageIncrement).toFixed(12)); // Utiliser toFixed(12) pour contrôler la précision
             state.age = updatedAge;
         },
         setSadGotchu: (state, action) => {

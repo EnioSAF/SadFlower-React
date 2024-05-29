@@ -24,7 +24,7 @@ import { evolutionTree, determineNextStage } from './EvolutionTree';
 
 import styles from "styles/system32/applications/SadGotchu/tamagotchi.module.sass";
 
-    // Sprites pour chaque stade
+    // Sprites pour chaque stade en export pour d'autres composants
     export const sprites = {
         oeuf: '/SadGotchu/tamas/egg(enio).png',
         bébé: '/SadGotchu/tamas/baby/baby(enio).png',
