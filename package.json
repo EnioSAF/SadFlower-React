@@ -13,8 +13,6 @@
     "@react-spring/parallax": "^9.7.3",
     "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^2.2.3",
-    "@tsparticles/all": "^3.2.1",
-    "@tsparticles/react": "^3.0.0",
     "@vercel/analytics": "^1.1.1",
     "@vercel/speed-insights": "^1.0.0",
     "98.css": "^0.1.20",
@@ -53,7 +51,10 @@
     "typeit-react": "^2.7.0"
   },
   "devDependencies": {
+    "@types/node": "^20.14.3",
+    "@types/react": "^18.3.3",
     "dotenv": "^16.3.1",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "typescript": "^5.4.5"
   }
 }

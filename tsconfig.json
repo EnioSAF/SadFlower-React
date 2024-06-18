@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": true,
+    "checkJs": true,
+    /* Emit */
+    "outDir": "./dist",
+    "sourceMap": true,
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    /* Type Checking */
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "noEmit": true,
+    "incremental": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    /* Base URL and Path Aliases */
+    "baseUrl": ".", // This should be the base directory that contains your 'src' and 'components' folders
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/pages/*": ["pages/*"],
+      "@/styles/*": ["styles/*"],
+      "@/utils/*": ["utils/*"],
+      "@/src/*": ["src/*"],
+      "@/context/*": ["context/*"]
+      // Ajoutez d'autres alias nécessaires selon votre structure de projet
+    }
+  },
+  "include": [
+    "src/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
