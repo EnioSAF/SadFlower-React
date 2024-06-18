@@ -1,4 +1,5 @@
-/** @type {import('next').NextConfig} */
+const path = require('path');
+
 const nextConfig = {
   env: {
     OPENAI_KEY: process.env.REACT_APP_OPENAI_API_KEY,
@@ -7,6 +8,10 @@ const nextConfig = {
   images: {
     domains: ["sadflower-image-database.s3.eu-west-3.amazonaws.com"],
     loader: "default",
+  },
+  webpack(config) {
+    config.resolve.alias['@'] = path.resolve(__dirname);
+    return config;
   },
 };
 
