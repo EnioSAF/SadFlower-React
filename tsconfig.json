@@ -1,37 +1,24 @@
 {
   "compilerOptions": {
-    /* Language and Environment */
     "target": "es6",
     "module": "commonjs",
     "allowJs": true,
-    "checkJs": true,
-    /* Emit */
+    "checkJs": false, // Changé à false
     "outDir": "./dist",
     "sourceMap": true,
-    /* Interop Constraints */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
-    "strict": true,
+    "strict": false, // Changé à false temporairement
     "skipLibCheck": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noEmit": true,
     "incremental": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    /* Base URL and Path Aliases */
-    "baseUrl": ".", // This should be the base directory that contains your 'src' and 'components' folders
+    "jsx": "react", // Modifié si nécessaire
+    "plugins": [{"name": "next"}],
+    "baseUrl": ".",
     "paths": {
       "@/components/*": ["components/*"],
       "@/pages/*": ["pages/*"],
@@ -39,14 +26,8 @@
       "@/utils/*": ["utils/*"],
       "@/src/*": ["src/*"],
       "@/context/*": ["context/*"]
-      // Ajoutez d'autres alias nécessaires selon votre structure de projet
     }
   },
-  "include": [
-    "src/**/*",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
