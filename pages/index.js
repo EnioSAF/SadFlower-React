@@ -14,6 +14,7 @@ import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 import TamagotchiWidget from "@/components/system32/applications/SadGotchu/Tamagotchi-Widget";
+import Testimonium from "./Testimonium";
 
 import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
 

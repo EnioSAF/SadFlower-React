@@ -10,3 +10,6 @@
 [ ] Faire une application musique (trouver idées)
 [ ] Faire un forum
 [ ] Gamifier le site (trouver idées)
+
+[ ] Faire un formulaire pour les racistes/sexistes/homophobes pour les inviter à se plaindre, mais quand ils écrivent, lettre par lettre, sa écrit les paroles de Never Give You Up.
+Leur proposer de partager sur les réseaux "Je suis mauvais pour l'humanité et je me suis fait RickRoll par Enio SadFlower !".
