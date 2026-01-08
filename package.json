@@ -30,7 +30,6 @@
     "next": "^14.2.15",
     "next-auth": "^4.24.5",
     "normalize.css": "^8.0.1",
-    "npm": "^10.4.0",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.0",
@@ -48,7 +47,7 @@
     "redux-persist": "^6.0.0",
     "sass": "^1.66.1",
     "tailwindcss": "3.3.3",
-    "typeit-react": "^2.7.0"
+    "typeit-react": "2.7.7"
   },
   "devDependencies": {
     "@types/node": "^20.14.3",
