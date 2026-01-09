@@ -1,8 +1,22 @@
 {
   "workbench.colorCustomizations": {
-    "activityBar.background": "#36004b",
-    "titleBar.activeBackground": "#2e2433",
-    "titleBar.activeForeground": "#d5afeb"
+    "activityBar.background": "#9068ac",
+    "titleBar.activeBackground": "#765091",
+    "titleBar.activeForeground": "#e7e7e7",
+    "activityBar.activeBackground": "#9068ac",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#c6b398",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#9068ac",
+    "statusBar.background": "#765091",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#9068ac",
+    "statusBarItem.remoteBackground": "#765091",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#76509199",
+    "titleBar.inactiveForeground": "#e7e7e799"
   },
   "cmake.configureOnOpen": false,
   "deepscan.enable": true,
