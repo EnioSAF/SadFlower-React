@@ -1,21 +1,21 @@
 {
   "workbench.colorCustomizations": {
-    "activityBar.background": "#68acab",
-    "titleBar.activeBackground": "#509190",
+    "activityBar.background": "#9068ac",
+    "titleBar.activeBackground": "#765091",
     "titleBar.activeForeground": "#e7e7e7",
-    "activityBar.activeBackground": "#68acab",
-    "activityBar.foreground": "#15202b",
-    "activityBar.inactiveForeground": "#15202b99",
-    "activityBarBadge.background": "#8f4f90",
-    "activityBarBadge.foreground": "#e7e7e7",
+    "activityBar.activeBackground": "#9068ac",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#c6b398",
+    "activityBarBadge.foreground": "#15202b",
     "commandCenter.border": "#e7e7e799",
-    "sash.hoverBorder": "#68acab",
-    "statusBar.background": "#509190",
+    "sash.hoverBorder": "#9068ac",
+    "statusBar.background": "#765091",
     "statusBar.foreground": "#e7e7e7",
-    "statusBarItem.hoverBackground": "#68acab",
-    "statusBarItem.remoteBackground": "#509190",
+    "statusBarItem.hoverBackground": "#9068ac",
+    "statusBarItem.remoteBackground": "#765091",
     "statusBarItem.remoteForeground": "#e7e7e7",
-    "titleBar.inactiveBackground": "#50919099",
+    "titleBar.inactiveBackground": "#76509199",
     "titleBar.inactiveForeground": "#e7e7e799"
 },
   "cmake.configureOnOpen": false,
@@ -26,5 +26,5 @@
   "Codegeex.Chat.LanguagePreference": "English",
   "Codegeex.Comment.LanguagePreference": "English",
 "Codegeex.SidebarUI.LanguagePreference": "English",
-"peacock.color": "#509190"
+"peacock.color": "#765091"
 }
