@@ -17,7 +17,7 @@
     "statusBarItem.remoteForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#76509199",
     "titleBar.inactiveForeground": "#e7e7e799"
-},
+  },
   "cmake.configureOnOpen": false,
   "deepscan.enable": true,
   "todo-tree.tree.showBadges": true,
