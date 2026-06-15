@@ -27,8 +27,6 @@ const ChatGPTModule = ({ username, maxTokens }) => {
       { role: "user", content: input },
     ]);
     try {
-      const apiUrl = "https://api.openai.com/v1/chat/completions";
-
       const messages = [
         { role: "system", content: chatGptConfig },
         { role: "user", content: input },
@@ -37,17 +35,11 @@ const ChatGPTModule = ({ username, maxTokens }) => {
       setIsTyping(true);
 
       const apiResponse = await axios.post(
-        apiUrl,
+        "/api/chat",
         {
           messages,
           max_tokens: Math.min(responseTokenLimit, maxTokens - tokensUsed),
           model: "gpt-3.5-turbo",
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.OPENAI_KEY}`,
-          },
         },
       );
 
