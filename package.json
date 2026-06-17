@@ -27,7 +27,7 @@
     "html-react-parser": "^5.1.0",
     "install": "^0.13.0",
     "intl": "^1.2.5",
-    "next": "^14.2.35",
+    "next": "^16.1.6",
     "next-auth": "^4.24.5",
     "normalize.css": "^8.0.1",
     "postcss": "^8.4.31",
