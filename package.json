@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:visual": "playwright test"
   },
   "dependencies": {
     "@react-spring/parallax": "^9.7.3",
@@ -50,6 +51,7 @@
     "typeit-react": "2.7.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.0",
     "@types/node": "^20.14.3",
     "@types/react": "^18.3.3",
     "dotenv": "^16.3.1",

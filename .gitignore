@@ -7,6 +7,9 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
+/blob-report/
 
 # next.js
 /.next/
@@ -36,3 +39,21 @@ yarn-error.log*
 next-env.d.ts
 
 # Bot-Brain
+
+# AI / agent tooling
+.agents/
+.codex/
+.claude/
+.cursor/
+.windsurf/
+.continue/
+.aider*
+.roo/
+.cline/
+.kilocode/
+.gemini/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.vscode/sessions.json
+session-*.md
