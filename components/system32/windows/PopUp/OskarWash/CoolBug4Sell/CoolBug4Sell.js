@@ -120,10 +120,10 @@ const CoolBug4Sell = ({ closeWindow }) => {
                         </div>
                         <div className="button-CoolBug4Sell" ref={faceRef}>
                             <a
-                                href="https://www.instagram.com/p/C4ECUrhLYqm/?img_index=1"
+                                href="https://www.instagram.com/p/C29ple7CNOa/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                onTouchEnd={() => window.open("https://www.instagram.com/p/C4ECUrhLYqm/?img_index=1", "_blank")}
+                                onTouchEnd={() => window.open("https://www.instagram.com/p/C29ple7CNOa/", "_blank")}
                             >
                                 <Image
                                     className={'button-CoolBug4Sell'}
