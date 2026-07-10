@@ -160,26 +160,28 @@ function HomePage() {
               height={1080}
             />
             <BootsScreen />
-            <Icon
-              title='WhoAmI.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Help/Help book.ico'
-              onClick={() => handleIconClick("Whoami")}
-            />
-            <Icon
-              title='Articles.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
-              onClick={() => handleIconClick("Articles")}
-            />
-            <Icon
-              title='Twitch.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
-              onClick={() => handleIconClick("TwitchWindow")}
-            />
-            <Icon
-              title='MyWork.exe'
-              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Programs/Web-document program.ico'
-              onClick={() => handleIconClick("MyWork")}
-            />
+            <div className='desktop-icons'>
+              <Icon
+                title='WhoAmI.exe'
+                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Help/Help book.ico'
+                onClick={() => handleIconClick("Whoami")}
+              />
+              <Icon
+                title='MyWork.exe'
+                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Programs/Web-document program.ico'
+                onClick={() => handleIconClick("MyWork")}
+              />
+              <Icon
+                title='Articles.exe'
+                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
+                onClick={() => handleIconClick("Articles")}
+              />
+              <Icon
+                title='Twitch.exe'
+                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
+                onClick={() => handleIconClick("TwitchWindow")}
+              />
+            </div>
             <>
               <PopUpManager />
             </>
