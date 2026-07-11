@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useZIndex } from '@/components/Tools/ZIndexContext';
 import { SERVICES, buildRequestPayload, isFormValid } from './myWorkData';
+import '/styles/system32/windows/window.sass';
 import '/styles/system32/windows/MyWork/mywork.sass';
 import '98.css';
 
@@ -18,7 +19,16 @@ export default function MyWork({ closeWindow }) {
   const [result, setResult] = useState(null);
   const selectedService = SERVICES.find((service) => service.code === selectedCode) || SERVICES[0];
   const visibleServices = useMemo(() => SERVICES.filter((service) => service.category === category), [category]);
-  const mobile = typeof window !== 'undefined' && window.innerWidth <= 600;
+  const isMobileScreen = () => window.innerWidth <= 600;
+  const getCenterPosition = () => {
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    return {
+      x: (windowWidth - 350) / 2,
+      y: (windowHeight - 220) / 2,
+    };
+  };
+  const mobile = isMobileScreen();
   const earliestDate = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
 
   const update = (key, value) => setForm((current) => ({ ...current, [key]: value }));
@@ -43,7 +53,7 @@ export default function MyWork({ closeWindow }) {
     }
   };
 
-  return <Rnd className="window mywork-window" style={{ zIndex }} default={{ x: mobile ? 0 : 80, y: mobile ? 0 : 45, width: 760, height: 650 }} minWidth={350} minHeight={260} disableDragging={mobile} onClick={!mobile ? () => setZIndex(bringToFront()) : undefined}>
+  return <Rnd className="window mywork-window" style={{ zIndex }} default={{ ...getCenterPosition(), width: 760, height: 650 }} minWidth={350} minHeight={220} disableDragging={mobile} position={mobile} onClick={!mobile ? () => setZIndex(bringToFront()) : undefined}>
     <div className="title-bar">
       <div className="title-bar-text">MyWork.exe</div>
       <div className="title-bar-controls"><button aria-label="Minimize" /><button aria-label="Maximize" /><button aria-label="Close" onClick={closeWindow} /></div>
