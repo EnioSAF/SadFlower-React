@@ -22,4 +22,16 @@ test.describe("SadFlower visual smoke", () => {
     await page.getByRole("button", { name: /Ask about it/ }).first().click();
     await expect(page.getByText("Quick quote / reservation")).toBeVisible();
   });
+
+  test("Articles icon renders blog titles returned by Strapi", async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("hasVisited", "true");
+    });
+    await page.goto("/");
+    await page.getByAltText("Articles.exe").click({ force: true });
+
+    await expect(page.getByText("La Crème")).toBeVisible();
+    await expect(page.getByText("DevLog 1 : Project EREM")).toBeVisible();
+  });
 });
