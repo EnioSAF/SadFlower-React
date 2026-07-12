@@ -31,19 +31,6 @@ const ArticleExe = ({ onClose }) => {
     setZIndex(newZIndex); // Met à jour le Z-index local avec la nouvelle valeur
   };
 
-  // Strapi 4 nested fields under `attributes`; Strapi 5 returns flattened documents.
-  // Normalize both shapes so the existing article windows remain compatible.
-  const normalizeBlogsResponse = (response) => {
-    const data = Array.isArray(response?.data)
-      ? response.data.map((blog) => ({
-          ...blog,
-          attributes: blog?.attributes || blog,
-        }))
-      : [];
-
-    return { ...response, data };
-  };
-
   // Pour aller chercher les articles
   useEffect(() => {
     const fetchData = async () => {
@@ -51,17 +38,16 @@ const ArticleExe = ({ onClose }) => {
         fetchBlogs("filters[IsFeatured][$eq]=true"),
         fetchBlogs("filters[IsFeatured][$eq]=false"),
       ]);
-      const normalizedFeatured = normalizeBlogsResponse(featuredBlogsResponse);
-      const normalizedBlogs = normalizeBlogsResponse(blogsResponse);
-      const featuredBlogsData = normalizedFeatured.data;
-      const blogsData = normalizedBlogs.data;
+      // Supposons que fetchBlogs renvoie un objet avec un champ data contenant les articles
+      const featuredBlogsData = featuredBlogsResponse.data;
+      const blogsData = blogsResponse.data;
 
-      setFeaturedBlogs(normalizedFeatured);
-      setBlogs(normalizedBlogs);
+      setFeaturedBlogs(featuredBlogsResponse);
+      setBlogs(blogsResponse);
 
       // Extraction et mise en place des catégories uniques
-      const featuredCategories = [...new Set(featuredBlogsData.map(blog => blog.attributes?.Category).filter(Boolean))];
-      const articleCategories = [...new Set(blogsData.map(blog => blog.attributes?.Category).filter(Boolean))];
+      const featuredCategories = [...new Set(featuredBlogsData.map(blog => blog.attributes.Category))];
+      const articleCategories = [...new Set(blogsData.map(blog => blog.attributes.Category))];
       setCategoriesFeatured(['All', ...featuredCategories]);
       setCategoriesArticles(['All', ...articleCategories]);
     };
@@ -95,7 +81,7 @@ const ArticleExe = ({ onClose }) => {
     const start = (currentPage - 1) * articlesPerPage;
     let filteredData = currentCategory === 'All'
       ? data
-      : data.filter(blog => blog.attributes?.Category === currentCategory);
+      : data.filter(blog => blog.attributes.Category === currentCategory);
 
     const paginatedData = filteredData.slice(start, start + articlesPerPage);
 

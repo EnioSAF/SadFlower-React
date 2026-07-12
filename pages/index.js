@@ -13,7 +13,6 @@ import AboutPage from "@/components/system32/windows/aboutpage";
 import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
-import MyWork from "@/components/system32/windows/MyWork/mywork";
 import TamagotchiWidget from "@/components/system32/applications/SadGotchu/Tamagotchi-Widget";
 
 import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
@@ -75,7 +74,6 @@ function HomePage() {
   const [isArticleExeOpen, setIsArticleExeOpen] = useState(false);
   const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
   const [isWhoamiOpen, setWhoamiOpen] = useState(false);
-  const [isMyWorkOpen, setIsMyWorkOpen] = useState(false);
 
   // Fonction pour le SignIn et SignUp et EditProfile et UserList
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -132,9 +130,6 @@ function HomePage() {
       case "Whoami":
         setWhoamiOpen(true);
         break;
-      case "MyWork":
-        setIsMyWorkOpen(true);
-        break;
       case "SignIn":
         user ? setIsUserInfoOpen(true) : setIsSignInOpen(true);
         break;
@@ -160,28 +155,21 @@ function HomePage() {
               height={1080}
             />
             <BootsScreen />
-            <div className='desktop-icons'>
-              <Icon
-                title='WhoAmI.exe'
-                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Help/Help book.ico'
-                onClick={() => handleIconClick("Whoami")}
-              />
-              <Icon
-                title='MyWork.exe'
-                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Programs/Web-document program.ico'
-                onClick={() => handleIconClick("MyWork")}
-              />
-              <Icon
-                title='Articles.exe'
-                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
-                onClick={() => handleIconClick("Articles")}
-              />
-              <Icon
-                title='Twitch.exe'
-                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
-                onClick={() => handleIconClick("TwitchWindow")}
-              />
-            </div>
+            <Icon
+              title='WhoAmI.exe'
+              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Help/Help book.ico'
+              onClick={() => handleIconClick("Whoami")}
+            />
+            <Icon
+              title='Articles.exe'
+              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Folders/Folder catalog.ico'
+              onClick={() => handleIconClick("Articles")}
+            />
+            <Icon
+              title='Twitch.exe'
+              iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
+              onClick={() => handleIconClick("TwitchWindow")}
+            />
             <>
               <PopUpManager />
             </>
@@ -207,9 +195,6 @@ function HomePage() {
                   closeWindow={() => setWhoamiOpen(false)}
                   username={user?.username}
                 />
-              )}
-              {isMyWorkOpen && (
-                <MyWork closeWindow={() => setIsMyWorkOpen(false)} />
               )}
               {!user && isSignInOpen && !isSignUpOpen && (
                 <SignIn

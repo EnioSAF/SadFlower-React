@@ -13,16 +13,6 @@ test.describe("SadFlower visual smoke", () => {
 
     expect(screenshot.byteLength).toBeGreaterThan(10_000);
   });
-
-  test("MyWork icon opens faux browser window", async ({ page }) => {
-    await page.goto("/");
-    await page.getByAltText("MyWork.exe").click();
-    await expect(page.getByText("MyWork.exe", { exact: true }).last()).toBeVisible();
-    await expect(page.getByText("WELCOME TO MY WORK")).toBeVisible();
-    await page.getByRole("button", { name: /Ask about it/ }).first().click();
-    await expect(page.getByText("Quick quote / reservation")).toBeVisible();
-  });
-
   test("Articles icon renders blog titles returned by Strapi", async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem("version", "1.0.2");
