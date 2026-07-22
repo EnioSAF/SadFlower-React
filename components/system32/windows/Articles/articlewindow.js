@@ -215,11 +215,11 @@ const ArticleExe = ({ onClose }) => {
               <button onClick={() => changeArticlesPage(Math.min(totalArticlesPages, currentPageArticles + 1))}>Suivant</button>
             </div>
           </div>
-          <div className='status-bar'>
-            <p className='status-bar-field'>Articles</p>
-            <p className='status-bar-field'>ReadMode : on</p>
-            <p className='status-bar-field'>CPU Usage: 10%</p>
-          </div>
+        </div>
+        <div className='status-bar'>
+          <p className='status-bar-field'>Articles</p>
+          <p className='status-bar-field'>ReadMode : on</p>
+          <p className='status-bar-field'>CPU Usage: 10%</p>
         </div>
       </Rnd>
 

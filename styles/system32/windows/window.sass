@@ -1,24 +1,37 @@
 .window
     position: relative
-    overflow: hidden // Empêche le contenu de déborder de la fenêtre
+    display: grid !important
+    grid-template-rows: max-content minmax(0, 1fr) max-content !important
+    overflow: hidden !important // Empêche le contenu de déborder de la fenêtre
+    background-color: #C0C0C0
+    box-sizing: border-box
+
+    > .title-bar
+        grid-row: 1
 
 .window-body
-    height: calc(100% - 80px)
-    overflow: auto // Permet de scroll dans la fenêtre
+    grid-row: 2
+    min-height: 0 !important
+    max-height: 100% !important
+    min-width: 0
+    height: auto !important
+    overflow: auto !important // Permet de scroll dans la fenêtre
     background-color: #C0C0C0
     padding: 9px
+    box-sizing: border-box
+    contain: paint
 
 
 .status-bar
-    position: absolute
-    bottom: 5px
-    width: 90%
+    grid-row: 3
+    position: static !important
+    width: auto !important
+    height: auto !important
     display: flex
     justify-content: space-between
     padding: 5px
-    z-index: 0
-    margin-bottom: 5px
-    background-color: #C0C0C0
-
-    @media (max-width: 600px)
-        bottom: -34px
+    z-index: 10 !important
+    margin: 5px
+    background-color: #C0C0C0 !important
+    box-sizing: border-box
+    align-self: stretch

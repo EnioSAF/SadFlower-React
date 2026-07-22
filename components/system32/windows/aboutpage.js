@@ -6,6 +6,7 @@ import Tilt from "react-next-tilt";
 
 import "/styles/utils/style.module.sass";
 import "98.css";
+import "/styles/system32/windows/window.sass";
 import "/styles/system32/windows/aboutpage.sass";
 
 const AboutPage = ({ closeWindow }) => {

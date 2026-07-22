@@ -5,6 +5,7 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import "/styles/utils/style.module.sass";
 import "styles/system32/windows/PopUp/OskarWash/DiveIn/divein.sass";
+import "/styles/system32/windows/window.sass";
 
 
 const DiveIn = ({ closeWindow }) => {
