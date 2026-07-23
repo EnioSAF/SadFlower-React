@@ -462,9 +462,9 @@
 .bookmark-tab
     position: absolute
     top: calc(78px + var(--bookmark-index) * 39px)
-    // Half the tab sits beyond its own sheet. Its parent leaf now provides
-    // the depth; no independent rail offset belongs here.
-    right: -26px
+    // Only a small grip escapes its own sheet. The page stack, rather than a
+    // free-floating rail, determines where every tab is visible.
+    right: -8px
     z-index: 4
     width: 52px
     min-width: 0
@@ -495,14 +495,6 @@
     &.bookmark-back
         transform: rotateY(180deg) translateZ(5px)
 
-// A front-page tab becomes the left-side tab after its leaf rotates 180°.
-// Invert only its Z position then, so it stays in front of that passed page.
-.book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
-    // A turned front page uses the former right edge as its outer left edge.
-    // The tab protrudes only 10px past that *own sheet*, not past the cover.
-    right: -62px
-    transform: translateZ(-5px)
-
     &.is-compact-bookmark
         width: 16px
         padding: 0
@@ -517,6 +509,14 @@
     &:focus-visible
         outline: 2px solid #f1d78d
         outline-offset: 2px
+
+// A front-page tab becomes the left-side tab after its leaf rotates 180°.
+// Invert only its Z position then, so it stays in front of that passed page.
+.book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
+    // A turned front page uses the former right edge as its outer left edge.
+    // Its compact reverse likewise leaves only an 8px grip outside.
+    right: -24px
+    transform: translateZ(-5px)
 
 .book-leaf.is-active-turn .bookmark-tab span
     color: transparent
