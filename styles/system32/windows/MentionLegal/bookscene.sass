@@ -145,10 +145,12 @@
     &.is-unturned
         // Right stack: current sheet sits on top; deeper sheets step out from
         // underneath it.  Tabs inherit this real sheet depth.
-        transform: translateX(calc(var(--leaf-depth) * -2.2px)) translateY(calc(var(--leaf-depth) * -.8px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
+        transform: translateX(calc(var(--leaf-depth) * -3.5px)) translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
 
     &.is-turned
-        transform: translateX(calc(var(--leaf-depth) * -.9px)) translateY(calc(var(--leaf-depth) * .55px)) translateZ(calc(var(--leaf-depth) * .35px)) rotateY(-180deg)
+        // Mirror the right stack after the leaf crosses the spine: newer
+        // turned leaves rest nearer the spine, older ones remain underneath.
+        transform: translateX(calc(var(--leaf-depth) * 3.5px)) translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(-180deg)
 
     &:focus
         outline: 0
@@ -496,11 +498,9 @@
 // A front-page tab becomes the left-side tab after its leaf rotates 180°.
 // Invert only its Z position then, so it stays in front of that passed page.
 .book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
-    // After its parent turns, the right edge is the outside left edge of the
-    // book. Pull the tab back over the paper stack instead of leaving it
-    // behind the front cover.
-    right: -48px
-    z-index: 30
+    // A turned front page uses the former right edge as its outer left edge.
+    // The tab protrudes only 10px past that *own sheet*, not past the cover.
+    right: -62px
     transform: translateZ(-5px)
 
     &.is-compact-bookmark
