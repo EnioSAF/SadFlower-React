@@ -1,0 +1,570 @@
+.legal-scene-backdrop
+    position: fixed
+    z-index: 1000
+    inset: 0
+    overflow: hidden
+    background: radial-gradient(circle at 50% 45%, rgba(255, 222, 158, .12), rgba(0, 0, 0, .42))
+    font-family: Georgia, 'Times New Roman', serif
+
+.mention-book-scene
+    position: fixed
+    width: min(940px, 90vw)
+    height: min(680px, 84vh)
+    min-width: 720px
+    min-height: 500px
+    user-select: none
+    perspective: 2200px
+
+.book-close
+    position: absolute
+    z-index: 200
+    top: 29px
+    right: 15px
+    width: 27px
+    height: 27px
+    border: 2px solid #70452f
+    border-radius: 3px 10px 3px 8px
+    color: #5b2c20
+    background: #d4ad7c
+    box-shadow: 2px 2px 0 rgba(28, 12, 8, .45), inset 0 0 0 1px #f1d5a7
+    font-family: Arial, sans-serif
+    font-size: 18px
+    line-height: 18px
+    cursor: pointer
+    transform: translateZ(140px)
+
+.book-object
+    position: absolute
+    top: 18px
+    left: 0
+    width: 100%
+    height: calc(100% - 36px)
+    transform-style: preserve-3d
+    transition: transform .7s cubic-bezier(.22, .75, .2, 1)
+
+.pose-closed-front .book-object
+    transform: translateX(-25%) scale(.94) rotateZ(-1deg)
+
+.pose-open-book .book-object
+    transform: translateX(0) scale(1) rotateZ(0)
+
+.pose-closed-back .book-object
+    transform: translateX(25%) scale(.94) rotateZ(1deg)
+
+.pose-closed-back .book-close
+    right: auto
+    left: 15px
+
+.book-board
+    position: absolute
+    z-index: 0
+    top: 23px
+    bottom: 13px
+    width: 50%
+    border: 9px solid #3c1c17
+    background: linear-gradient(135deg, #965f3f, #54291f 55%, #a8734f)
+    box-shadow: 0 12px 0 rgba(34, 15, 10, .65), inset 0 0 0 4px #c38d61
+    transition: opacity .35s ease
+
+.board-left
+    left: 0
+    border-radius: 17px 4px 6px 14px
+
+.board-right
+    right: 0
+    border-radius: 4px 17px 14px 6px
+
+.pose-closed-front .board-left
+    opacity: 0
+
+.pose-closed-back .board-right
+    opacity: 0
+
+.book-spine
+    position: absolute
+    z-index: 90
+    top: 20px
+    bottom: 8px
+    left: 50%
+    width: 24px
+    transform: translateX(-50%)
+    background: linear-gradient(90deg, rgba(45, 19, 13, .72), #9b6443 44%, #d4a06c 50%, #75442e 57%, rgba(45, 19, 13, .75))
+    box-shadow: 0 7px 8px rgba(34, 14, 8, .48)
+    pointer-events: none
+    transition: opacity .3s ease
+
+.pose-closed-front .book-spine,
+.pose-closed-back .book-spine
+    opacity: .35
+
+.paper-stack
+    position: absolute
+    z-index: 2
+    top: 39px
+    bottom: 29px
+    width: calc(50% - 25px)
+    border: 3px solid #906b46
+    background: repeating-linear-gradient(to bottom, #f5e2b9 0, #f5e2b9 3px, #cba778 4px, #f8e8c8 5px)
+    pointer-events: none
+
+.stack-left
+    left: 17px
+    border-radius: 10px 2px 7px 10px
+    border-bottom-width: calc(3px + var(--left-paper-count) * .65px)
+    transform: translateY(calc(var(--left-paper-count) * .22px))
+    box-shadow: calc(var(--left-paper-count) * -.28px) 5px 0 #8a6040
+
+.stack-right
+    right: 17px
+    border-radius: 2px 10px 10px 7px
+    border-bottom-width: calc(3px + var(--right-paper-count) * .65px)
+    transform: translateY(calc(var(--right-paper-count) * .22px))
+    box-shadow: calc(var(--right-paper-count) * .28px) 5px 0 #8a6040
+
+.pose-closed-front .stack-left,
+.pose-closed-back .stack-right
+    opacity: 0
+    visibility: hidden
+
+.boundary-hide-left .stack-left,
+.boundary-hide-right .stack-right
+    opacity: 0
+    visibility: hidden
+
+.book-leaf
+    position: absolute
+    top: 36px
+    bottom: 31px
+    left: 50%
+    width: calc(50% - 25px)
+    transform-style: preserve-3d
+    transform-origin: left center
+    transition: transform var(--leaf-turn-duration, .56s) cubic-bezier(.42, 0, .18, 1), filter .28s ease
+    will-change: transform
+
+    &.is-unturned
+        // Right stack: current sheet sits on top; deeper sheets step out from
+        // underneath it.  Tabs inherit this real sheet depth.
+        transform: translateX(calc(var(--leaf-depth) * -2.2px)) translateY(calc(var(--leaf-depth) * -.8px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
+
+    &.is-turned
+        transform: translateX(calc(var(--leaf-depth) * -.9px)) translateY(calc(var(--leaf-depth) * .55px)) translateZ(calc(var(--leaf-depth) * .35px)) rotateY(-180deg)
+
+    &:focus
+        outline: 0
+
+    &[role='button']:focus-visible .leaf-front,
+    &[role='button']:focus-visible .leaf-back
+        box-shadow: inset 0 0 0 3px #f0c776
+
+.leaf-paper::before
+    position: absolute
+    z-index: 1
+    inset: 1px -1px -2px 1px
+    border: 1px solid rgba(152, 109, 69, .52)
+    border-radius: 3px 9px 9px 3px
+    background: #ead2a6
+    box-shadow: 1px 2px 0 rgba(177, 129, 78, .68)
+    content: ''
+    backface-visibility: hidden
+    -webkit-backface-visibility: hidden
+
+.leaf-front-cover,
+.leaf-back-cover
+    top: 25px
+    bottom: 14px
+    width: calc(50% - 7px)
+    transition-timing-function: cubic-bezier(.36, .02, .18, 1)
+
+// A turning leaf must cross its edge exactly halfway through its animation.
+// That lets the visible face hand over at 90deg: no early disappearance and
+// no mirrored face beyond the edge.
+.book-leaf.is-active-turn
+    transition-timing-function: linear
+
+.leaf-face
+    position: absolute
+    inset: 0
+    visibility: visible
+    overflow: auto
+    border: 2px solid #b88d61
+    border-radius: 3px 9px 9px 3px
+    color: #3d291b
+    background: linear-gradient(90deg, #e5c99a, #f8e8c5 7%, #f6e4bd 96%, #d5b586)
+    box-shadow: inset 0 0 0 2px rgba(255, 248, 218, .6), inset 8px 0 12px rgba(96, 54, 28, .12)
+    backface-visibility: hidden
+    -webkit-backface-visibility: hidden
+    transform-style: preserve-3d
+    pointer-events: none
+    z-index: 2
+
+    &.is-visible-face
+        visibility: visible
+        pointer-events: auto
+
+    &::after
+        position: absolute
+        inset: 9px
+        border: 1px solid rgba(140, 91, 53, .24)
+        content: ''
+        pointer-events: none
+
+.leaf-back
+    transform: rotateY(180deg)
+    border-radius: 9px 3px 3px 9px
+    background: linear-gradient(270deg, #e5c99a, #f8e8c5 7%, #f6e4bd 96%, #d5b586)
+    box-shadow: inset 0 0 0 2px rgba(255, 248, 218, .6), inset -8px 0 12px rgba(96, 54, 28, .12)
+.book-leaf.is-active-turn .leaf-face
+    pointer-events: none
+
+.leaf-front-cover .leaf-front,
+.leaf-back-cover .leaf-back
+    overflow: hidden
+    border: 10px solid #3b1914
+    border-radius: 7px 18px 15px 6px
+    color: #f5dfae
+    background: linear-gradient(135deg, #9d6240, #5a2b20 48%, #a86f49)
+    box-shadow: inset 0 0 0 4px #ca9561, inset 0 0 0 8px #431c15
+
+    &::after
+        inset: 21px
+        border: 3px double #d5a774
+
+.leaf-front-cover .leaf-back,
+.leaf-back-cover .leaf-front
+    border: 9px solid #4a241b
+    background: linear-gradient(135deg, #b47d55, #70412d)
+    box-shadow: inset 0 0 0 4px #d3a370
+
+.cover-copy
+    position: relative
+    z-index: 2
+    display: flex
+    height: 100%
+    padding: 55px 42px
+    box-sizing: border-box
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    text-align: center
+    text-shadow: 2px 2px #32110d
+
+    small
+        font-family: 'Courier New', monospace
+        letter-spacing: 4px
+
+    h1
+        margin: 22px 0
+        font-size: clamp(42px, 6vw, 70px)
+        line-height: .92
+
+    h2
+        margin: 20px 0
+        font-size: clamp(30px, 4vw, 48px)
+
+    span, p
+        max-width: 280px
+        font-family: Arial, sans-serif
+        font-size: 14px
+
+    em
+        margin-top: auto
+        font-size: 12px
+
+.back-copy
+    transform: rotateY(0deg)
+
+.inside-cover-copy
+    position: relative
+    z-index: 2
+    display: grid
+    height: 100%
+    place-content: center
+    gap: 18px
+    text-align: center
+
+    small
+        color: #f0cf9c
+        font-family: 'Courier New', monospace
+        letter-spacing: 2px
+
+.bookplate
+    padding: 25px
+    border: 4px double #f0c58e
+    color: #fff0cd
+    background: rgba(51, 20, 14, .26)
+    box-shadow: inset 0 0 0 2px rgba(255, 229, 180, .18)
+    font-weight: bold
+    letter-spacing: 3px
+
+.title-page,
+.quote-page,
+.contents-page,
+.instructions-page,
+.legal-paper-content,
+.blank-page
+    position: relative
+    z-index: 2
+    min-height: 100%
+    padding: clamp(28px, 4vw, 48px)
+    box-sizing: border-box
+
+.title-page
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    text-align: center
+
+    small
+        color: #8a5a38
+        font-family: 'Courier New', monospace
+        letter-spacing: 2px
+
+    h1
+        margin: 28px 0 16px
+        color: #61321f
+        font-size: clamp(34px, 5vw, 58px)
+        line-height: .96
+
+    p
+        max-width: 310px
+        font-family: Arial, sans-serif
+        line-height: 1.5
+
+    span
+        margin-top: 35px
+        color: #8a5a38
+
+.quote-page
+    display: flex
+    margin: 0
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    text-align: center
+
+    p
+        color: #623b25
+        font-size: clamp(22px, 3vw, 34px)
+        font-style: italic
+        line-height: 1.3
+
+    cite
+        color: #906746
+        font-family: Arial, sans-serif
+        font-size: 12px
+
+.contents-page
+    h1
+        margin: 0 0 22px
+        color: #62351f
+        font-size: 36px
+
+    ol
+        display: grid
+        gap: 7px
+        margin: 0
+        padding: 0
+        list-style: none
+
+    button
+        display: grid
+        width: 100%
+        grid-template-columns: 8px 65px 1fr
+        align-items: center
+        gap: 9px
+        padding: 7px
+        border: 0
+        border-bottom: 1px dotted #9b7451
+        color: #4c2e1d
+        background: transparent
+        text-align: left
+        cursor: pointer
+
+        &:hover
+            background: rgba(139, 88, 48, .1)
+
+        span
+            width: 7px
+            height: 20px
+
+        em
+            font-family: Arial, sans-serif
+            font-size: 11px
+
+.instructions-page
+    h2
+        margin-top: 0
+        color: #62351f
+        font-size: 28px
+
+    ul
+        display: grid
+        gap: 20px
+        padding-left: 20px
+        font-family: Arial, sans-serif
+        line-height: 1.45
+
+.legal-paper-content
+    header
+        margin-bottom: 24px
+        padding-bottom: 13px
+        border-bottom: 2px solid #a77d54
+
+    header small
+        color: #8c5b38
+        font-family: 'Courier New', monospace
+        font-weight: bold
+
+    h1
+        margin: 5px 0 0
+        color: #61321f
+        font-size: clamp(25px, 3vw, 37px)
+        line-height: 1.05
+
+    section
+        margin-bottom: 22px
+
+    h2
+        margin: 0 0 7px
+        color: #6a3822
+        font-size: 19px
+
+    p
+        margin: 0
+        font-family: Arial, sans-serif
+        font-size: clamp(12px, 1.25vw, 14px)
+        line-height: 1.5
+
+.blank-page
+    display: grid
+    place-content: end center
+    color: #997453
+    font-size: 12px
+
+.folio
+    position: absolute
+    z-index: 3
+    bottom: 14px
+    color: #8c6949
+    font-family: 'Courier New', monospace
+    font-size: 10px
+
+.folio-front
+    right: 20px
+
+.folio-back
+    left: 20px
+
+.bookmark-tab
+    position: absolute
+    top: calc(78px + var(--bookmark-index) * 39px)
+    // Half the tab sits beyond its own sheet. Its parent leaf now provides
+    // the depth; no independent rail offset belongs here.
+    right: -26px
+    z-index: 4
+    width: 52px
+    min-width: 0
+    height: 28px
+    padding: 0 8px 0 2px
+    border: 1px solid rgba(69, 36, 24, .78)
+    border-radius: 2px 0 0 2px
+    color: #fff7de
+    background: linear-gradient(180deg, rgba(255, 255, 255, .22), transparent 44%), var(--bookmark-color)
+    box-shadow: inset 0 0 0 1px rgba(255, 238, 206, .26), 2px 2px 0 rgba(43, 22, 14, .25)
+    font-family: 'Courier New', monospace
+    font-size: 9px
+    font-weight: bold
+    text-align: center
+    text-shadow: 1px 1px #392017
+    cursor: pointer
+    clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%)
+    pointer-events: auto
+    transition: width .14s ease, filter .14s ease
+    // One physical tab: when its page turns left, its blank compact reverse
+    // remains visible and the clipped end mirrors with the paper.
+    backface-visibility: visible
+    -webkit-backface-visibility: visible
+
+    &.bookmark-on-leaf
+        transform: translateZ(5px)
+
+    &.bookmark-back
+        transform: rotateY(180deg) translateZ(5px)
+
+// A front-page tab becomes the left-side tab after its leaf rotates 180°.
+// Invert only its Z position then, so it stays in front of that passed page.
+.book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
+    // After its parent turns, the right edge is the outside left edge of the
+    // book. Pull the tab back over the paper stack instead of leaving it
+    // behind the front cover.
+    right: -48px
+    z-index: 30
+    transform: translateZ(-5px)
+
+    &.is-compact-bookmark
+        width: 16px
+        padding: 0
+
+        span
+            color: transparent
+
+    &:hover,
+    &:focus-visible
+        filter: brightness(1.18)
+
+    &:focus-visible
+        outline: 2px solid #f1d78d
+        outline-offset: 2px
+
+.book-leaf.is-active-turn .bookmark-tab span
+    color: transparent
+
+.pose-closed-front .bookmark-on-leaf,
+.pose-closed-back .bookmark-on-leaf
+    visibility: hidden
+
+.book-drag-zone
+    position: absolute
+    z-index: 155
+    cursor: grab
+    touch-action: none
+    transform: translateZ(110px)
+
+    &:active
+        cursor: grabbing
+
+.drag-top
+    top: 26px
+    right: 48px
+    left: 22px
+    height: 11px
+
+.drag-right
+    top: 350px
+    right: 5px
+    bottom: 25px
+    width: 11px
+
+.drag-bottom
+    right: 22px
+    bottom: 15px
+    left: 22px
+    height: 11px
+
+.drag-left
+    top: 42px
+    bottom: 25px
+    left: 5px
+    width: 11px
+
+@media (prefers-reduced-motion: reduce)
+    .book-object, .book-leaf, .bookmark-face
+        transition: none !important
+
+@media (max-width: 800px)
+    .mention-book-scene
+        min-width: 680px
+        transform: scale(.85)
+        transform-origin: top left

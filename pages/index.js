@@ -14,6 +14,8 @@ import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 import MyWork from "@/components/system32/windows/MyWork/mywork";
+import MentionLegal from "@/components/system32/windows/MentionLegal/mentionlegal";
+import { playBookSettle } from "@/components/system32/windows/MentionLegal/bookSounds";
 import TamagotchiWidget from "@/components/system32/applications/SadGotchu/Tamagotchi-Widget";
 
 import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
@@ -76,6 +78,7 @@ function HomePage() {
   const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
   const [isWhoamiOpen, setWhoamiOpen] = useState(false);
   const [isMyWorkOpen, setIsMyWorkOpen] = useState(false);
+  const [isMentionLegalOpen, setIsMentionLegalOpen] = useState(false);
 
   // Fonction pour le SignIn et SignUp et EditProfile et UserList
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -135,6 +138,10 @@ function HomePage() {
       case "MyWork":
         setIsMyWorkOpen(true);
         break;
+      case "MentionLegal":
+        playBookSettle();
+        setIsMentionLegalOpen(true);
+        break;
       case "SignIn":
         user ? setIsUserInfoOpen(true) : setIsSignInOpen(true);
         break;
@@ -177,6 +184,11 @@ function HomePage() {
                 onClick={() => handleIconClick("Articles")}
               />
               <Icon
+                title='MentionLegal.exe'
+                iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Books/Book.ico'
+                onClick={() => handleIconClick("MentionLegal")}
+              />
+              <Icon
                 title='Twitch.exe'
                 iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Media/Movie frame (in hands).ico'
                 onClick={() => handleIconClick("TwitchWindow")}
@@ -210,6 +222,9 @@ function HomePage() {
               )}
               {isMyWorkOpen && (
                 <MyWork closeWindow={() => setIsMyWorkOpen(false)} />
+              )}
+              {isMentionLegalOpen && (
+                <MentionLegal closeWindow={() => setIsMentionLegalOpen(false)} />
               )}
               {!user && isSignInOpen && !isSignUpOpen && (
                 <SignIn

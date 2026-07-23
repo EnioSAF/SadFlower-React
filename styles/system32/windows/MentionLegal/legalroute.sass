@@ -1,0 +1,71 @@
+.legal-route
+    min-height: 100vh
+    padding: 24px
+    background: #087e79
+    color: #21190f
+    font-family: Georgia, 'Times New Roman', serif
+
+.legal-route-nav
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 8px
+    max-width: 960px
+    margin: 0 auto 18px
+    padding: 10px
+    border: 3px ridge #d6c2a2
+    background: #c0c0c0
+    font-family: 'Courier New', monospace
+
+    strong
+        margin-right: auto
+
+    a
+        padding: 4px 7px
+        color: #21190f
+        background: #ead5ad
+        border: 2px outset #fff1d2
+        text-decoration: none
+
+        &.active
+            border-style: inset
+
+.legal-route-page
+    max-width: 900px
+    margin: 0 auto
+    padding: 36px clamp(20px, 6vw, 64px)
+    border: 4px ridge #d6c2a2
+    background: #f7e6c5
+    box-shadow: inset 0 0 0 2px #76583d, 5px 5px 0 #342619
+
+    h1
+        margin: 0 0 28px
+        color: #5a301f
+        font-size: clamp(28px, 5vw, 48px)
+
+    section
+        margin-bottom: 22px
+
+    h2
+        margin: 0 0 6px
+        color: #5a301f
+        font-size: 19px
+
+    p
+        margin: 0
+        font-family: Arial, sans-serif
+        font-size: 15px
+        line-height: 1.55
+
+.legal-route-kicker
+    margin-bottom: 10px !important
+    color: #80674a
+    font-family: 'Courier New', monospace !important
+    font-size: 12px !important
+
+@media (max-width: 600px)
+    .legal-route
+        padding: 10px
+
+    .legal-route-nav strong
+        width: 100%
