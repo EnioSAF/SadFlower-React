@@ -142,15 +142,18 @@
     transition: transform var(--leaf-turn-duration, .56s) cubic-bezier(.42, 0, .18, 1), filter .28s ease
     will-change: transform
 
+// The left edge of every leaf stays on the shared hinge.  Extra width appears
+// solely at the free edge, producing page depth without moving book centre.
+.book-leaf.leaf-paper
+    width: calc(50% - 25px + var(--edge-width, 0px))
+
     &.is-unturned
-        // Right stack: current sheet sits on top; deeper sheets step out from
-        // underneath it.  Tabs inherit this real sheet depth.
-        transform: translateX(calc(var(--leaf-depth) * -3.5px)) translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
+        // Every right page keeps the exact same hinge at book centre.
+        transform: translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
 
     &.is-turned
-        // Mirror the right stack after the leaf crosses the spine: newer
-        // turned leaves rest nearer the spine, older ones remain underneath.
-        transform: translateX(calc(var(--leaf-depth) * 3.5px)) translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(-180deg)
+        // Same fixed hinge once a page has crossed to the left.
+        transform: translateY(calc(var(--leaf-depth) * -1px)) translateZ(calc(var(--leaf-depth) * .55px)) rotateY(-180deg)
 
     &:focus
         outline: 0
@@ -177,6 +180,14 @@
     bottom: 14px
     width: calc(50% - 7px)
     transition-timing-function: cubic-bezier(.36, .02, .18, 1)
+
+    // Covers need the same 3D depth as paper sheets. Without this, a
+    // transformed paper face paints in front of a flat cover at rest.
+    &.is-unturned
+        transform: translateZ(calc(var(--leaf-depth) * .55px)) rotateY(0deg)
+
+    &.is-turned
+        transform: translateZ(calc(var(--leaf-depth) * .55px)) rotateY(-180deg)
 
 // A turning leaf must cross its edge exactly halfway through its animation.
 // That lets the visible face hand over at 90deg: no early disappearance and
@@ -216,6 +227,18 @@
     border-radius: 9px 3px 3px 9px
     background: linear-gradient(270deg, #e5c99a, #f8e8c5 7%, #f6e4bd 96%, #d5b586)
     box-shadow: inset 0 0 0 2px rgba(255, 248, 218, .6), inset -8px 0 12px rgba(96, 54, 28, .12)
+
+// The pages themselves stop before the hinge.  This leaves a physical gutter
+// at the centre of the open book, rather than drawing a decorative spine over
+// moving paper.
+.book-leaf.leaf-paper.is-unturned .leaf-front,
+.book-leaf.leaf-paper.is-unturned::before
+    clip-path: inset(0 0 0 12px)
+
+.book-leaf.leaf-paper.is-turned .leaf-back,
+.book-leaf.leaf-paper.is-turned::before
+    clip-path: inset(0 12px 0 0)
+
 .book-leaf.is-active-turn .leaf-face
     pointer-events: none
 
@@ -426,12 +449,35 @@
         line-height: 1.05
 
     section
+        position: relative
         margin-bottom: 22px
+        padding: 0 7px 12px
+        border-bottom: 1px solid rgba(133, 84, 48, .18)
+
+        &:last-child
+            border-bottom: 0
+
+        &:first-of-type p::first-letter
+            float: left
+            margin: 0 5px 0 0
+            color: #704029
+            font-family: Georgia, 'Times New Roman', serif
+            font-size: 2.55em
+            font-weight: bold
+            line-height: .82
 
     h2
         margin: 0 0 7px
         color: #6a3822
         font-size: 19px
+
+        &::after
+            display: inline-block
+            width: 28px
+            margin-left: 9px
+            border-top: 1px solid #b4845b
+            content: ''
+            vertical-align: middle
 
     p
         margin: 0
@@ -444,6 +490,19 @@
     place-content: end center
     color: #997453
     font-size: 12px
+
+.legal-fill-blank
+    padding: 1px 3px 2px
+    border: 0
+    border-bottom: 1px dashed #8e5334
+    color: #713b25
+    background: rgba(199, 143, 83, .15)
+    box-decoration-break: clone
+    -webkit-box-decoration-break: clone
+    font-family: 'Courier New', monospace
+    font-size: .87em
+    font-weight: bold
+    line-height: 1.55
 
 .folio
     position: absolute

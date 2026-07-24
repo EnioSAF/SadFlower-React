@@ -20,6 +20,7 @@ function clamp(value, minimum, maximum) {
 export default function MentionLegal({ closeWindow }) {
   const sceneRef = useRef(null);
   const dragRef = useRef(null);
+  const isInteractionReadyRef = useRef(false);
   const cascadeTimerRef = useRef(null);
   const releaseTimerRef = useRef(null);
   const [turnedCount, setTurnedCount] = useState(0);
@@ -73,6 +74,15 @@ export default function MentionLegal({ closeWindow }) {
   }, []);
 
   useEffect(() => () => clearTimers(), [clearTimers]);
+
+  // The desktop-icon click that mounts the book can otherwise bubble into the
+  // newly mounted scene and turn the front cover in the same interaction.
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      isInteractionReadyRef.current = true;
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   const settleTurn = useCallback((target, delay = TURN_MS, afterSettle) => {
     window.clearTimeout(releaseTimerRef.current);
@@ -171,6 +181,7 @@ export default function MentionLegal({ closeWindow }) {
   }
 
   function handleBookClick(event) {
+    if (!isInteractionReadyRef.current) return;
     if (event.target.closest('button, a, input, textarea, select, .book-drag-zone')) return;
     if (pose === 'closed-front') {
       turnOne(1);
@@ -184,6 +195,14 @@ export default function MentionLegal({ closeWindow }) {
     const relativeX = event.clientX - bounds.left;
     if (relativeX <= bounds.width * .28) turnOne(-1);
     if (relativeX >= bounds.width * .72) turnOne(1);
+  }
+
+  function renderLegalText(text) {
+    return text.split(/(\[[^\]]+\])/g).map((part, index) => (
+      part.startsWith('[') && part.endsWith(']')
+        ? <mark className="legal-fill-blank" key={`${part}-${index}`}>{part}</mark>
+        : part
+    ));
   }
 
   function renderPage(page) {
@@ -271,14 +290,16 @@ export default function MentionLegal({ closeWindow }) {
     if (page.type === 'legal') {
       return (
         <div className="legal-paper-content">
-          <header>
-            <small>{page.sectionLabel}</small>
-            <h1>{page.sectionTitle}</h1>
-          </header>
+          {page.showSectionTitle && (
+            <header>
+              <small>{page.sectionLabel}</small>
+              <h1>{page.sectionTitle}</h1>
+            </header>
+          )}
           {page.blocks.map(([heading, text]) => (
             <section key={heading}>
               <h2>{heading}</h2>
-              <p>{text}</p>
+              <p>{renderLegalText(text)}</p>
             </section>
           ))}
         </div>
@@ -329,6 +350,11 @@ export default function MentionLegal({ closeWindow }) {
             const turned = isForwardTurn ? true : isBackwardTurn ? false : settledTurned;
             const remainingDepth = totalLeaves - index;
             const turnedDepth = index + 1;
+            // The hinge never moves.  Only the free outer edge of a paper
+            // sheet grows as it lies deeper in the left or right stack.
+            const edgeDepth = turned
+              ? Math.max(turnedCount - index - 1, 0)
+              : Math.max(index - turnedCount, 0);
             // During a turn, keep outgoing page and incoming page mounted.
             // The active leaf overlaps the incoming page until it physically
             // crosses the spine, instead of revealing the blank paper stack.
@@ -357,6 +383,20 @@ export default function MentionLegal({ closeWindow }) {
               : pose === 'closed-back' && index === totalLeaves - 1
                 ? -1
                 : 0;
+            // Covers are whole-page controls.  They must not rely on the
+            // narrow generic "page edge" click zones used by the book body.
+            const coverDirection = index === 0
+              ? (turnedCount === 0 ? 1 : turnedCount === 1 ? -1 : 0)
+              : index === totalLeaves - 1
+                ? (turnedCount === totalLeaves ? -1 : turnedCount === totalLeaves - 1 ? 1 : 0)
+                : 0;
+            const onCoverClick = coverDirection
+              ? (event) => {
+                event.stopPropagation();
+                if (!isInteractionReadyRef.current) return;
+                turnOne(coverDirection);
+              }
+              : undefined;
             return (
               <div
                 className={[
@@ -369,6 +409,7 @@ export default function MentionLegal({ closeWindow }) {
                 style={{
                   '--leaf-index': index,
                   '--leaf-depth': turned ? turnedDepth : remainingDepth,
+                  '--edge-width': `${edgeDepth * 3}px`,
                   '--leaf-turn-duration': `${turnDuration(index)}ms`,
                   zIndex: isActiveTurn ? totalLeaves * 3 : turned ? totalLeaves + index : totalLeaves - index,
                 }}
@@ -384,6 +425,7 @@ export default function MentionLegal({ closeWindow }) {
                   className={`leaf-face leaf-front ${frontVisible ? 'is-visible-face' : ''}`}
                   aria-hidden={!frontVisible}
                   inert={frontVisible ? undefined : ''}
+                  onClick={onCoverClick}
                 >
                   {renderPage(leaf.front)}
                   {leaf.kind === 'paper' && <small className="folio folio-front">{index * 2 - 1}</small>}
@@ -392,6 +434,7 @@ export default function MentionLegal({ closeWindow }) {
                   className={`leaf-face leaf-back ${backVisible ? 'is-visible-face' : ''}`}
                   aria-hidden={!backVisible}
                   inert={backVisible ? undefined : ''}
+                  onClick={onCoverClick}
                 >
                   {renderPage(leaf.back)}
                   {leaf.kind === 'paper' && <small className="folio folio-back">{index * 2}</small>}

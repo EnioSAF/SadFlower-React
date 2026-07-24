@@ -53,6 +53,7 @@ function buildSectionPages() {
         sectionLabel: section.label,
         sectionTitle: section.title,
         pageInSection: index / 2 + 1,
+        showSectionTitle: index === 0,
         blocks: section.blocks.slice(index, index + 2),
       });
     }

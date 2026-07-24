@@ -123,4 +123,11 @@ test.describe("SadFlower visual smoke", () => {
     await expect(page.getByRole("heading", { name: "Vie privée & données personnelles" })).toBeVisible();
     await expect(page.getByRole("link", { name: "RGPD", exact: true })).toHaveClass(/active/);
   });
+
+  test("legal document exposes the prepared micro-enterprise register", async ({ page }) => {
+    await page.goto("/mentions-legales");
+    await expect(page.getByText("SIREN : 848 268 330. SIRET : 848 268 330 00034.", { exact: false })).toBeVisible();
+    await expect(page.locator(".legal-fill-blank").first()).toContainText("NOM CIVIL OU DÉNOMINATION LÉGALE");
+    await expect(page.getByRole("heading", { name: "Adresse professionnelle" })).toBeVisible();
+  });
 });

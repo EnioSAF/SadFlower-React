@@ -3,6 +3,14 @@ import Link from 'next/link';
 import { LEGAL_SECTIONS } from './legalData';
 import '/styles/system32/windows/MentionLegal/legalroute.sass';
 
+function LegalText({ children }) {
+  return children.split(/(\[[^\]]+\])/g).map((part, index) => (
+    part.startsWith('[') && part.endsWith(']')
+      ? <mark className="legal-fill-blank" key={`${part}-${index}`}>{part}</mark>
+      : part
+  ));
+}
+
 export default function LegalDocument({ sectionId }) {
   const section = LEGAL_SECTIONS.find((item) => item.id === sectionId) || LEGAL_SECTIONS[0];
 
@@ -27,7 +35,7 @@ export default function LegalDocument({ sectionId }) {
           {section.blocks.map(([heading, text]) => (
             <section key={heading}>
               <h2>{heading}</h2>
-              <p>{text}</p>
+              <p><LegalText>{text}</LegalText></p>
             </section>
           ))}
         </article>
