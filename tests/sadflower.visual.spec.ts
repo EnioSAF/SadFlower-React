@@ -31,6 +31,12 @@ test.describe("SadFlower visual smoke", () => {
     });
     await page.goto("/");
     await expect(page.getByRole("dialog", { name: /Configuration de confidentialité/ })).toBeVisible();
+    const consentBox = await page.getByRole("dialog", { name: /Configuration de confidentialité/ }).boundingBox();
+    if (!consentBox) throw new Error("La fenêtre de confidentialité est introuvable.");
+    expect(consentBox.x).toBeGreaterThanOrEqual(0);
+    expect(consentBox.y).toBeGreaterThanOrEqual(0);
+    expect(consentBox.x + consentBox.width).toBeLessThanOrEqual(page.viewportSize().width);
+    expect(consentBox.y + consentBox.height).toBeLessThanOrEqual(page.viewportSize().height);
     await page.getByRole("button", { name: "Refuser l’optionnel" }).click();
     await expect(page.getByRole("dialog", { name: /Configuration de confidentialité/ })).toBeHidden();
     await expect.poll(() => page.evaluate(() => localStorage.getItem("sadflower-privacy-v1"))).toBe('{"analytics":false,"externalMedia":false}');
@@ -76,6 +82,47 @@ test.describe("SadFlower visual smoke", () => {
     await expect(page.getByRole("heading", { name: "Fin du registre" })).toBeVisible();
     await page.getByRole("button", { name: "Fermer le livre" }).click();
     await expect(page.getByRole("dialog", { name: "MentionLegal.exe" })).toBeHidden();
+  });
+
+  test("MentionLegal keeps turned verso bookmarks compact", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name === "mobile-chrome", "La scène mobile plein écran sera conçue séparément.");
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("MentionLegal.exe").click();
+    await page.getByRole("button", { name: "Ouvrir le registre" }).click();
+    await page.waitForTimeout(500);
+    for (let turn = 0; turn < 4; turn += 1) {
+      await page.keyboard.press("ArrowRight");
+      await page.waitForTimeout(350);
+    }
+    await expect(page.locator('.bookmark-back.is-current-bookmark')).toHaveCount(0);
+    await expect(page.locator('.bookmark-front.is-current-bookmark')).toHaveCount(1);
+  });
+
+  test("MentionLegal uses a full-screen single-page reader on mobile", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au lecteur mobile.");
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("MentionLegal.exe").click();
+    await expect(page.locator(".mobile-book-reader")).toBeVisible();
+    await expect(page.locator(".desktop-book-object")).toBeHidden();
+    await expect(page.getByRole("heading", { name: /Legal Library/ })).toBeVisible();
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await page.waitForTimeout(320);
+    await page.getByRole("button", { name: "Suivant" }).click();
+    await page.waitForTimeout(320);
+    await expect(page.getByRole("heading", { name: "Le registre de bord" })).toBeVisible();
+    await page.getByRole("button", { name: "Précédent" }).click();
+    await page.waitForTimeout(320);
+    await expect(page.locator(".mobile-book-folio")).toContainText("Feuille 2");
   });
 
   test("MentionLegal preserves the physical sheet during both flip directions", async ({ page }, testInfo) => {

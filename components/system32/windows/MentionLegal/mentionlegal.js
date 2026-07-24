@@ -7,6 +7,11 @@ import '/styles/system32/windows/MentionLegal/bookscene.sass';
 const TURN_MS = 260;
 const COVER_TURN_MS = 330;
 const CASCADE_STEP_MS = 60;
+const MOBILE_BREAKPOINT = '(max-width: 800px)';
+const MOBILE_BOOK_PAGES = BOOK_LEAVES.flatMap((leaf, leafIndex) => [
+  { id: `${leaf.id}-front`, page: leaf.front, leafIndex, side: 'front' },
+  { id: `${leaf.id}-back`, page: leaf.back, leafIndex, side: 'back' },
+]);
 
 function turnDuration(leafIndex) {
   const kind = BOOK_LEAVES[leafIndex]?.kind;
@@ -23,10 +28,15 @@ export default function MentionLegal({ closeWindow }) {
   const isInteractionReadyRef = useRef(false);
   const cascadeTimerRef = useRef(null);
   const releaseTimerRef = useRef(null);
+  const touchRef = useRef(null);
   const [turnedCount, setTurnedCount] = useState(0);
   const [turningLeaves, setTurningLeaves] = useState([]);
   const [turnDirection, setTurnDirection] = useState('');
   const [isBusy, setIsBusy] = useState(false);
+  const [isMobileBook, setIsMobileBook] = useState(false);
+  const [mobilePageIndex, setMobilePageIndex] = useState(0);
+  const [mobileDirection, setMobileDirection] = useState('');
+  const [isMobileBusy, setIsMobileBusy] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const totalLeaves = BOOK_LEAVES.length;
   const isOpeningFromFront = isBusy
@@ -52,6 +62,14 @@ export default function MentionLegal({ closeWindow }) {
     : turnedCount === totalLeaves
       ? 'closed-back'
       : 'open-book';
+
+  useEffect(() => {
+    const query = window.matchMedia(MOBILE_BREAKPOINT);
+    const sync = () => setIsMobileBook(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
 
   const clearTimers = useCallback(() => {
     window.clearTimeout(cascadeTimerRef.current);
@@ -98,7 +116,26 @@ export default function MentionLegal({ closeWindow }) {
     }, delay);
   }, []);
 
+  const turnMobile = useCallback((direction) => {
+    if (isMobileBusy) return;
+    const target = clamp(mobilePageIndex + direction, 0, MOBILE_BOOK_PAGES.length - 1);
+    if (target === mobilePageIndex) return;
+    playPageTurn();
+    setIsMobileBusy(true);
+    setMobileDirection(direction > 0 ? 'forward' : 'backward');
+    window.clearTimeout(releaseTimerRef.current);
+    releaseTimerRef.current = window.setTimeout(() => {
+      setMobilePageIndex(target);
+      setMobileDirection('');
+      setIsMobileBusy(false);
+    }, TURN_MS);
+  }, [isMobileBusy, mobilePageIndex]);
+
   const turnOne = useCallback((direction) => {
+    if (isMobileBook) {
+      turnMobile(direction);
+      return;
+    }
     if (isBusy) return;
     const target = clamp(turnedCount + direction, 0, totalLeaves);
     if (target === turnedCount) return;
@@ -110,7 +147,7 @@ export default function MentionLegal({ closeWindow }) {
     // Keep the settled spread on screen while its leaf moves. Updating this
     // value before the transition exposed the paper stack as a blank page.
     settleTurn(target, turnDuration(leafIndex));
-  }, [isBusy, settleTurn, totalLeaves, turnedCount]);
+  }, [isBusy, isMobileBook, settleTurn, totalLeaves, turnMobile, turnedCount]);
 
   const closeBook = useCallback(() => {
     playBookPoof();
@@ -118,6 +155,18 @@ export default function MentionLegal({ closeWindow }) {
   }, [closeWindow]);
 
   const jumpTo = useCallback((target) => {
+    if (isMobileBook) {
+      const section = LEGAL_SECTIONS.find((item) => BOOKMARK_TARGETS[item.id] === target);
+      const mobileTarget = MOBILE_BOOK_PAGES.findIndex(({ page }) => page.sectionId === section?.id);
+      if (mobileTarget >= 0 && mobileTarget !== mobilePageIndex) {
+        playPageTurn();
+        setMobileDirection(mobileTarget > mobilePageIndex ? 'forward' : 'backward');
+        setMobilePageIndex(mobileTarget);
+        window.clearTimeout(releaseTimerRef.current);
+        releaseTimerRef.current = window.setTimeout(() => setMobileDirection(''), TURN_MS);
+      }
+      return;
+    }
     const safeTarget = clamp(target, 1, totalLeaves - 1);
     if (safeTarget === turnedCount || isBusy) return;
     clearTimers();
@@ -141,7 +190,7 @@ export default function MentionLegal({ closeWindow }) {
     };
 
     step(turnedCount);
-  }, [clearTimers, isBusy, settleTurn, totalLeaves, turnedCount]);
+  }, [clearTimers, isBusy, isMobileBook, mobilePageIndex, settleTurn, totalLeaves, turnedCount]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -195,6 +244,20 @@ export default function MentionLegal({ closeWindow }) {
     const relativeX = event.clientX - bounds.left;
     if (relativeX <= bounds.width * .28) turnOne(-1);
     if (relativeX >= bounds.width * .72) turnOne(1);
+  }
+
+  function startMobileSwipe(event) {
+    touchRef.current = event.changedTouches?.[0]?.clientX;
+  }
+
+  function endMobileSwipe(event) {
+    const startX = touchRef.current;
+    const endX = event.changedTouches?.[0]?.clientX;
+    touchRef.current = null;
+    if (typeof startX !== 'number' || typeof endX !== 'number') return;
+    const distance = endX - startX;
+    if (Math.abs(distance) < 42) return;
+    turnMobile(distance < 0 ? 1 : -1);
   }
 
   function renderLegalText(text) {
@@ -311,6 +374,7 @@ export default function MentionLegal({ closeWindow }) {
 
   const leftPaperCount = clamp(turnedCount - 1, 0, BOOK_META.totalPaperSheets);
   const rightPaperCount = BOOK_META.totalPaperSheets - leftPaperCount;
+  const mobilePage = MOBILE_BOOK_PAGES[mobilePageIndex];
 
   return (
     <div className="legal-scene-backdrop">
@@ -334,7 +398,22 @@ export default function MentionLegal({ closeWindow }) {
         aria-modal="true"
         aria-label="MentionLegal.exe"
       >
-        <div className="book-object" onClick={handleBookClick}>
+        {isMobileBook && (
+          <div className="mobile-book-reader" onTouchStart={startMobileSwipe} onTouchEnd={endMobileSwipe}>
+            <button className="book-close mobile-book-close" type="button" aria-label="Fermer le livre" onClick={closeBook}>×</button>
+            <article className={`mobile-book-page ${mobileDirection ? `turn-${mobileDirection}` : ''}`} aria-live="polite">
+              <div className="mobile-book-page-content">
+                {renderPage(mobilePage.page)}
+              </div>
+              <small className="mobile-book-folio">Feuille {mobilePageIndex + 1} / {MOBILE_BOOK_PAGES.length}</small>
+            </article>
+            <nav className="mobile-book-controls" aria-label="Navigation du registre">
+              <button type="button" onClick={() => turnMobile(-1)} disabled={mobilePageIndex === 0 || isMobileBusy}>Précédent</button>
+              <button type="button" onClick={() => turnMobile(1)} disabled={mobilePageIndex === MOBILE_BOOK_PAGES.length - 1 || isMobileBusy}>Suivant</button>
+            </nav>
+          </div>
+        )}
+        <div className={`book-object ${isMobileBook ? 'desktop-book-object' : ''}`} onClick={handleBookClick}>
           <button className="book-close" type="button" aria-label="Fermer le livre" onClick={closeBook}>×</button>
           <div className="book-board board-left" aria-hidden="true" />
           <div className="book-board board-right" aria-hidden="true" />
@@ -377,6 +456,7 @@ export default function MentionLegal({ closeWindow }) {
               ? LEGAL_SECTIONS.findIndex((section) => section.id === bookmarkSection.id)
               : -1;
             const bookmarkIsCurrent = bookmarkSection
+              && bookmarkSide === 'front'
               && BOOKMARK_TARGETS[bookmarkSection.id] === turnedCount;
             const closedCoverDirection = pose === 'closed-front' && index === 0
               ? 1

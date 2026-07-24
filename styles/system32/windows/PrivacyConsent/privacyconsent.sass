@@ -67,12 +67,24 @@
         padding: 8px
 
     .privacy-consent-window
+        position: relative !important
+        top: auto !important
+        left: auto !important
         width: calc(100vw - 16px)
+        height: auto !important
         max-height: calc(100vh - 16px)
 
+        .title-bar
+            margin-top: 0
+            font-size: 1rem
+
     .privacy-consent-actions
+        display: grid
+        grid-template-columns: 1fr 1fr
+
         button
-            flex: 1 1 45%
+            min-width: 0
 
         .privacy-legal-link
             margin-left: 0
+            grid-column: 1 / -1

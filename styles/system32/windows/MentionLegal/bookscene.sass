@@ -1,6 +1,8 @@
 .legal-scene-backdrop
     position: fixed
-    z-index: 1000
+    // The book is a modal scene. It must stay above taskbar and desktop
+    // windows; only privacy consent deliberately sits higher.
+    z-index: 2147482000
     inset: 0
     overflow: hidden
     background: radial-gradient(circle at 50% 45%, rgba(255, 222, 158, .12), rgba(0, 0, 0, .42))
@@ -569,13 +571,14 @@
         outline: 2px solid #f1d78d
         outline-offset: 2px
 
-// A front-page tab becomes the left-side tab after its leaf rotates 180°.
-// Invert only its Z position then, so it stays in front of that passed page.
+// A front-page tab becomes a left-side tab after its leaf rotates 180°.
+// Counter-rotate its own face: otherwise its clipped tip is mirrored while
+// tabs carried by a verso keep their normal orientation.
 .book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
     // A turned front page uses the former right edge as its outer left edge.
     // Its compact reverse likewise leaves only an 8px grip outside.
     right: -17px
-    transform: translateZ(-5px)
+    transform: rotateY(180deg) translateZ(-5px)
 
 .book-leaf.is-active-turn .bookmark-tab span
     color: transparent
@@ -624,6 +627,139 @@
 
 @media (max-width: 800px)
     .mention-book-scene
-        min-width: 680px
-        transform: scale(.85)
-        transform-origin: top left
+        position: fixed
+        inset: 0
+        width: 100vw
+        height: 100dvh
+        min-width: 0
+        min-height: 0
+        perspective: none
+
+    .desktop-book-object
+        display: none
+
+    .mobile-book-reader
+        position: relative
+        display: grid
+        height: 100%
+        padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom))
+        box-sizing: border-box
+        grid-template-rows: minmax(0, 1fr) auto
+        gap: 10px
+        background: linear-gradient(135deg, rgba(50, 23, 17, .96), rgba(112, 65, 43, .96))
+
+    .mobile-book-close
+        top: max(12px, env(safe-area-inset-top))
+        right: 14px
+        width: 34px
+        height: 34px
+        z-index: 3
+        font-size: 23px
+        line-height: 21px
+
+    .mobile-book-page
+        position: relative
+        display: flex
+        min-height: 0
+        overflow: hidden
+        border: 8px solid #3c1c17
+        border-radius: 8px
+        background: linear-gradient(90deg, #e5c99a, #f8e8c5 7%, #f6e4bd 96%, #d5b586)
+        box-shadow: inset 0 0 0 2px rgba(255, 248, 218, .6), inset 8px 0 12px rgba(96, 54, 28, .12), 0 8px 0 rgba(34, 15, 10, .55)
+        transform-origin: right center
+
+        &.turn-forward
+            animation: mobile-page-forward .26s ease
+
+        &.turn-backward
+            transform-origin: left center
+            animation: mobile-page-backward .26s ease
+
+    .mobile-book-page-content
+        width: 100%
+        min-height: 0
+        overflow: auto
+        padding: 54px 20px 38px
+        box-sizing: border-box
+        -webkit-overflow-scrolling: touch
+
+    .mobile-book-page .cover-copy,
+    .mobile-book-page .inside-cover-copy,
+    .mobile-book-page .title-page,
+    .mobile-book-page .quote-page
+        min-height: 100%
+
+    .mobile-book-page .cover-copy
+        padding: 28px 16px
+
+    .mobile-book-page .cover-copy h1
+        font-size: clamp(42px, 15vw, 60px)
+
+    .mobile-book-page .title-page h1
+        font-size: clamp(34px, 12vw, 52px)
+
+    .mobile-book-page .legal-paper-content h1
+        font-size: clamp(28px, 10vw, 40px)
+
+    .mobile-book-page .legal-paper-content p
+        font-size: 14px
+        line-height: 1.55
+
+    .mobile-book-page .contents-page h1
+        font-size: 34px
+
+    .mobile-book-page .contents-page button
+        grid-template-columns: 8px 58px minmax(0, 1fr)
+
+    .mobile-book-page .contents-page em
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+
+    .mobile-book-folio
+        position: absolute
+        right: 14px
+        bottom: 10px
+        color: #8c6949
+        font-family: 'Courier New', monospace
+        font-size: 10px
+
+    .mobile-book-controls
+        display: grid
+        grid-template-columns: 1fr 1fr
+        gap: 8px
+
+        button
+            min-height: 42px
+            border: 2px solid #3c1c17
+            border-radius: 3px
+            color: #f6dfae
+            background: linear-gradient(#a86f49, #5b2d21)
+            box-shadow: inset 0 0 0 1px #d5a774
+            font-family: Georgia, 'Times New Roman', serif
+            font-size: 16px
+
+            &:disabled
+                opacity: .45
+
+    @keyframes mobile-page-forward
+        0%
+            transform: rotateY(0deg)
+            opacity: 1
+        48%
+            transform: rotateY(-82deg)
+            opacity: .28
+        100%
+            transform: rotateY(0deg)
+            opacity: 1
+
+    @keyframes mobile-page-backward
+        0%
+            transform: rotateY(0deg)
+            opacity: 1
+        48%
+            transform: rotateY(82deg)
+            opacity: .28
+        100%
+            transform: rotateY(0deg)
+            opacity: 1
