@@ -20,7 +20,7 @@ export const LEGAL_SECTIONS = [
       ['Base légale', 'La base applicable dépend du traitement : mesures précontractuelles pour répondre à une demande, obligation légale lorsque nécessaire, ou consentement lorsqu’il est demandé séparément.'],
       ['Destinataires', 'Les données sont accessibles aux seules personnes habilitées et aux prestataires techniques nécessaires au fonctionnement du site : [LISTE DES PRESTATAIRES QUI REÇOIVENT DES DONNÉES PERSONNELLES].'],
       ['Conservation', 'Les demandes sans contrat sont conservées pendant 3 ans après le dernier échange, puis supprimées ou anonymisées, sauf obligation légale ou litige à traiter.'],
-      ['Vos droits', 'Vous pouvez demander accès, rectification, effacement, limitation, opposition ou portabilité lorsque ces droits s’appliquent, en écrivant à enio.sadflower@gmail.com. Vous pouvez aussi saisir la CNIL.'],
+      ['Vos droits', 'Vous pouvez demander accès, rectification, effacement, limitation, opposition ou portabilité lorsque ces droits s’appliquent, en écrivant à [enio.sadflower@gmail.com]. Vous pouvez aussi saisir la CNIL.'],
     ],
   },
   {
@@ -38,7 +38,7 @@ export const LEGAL_SECTIONS = [
       ['Créations', 'Les textes, visuels, musiques, interfaces, code et éléments originaux présents sur SadFlower OS sont protégés par le droit d’auteur, sauf indication contraire.'],
       ['Réutilisation', 'Toute reproduction, modification ou réutilisation publique nécessite l’autorisation de son auteur ou le respect de la licence applicable.'],
       ['Crédits', 'Les bibliothèques, services, assets et contenus tiers sont crédités lorsque leur licence ou leur auteur l’exige.'],
-      ['Demande', 'Pour signaler une attribution manquante ou demander une autorisation : enio.sadflower@gmail.com.'],
+      ['Demande', 'Pour signaler une attribution manquante ou demander une autorisation : [enio.sadflower@gmail.com]'],
     ],
   },
   {
@@ -47,7 +47,7 @@ export const LEGAL_SECTIONS = [
       ['Objet', 'Le site présente un portfolio interactif, des articles, des créations et des services de développement et de musique.'],
       ['Utilisation', 'L’utilisateur s’engage à utiliser le site de manière licite, loyale et à ne pas perturber son fonctionnement.'],
       ['Disponibilité', 'Le site peut évoluer, être interrompu ou afficher des contenus provenant de services tiers.'],
-      ['Contact', 'Pour toute question relative à l’utilisation du site : enio.sadflower@gmail.com.'],
+      ['Contact', 'Pour toute question relative à l’utilisation du site : [enio.sadflower@gmail.com]'],
     ],
   },
   {
