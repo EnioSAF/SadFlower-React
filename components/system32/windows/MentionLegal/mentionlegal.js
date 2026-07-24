@@ -260,6 +260,14 @@ export default function MentionLegal({ closeWindow }) {
     turnMobile(distance < 0 ? 1 : -1);
   }
 
+  function handleMobilePageTap(event) {
+    if (event.target.closest('button, a, input, textarea, select, mark')) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const relativeX = event.clientX - bounds.left;
+    if (relativeX <= bounds.width * .3) turnMobile(-1);
+    if (relativeX >= bounds.width * .7) turnMobile(1);
+  }
+
   function renderLegalText(text) {
     return text.split(/(\[[^\]]+\])/g).map((part, index) => (
       part.startsWith('[') && part.endsWith(']')
@@ -401,12 +409,26 @@ export default function MentionLegal({ closeWindow }) {
         {isMobileBook && (
           <div className="mobile-book-reader" onTouchStart={startMobileSwipe} onTouchEnd={endMobileSwipe}>
             <button className="book-close mobile-book-close" type="button" aria-label="Fermer le livre" onClick={closeBook}>×</button>
-            <article className={`mobile-book-page ${mobileDirection ? `turn-${mobileDirection}` : ''}`} aria-live="polite">
+            <article className={`mobile-book-page page-${mobilePage.page.type} ${mobileDirection ? `turn-${mobileDirection}` : ''}`} aria-live="polite" onClick={handleMobilePageTap}>
               <div className="mobile-book-page-content">
                 {renderPage(mobilePage.page)}
               </div>
               <small className="mobile-book-folio">Feuille {mobilePageIndex + 1} / {MOBILE_BOOK_PAGES.length}</small>
             </article>
+            <aside className="mobile-bookmarks" aria-label="Accès direct aux chapitres">
+              {LEGAL_SECTIONS.map((section) => (
+                <button
+                  className={mobilePage.page.sectionId === section.id ? 'is-active-mobile-bookmark' : ''}
+                  type="button"
+                  key={section.id}
+                  style={{ '--bookmark-color': section.tabColor }}
+                  onClick={() => jumpTo(BOOKMARK_TARGETS[section.id])}
+                  aria-label={`Ouvrir ${section.label}`}
+                >
+                  {section.label}
+                </button>
+              ))}
+            </aside>
             <nav className="mobile-book-controls" aria-label="Navigation du registre">
               <button type="button" onClick={() => turnMobile(-1)} disabled={mobilePageIndex === 0 || isMobileBusy}>Précédent</button>
               <button type="button" onClick={() => turnMobile(1)} disabled={mobilePageIndex === MOBILE_BOOK_PAGES.length - 1 || isMobileBusy}>Suivant</button>

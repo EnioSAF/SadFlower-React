@@ -505,6 +505,9 @@
     font-size: .87em
     font-weight: bold
     line-height: 1.55
+    user-select: text
+    -webkit-user-select: text
+    cursor: text
 
 .folio
     position: absolute
@@ -641,12 +644,14 @@
     .mobile-book-reader
         position: relative
         display: grid
+        width: calc(100% + 3px)
         height: 100%
         padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom))
         box-sizing: border-box
         grid-template-rows: minmax(0, 1fr) auto
         gap: 10px
         background: linear-gradient(135deg, rgba(50, 23, 17, .96), rgba(112, 65, 43, .96))
+        transform: translateX(-3px)
 
     .mobile-book-close
         top: max(12px, env(safe-area-inset-top))
@@ -667,6 +672,21 @@
         background: linear-gradient(90deg, #e5c99a, #f8e8c5 7%, #f6e4bd 96%, #d5b586)
         box-shadow: inset 0 0 0 2px rgba(255, 248, 218, .6), inset 8px 0 12px rgba(96, 54, 28, .12), 0 8px 0 rgba(34, 15, 10, .55)
         transform-origin: right center
+
+        &.page-front-cover,
+        &.page-back-cover
+            color: #f5dfae
+            background: linear-gradient(135deg, #9d6240, #5a2b20 48%, #a86f49)
+            box-shadow: inset 0 0 0 4px #ca9561, inset 0 0 0 8px #431c15, 0 8px 0 rgba(34, 15, 10, .55)
+
+        &.page-front-cover .mobile-book-page-content,
+        &.page-back-cover .mobile-book-page-content
+            overflow: hidden
+
+        &.page-front-cover .cover-copy,
+        &.page-back-cover .cover-copy
+            color: #f5dfae
+            text-shadow: 2px 2px #32110d
 
         &.turn-forward
             animation: mobile-page-forward .26s ease
@@ -723,6 +743,32 @@
         color: #8c6949
         font-family: 'Courier New', monospace
         font-size: 10px
+
+    .mobile-bookmarks
+        position: absolute
+        z-index: 4
+        top: 82px
+        right: -7px
+        display: grid
+        gap: 7px
+
+        button
+            width: 43px
+            height: 24px
+            padding: 0 6px 0 1px
+            border: 1px solid rgba(69, 36, 24, .78)
+            color: #fff7de
+            background: linear-gradient(180deg, rgba(255, 255, 255, .22), transparent 44%), var(--bookmark-color)
+            box-shadow: inset 0 0 0 1px rgba(255, 238, 206, .26), 2px 2px 0 rgba(43, 22, 14, .25)
+            clip-path: polygon(0 0, 100% 0, calc(100% - 9px) 50%, 100% 100%, 0 100%)
+            font-family: 'Courier New', monospace
+            font-size: 7px
+            font-weight: bold
+            text-shadow: 1px 1px #392017
+
+            &.is-active-mobile-bookmark
+                filter: brightness(1.2)
+                transform: translateX(-5px)
 
     .mobile-book-controls
         display: grid
