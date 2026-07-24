@@ -23,6 +23,24 @@ test.describe("SadFlower visual smoke", () => {
     await expect(page.getByText("Quick quote / reservation")).toBeVisible();
   });
 
+  test("privacy setup gates optional services after boot", async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.removeItem("sadflower-privacy-v1");
+    });
+    await page.goto("/");
+    await expect(page.getByRole("dialog", { name: /Configuration de confidentialité/ })).toBeVisible();
+    await page.getByRole("button", { name: "Refuser l’optionnel" }).click();
+    await expect(page.getByRole("dialog", { name: /Configuration de confidentialité/ })).toBeHidden();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem("sadflower-privacy-v1"))).toBe('{"analytics":false,"externalMedia":false}');
+
+    await page.getByAltText("Twitch.exe").click();
+    await expect(page.getByRole("heading", { name: "Contenu externe bloqué" })).toBeVisible();
+    await page.getByRole("button", { name: "Autoriser Twitch" }).click();
+    await expect.poll(() => page.evaluate(() => localStorage.getItem("sadflower-privacy-v1"))).toBe('{"analytics":false,"externalMedia":true}');
+  });
+
   test("MentionLegal behaves like a physical point-and-click book", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile-chrome", "La scène mobile plein écran sera conçue séparément.");
     await page.addInitScript(() => {

@@ -1,16 +1,21 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import TypeIt from "typeit-react";
 
 import styles from "@/styles/system32/windows/bootscreen.module.sass";
 
 const packageJson = require("/package.json");
 
-const BootsScreen = () => {
+const BootsScreen = ({ onComplete }) => {
   const [showScreen, setShowScreen] = useState(true);
   const [allowKeyPress, setAllowKeyPress] = useState(false);
   const bootsScreenRef = useRef(null);
   const initMusic = useRef(null);
   const initSound = useRef(null);
+
+  const finishBoot = useCallback(() => {
+    setShowScreen(false);
+    onComplete?.();
+  }, [onComplete]);
 
   useEffect(() => {
     initMusic.current = new Audio(
@@ -40,39 +45,36 @@ const BootsScreen = () => {
           localStorage.setItem("hasVisited", "true");
           return () => clearTimeout(timer);
         } else {
-          setShowScreen(false);
+          finishBoot();
         }
       } else {
-        setShowScreen(false);
+        finishBoot();
       }
     };
 
     const cleanup = checkFirstVisit();
     return cleanup;
-  }, []);
+  }, [finishBoot]);
 
-  const handleInteraction = () => {
+  const handleInteraction = useCallback(() => {
     if (allowKeyPress) {
-      setShowScreen(false);
+      finishBoot();
     }
-  };
+  }, [allowKeyPress, finishBoot]);
 
   useEffect(() => {
+    const bootsScreenElement = bootsScreenRef.current;
+    if (!bootsScreenElement) return undefined;
     document.addEventListener("keydown", handleInteraction);
-    bootsScreenRef.current.addEventListener("click", handleInteraction);
-    bootsScreenRef.current.addEventListener("touchstart", handleInteraction);
+    bootsScreenElement.addEventListener("click", handleInteraction);
+    bootsScreenElement.addEventListener("touchstart", handleInteraction);
 
     return () => {
       document.removeEventListener("keydown", handleInteraction);
-      if (bootsScreenRef.current) {
-        bootsScreenRef.current.removeEventListener("click", handleInteraction);
-        bootsScreenRef.current.removeEventListener(
-          "touchstart",
-          handleInteraction,
-        );
-      }
+      bootsScreenElement.removeEventListener("click", handleInteraction);
+      bootsScreenElement.removeEventListener("touchstart", handleInteraction);
     };
-  }, [allowKeyPress]);
+  }, [handleInteraction]);
 
   return (
     showScreen && (

@@ -9,6 +9,7 @@ const TaskBar = ({
   onSignUpClick,
   onUserInfoClick,
   onUserListClick,
+  onPrivacyClick,
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showStartMenu, setShowStartMenu] = useState(false);
@@ -65,6 +66,12 @@ const TaskBar = ({
                 className='auth-icon'
               />
               About
+            </button>
+          </div>
+          <div className='about'>
+            <button className='taskbar-button' onClick={onPrivacyClick}>
+              <span className='auth-icon' aria-hidden='true'>🔒</span>
+              Privacy
             </button>
           </div>
           {!user ? (

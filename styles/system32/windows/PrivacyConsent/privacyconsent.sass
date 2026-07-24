@@ -1,0 +1,78 @@
+.privacy-consent-layer
+    position: fixed
+    z-index: 2147483000
+    inset: 0
+    display: grid
+    place-items: center
+    padding: 16px
+    background: rgba(0, 20, 24, .62)
+
+.privacy-consent-window
+    width: min(560px, calc(100vw - 32px))
+    min-height: 0
+    max-height: calc(100vh - 32px)
+    grid-template-rows: max-content minmax(0, 1fr) max-content max-content !important
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, .45)
+
+.privacy-consent-body
+    overflow: auto !important
+    padding: 20px !important
+    color: #1d2630
+
+    h1
+        margin: 5px 0 12px
+        font-size: 1.5rem
+
+    p
+        line-height: 1.45
+
+.privacy-consent-stamp
+    display: inline-block
+    margin-bottom: 8px
+    font-size: .7rem
+    letter-spacing: .12em
+    color: #4d5964
+
+.privacy-consent-note
+    margin: 18px 0 0
+    font-size: .82rem
+
+.privacy-consent-options
+    display: grid
+    gap: 10px
+    margin: 18px 0
+    padding: 12px
+
+    label
+        display: flex
+        align-items: center
+        gap: 8px
+
+.privacy-consent-actions
+    display: flex
+    flex-wrap: wrap
+    gap: 8px
+    padding: 8px
+    border-top: 1px solid #808080
+    background: #c0c0c0
+
+    button
+        min-height: 28px
+
+.privacy-legal-link
+    margin-left: auto
+
+@media (max-width: 520px)
+    .privacy-consent-layer
+        padding: 8px
+
+    .privacy-consent-window
+        width: calc(100vw - 16px)
+        max-height: calc(100vh - 16px)
+
+    .privacy-consent-actions
+        button
+            flex: 1 1 45%
+
+        .privacy-legal-link
+            margin-left: 0

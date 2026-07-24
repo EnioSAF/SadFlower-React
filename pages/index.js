@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { getToken, getUser } from "@/components/Tools/SignInOut/strapitoken";
 import fetchBlogs from "@/components/Tools/Blog/fetch-blogs";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import TwitchWindow from "@/components/system32/windows/twitchwindow";
 import MyWork from "@/components/system32/windows/MyWork/mywork";
 import MentionLegal from "@/components/system32/windows/MentionLegal/mentionlegal";
 import { playBookSettle } from "@/components/system32/windows/MentionLegal/bookSounds";
+import PrivacyConsent from "@/components/system32/windows/PrivacyConsent/privacyconsent";
 import TamagotchiWidget from "@/components/system32/applications/SadGotchu/Tamagotchi-Widget";
 
 import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
@@ -29,12 +30,20 @@ import "/styles/styles.sass";
 import "/styles/system32/windows/index.sass"
 import "/styles/system32/desktop/crt.sass";
 
+const PRIVACY_STORAGE_KEY = "sadflower-privacy-v1";
+const DEFAULT_PRIVACY_CONSENT = { analytics: false, externalMedia: false };
+
 function HomePage() {
   const [user, setUser] = useState(null);
   const [featuredBlogs, setFeaturedBlogs] = useState(null);
   const [blogs, setBlogs] = useState(null);
   const [isClient, setIsClient] = useState(false);
   const [loginStatus, setLoginStatus] = useState(false);
+  const [bootComplete, setBootComplete] = useState(false);
+  const [privacyReady, setPrivacyReady] = useState(false);
+  const [privacyConsent, setPrivacyConsent] = useState(null);
+  const [isPrivacySettingsOpen, setIsPrivacySettingsOpen] = useState(false);
+  const [isPrivacyLegalPreviewOpen, setIsPrivacyLegalPreviewOpen] = useState(false);
 
   // Fonction pour vérifier si nous sommes sur PC ou Tablette/téléphone :
   const isMobileDevice = () => {
@@ -47,6 +56,25 @@ function HomePage() {
   // Fonction pour gérer les élements dynamique côté client
   useEffect(() => {
     setIsClient(true);
+    try {
+      const storedConsent = JSON.parse(localStorage.getItem(PRIVACY_STORAGE_KEY));
+      if (storedConsent && typeof storedConsent.analytics === "boolean" && typeof storedConsent.externalMedia === "boolean") {
+        setPrivacyConsent(storedConsent);
+      }
+    } catch {
+      localStorage.removeItem(PRIVACY_STORAGE_KEY);
+    } finally {
+      setPrivacyReady(true);
+    }
+  }, []);
+
+  const handleBootComplete = useCallback(() => setBootComplete(true), []);
+
+  const savePrivacyConsent = useCallback((nextConsent) => {
+    const normalizedConsent = { ...DEFAULT_PRIVACY_CONSENT, ...nextConsent };
+    localStorage.setItem(PRIVACY_STORAGE_KEY, JSON.stringify(normalizedConsent));
+    setPrivacyConsent(normalizedConsent);
+    setIsPrivacySettingsOpen(false);
   }, []);
   useEffect(() => {
     // Pour gérer si le user est connecté
@@ -123,7 +151,7 @@ function HomePage() {
         setIsArticleExeOpen(true);
         break;
       case "TwitchWindow":
-        if (isMobileDevice()) {
+        if (isMobileDevice() && privacyConsent?.externalMedia === true) {
           window.location.href = `twitch://stream/eniosadflower`; // Ça ouvre l'app Twitch direct
         } else {
           setIsTwitchWindowOpen(true); // Sinon, ça ouvre la fenêtre normalement
@@ -140,6 +168,7 @@ function HomePage() {
         break;
       case "MentionLegal":
         playBookSettle();
+        setIsPrivacyLegalPreviewOpen(false);
         setIsMentionLegalOpen(true);
         break;
       case "SignIn":
@@ -166,7 +195,7 @@ function HomePage() {
               width={1920}
               height={1080}
             />
-            <BootsScreen />
+            <BootsScreen onComplete={handleBootComplete} />
             <div className='desktop-icons'>
               <Icon
                 title='WhoAmI.exe'
@@ -212,6 +241,11 @@ function HomePage() {
               {isTwitchWindowOpen && (
                 <TwitchWindow
                   closeWindow={() => setIsTwitchWindowOpen(false)}
+                  externalMediaAllowed={privacyConsent?.externalMedia === true}
+                  onAllowExternalMedia={() => savePrivacyConsent({
+                    analytics: privacyConsent?.analytics === true,
+                    externalMedia: true,
+                  })}
                 />
               )}
               {isWhoamiOpen && (
@@ -224,7 +258,10 @@ function HomePage() {
                 <MyWork closeWindow={() => setIsMyWorkOpen(false)} />
               )}
               {isMentionLegalOpen && (
-                <MentionLegal closeWindow={() => setIsMentionLegalOpen(false)} />
+                <MentionLegal closeWindow={() => {
+                  setIsMentionLegalOpen(false);
+                  setIsPrivacyLegalPreviewOpen(false);
+                }} />
               )}
               {!user && isSignInOpen && !isSignUpOpen && (
                 <SignIn
@@ -267,6 +304,17 @@ function HomePage() {
               )}
             </>
           )}
+          {isClient && bootComplete && privacyReady && !isPrivacyLegalPreviewOpen && (!privacyConsent || isPrivacySettingsOpen) && (
+            <PrivacyConsent
+              initialConsent={privacyConsent}
+              onSave={savePrivacyConsent}
+              onOpenLegal={() => {
+                playBookSettle();
+                setIsPrivacyLegalPreviewOpen(true);
+                setIsMentionLegalOpen(true);
+              }}
+            />
+          )}
           <div className="watermark-desktop">
             <p>2024 © SadFlower™ OS </p>
           </div>
@@ -279,12 +327,13 @@ function HomePage() {
                 onSignUpClick={() => setIsSignUpOpen(true)}
                 onUserInfoClick={() => setIsUserInfoOpen(true)}
                 onUserListClick={handleUserListClick}
+                onPrivacyClick={() => setIsPrivacySettingsOpen(true)}
               />
             </div>
           )}
         </div>
       </div>
-      <Analytics />
+      {privacyConsent?.analytics === true && <Analytics />}
     </div>
   );
 }
