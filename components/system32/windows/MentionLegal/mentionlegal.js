@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { BOOK_LEAVES, BOOK_META, BOOKMARK_TARGETS } from './bookData';
 import { LEGAL_SECTIONS } from './legalData';
 import { playBookPoof, playPageTurn } from './bookSounds';
+import { resolveMobileBookPage } from './mobilePageResolver';
 import '/styles/system32/windows/MentionLegal/bookscene.sass';
 
 const TURN_MS = 260;
@@ -39,6 +40,9 @@ export default function MentionLegal({ closeWindow }) {
   const [isMobileBusy, setIsMobileBusy] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const totalLeaves = BOOK_LEAVES.length;
+  const resolvedMobilePage = resolveMobileBookPage(MOBILE_BOOK_PAGES, mobilePageIndex);
+  const safeMobilePageIndex = resolvedMobilePage.index;
+  const mobilePage = resolvedMobilePage.page;
   const isOpeningFromFront = isBusy
     && turnDirection === 'forward'
     && turnedCount === 0
@@ -71,6 +75,12 @@ export default function MentionLegal({ closeWindow }) {
     return () => query.removeEventListener('change', sync);
   }, []);
 
+  useEffect(() => {
+    if (mobilePageIndex !== safeMobilePageIndex) {
+      setMobilePageIndex(safeMobilePageIndex);
+    }
+  }, [mobilePageIndex, safeMobilePageIndex]);
+
   const clearTimers = useCallback(() => {
     window.clearTimeout(cascadeTimerRef.current);
     window.clearTimeout(releaseTimerRef.current);
@@ -83,7 +93,7 @@ export default function MentionLegal({ closeWindow }) {
       const height = node?.offsetHeight || Math.min(680, window.innerHeight * 0.84);
       setPosition({
         x: Math.max(8, (window.innerWidth - width) / 2),
-        y: Math.max(8, (window.innerHeight - height) / 2),
+        y: Math.max(0, (window.innerHeight - height) / 2),
       });
     };
     centerBook();
@@ -118,8 +128,8 @@ export default function MentionLegal({ closeWindow }) {
 
   const turnMobile = useCallback((direction) => {
     if (isMobileBusy) return;
-    const target = clamp(mobilePageIndex + direction, 0, MOBILE_BOOK_PAGES.length - 1);
-    if (target === mobilePageIndex) return;
+    const target = clamp(safeMobilePageIndex + direction, 0, MOBILE_BOOK_PAGES.length - 1);
+    if (target === safeMobilePageIndex) return;
     playPageTurn();
     setIsMobileBusy(true);
     setMobileDirection(direction > 0 ? 'forward' : 'backward');
@@ -129,7 +139,7 @@ export default function MentionLegal({ closeWindow }) {
       setMobileDirection('');
       setIsMobileBusy(false);
     }, TURN_MS);
-  }, [isMobileBusy, mobilePageIndex]);
+  }, [isMobileBusy, safeMobilePageIndex]);
 
   const turnOne = useCallback((direction) => {
     if (isMobileBook) {
@@ -158,9 +168,9 @@ export default function MentionLegal({ closeWindow }) {
     if (isMobileBook) {
       const section = LEGAL_SECTIONS.find((item) => BOOKMARK_TARGETS[item.id] === target);
       const mobileTarget = MOBILE_BOOK_PAGES.findIndex(({ page }) => page.sectionId === section?.id);
-      if (mobileTarget >= 0 && mobileTarget !== mobilePageIndex) {
+      if (mobileTarget >= 0 && mobileTarget !== safeMobilePageIndex) {
         playPageTurn();
-        setMobileDirection(mobileTarget > mobilePageIndex ? 'forward' : 'backward');
+        setMobileDirection(mobileTarget > safeMobilePageIndex ? 'forward' : 'backward');
         setMobilePageIndex(mobileTarget);
         window.clearTimeout(releaseTimerRef.current);
         releaseTimerRef.current = window.setTimeout(() => setMobileDirection(''), TURN_MS);
@@ -190,7 +200,7 @@ export default function MentionLegal({ closeWindow }) {
     };
 
     step(turnedCount);
-  }, [clearTimers, isBusy, isMobileBook, mobilePageIndex, settleTurn, totalLeaves, turnedCount]);
+  }, [clearTimers, isBusy, isMobileBook, safeMobilePageIndex, settleTurn, totalLeaves, turnedCount]);
 
   useEffect(() => {
     const onKeyDown = (event) => {
@@ -382,8 +392,6 @@ export default function MentionLegal({ closeWindow }) {
 
   const leftPaperCount = clamp(turnedCount - 1, 0, BOOK_META.totalPaperSheets);
   const rightPaperCount = BOOK_META.totalPaperSheets - leftPaperCount;
-  const mobilePage = MOBILE_BOOK_PAGES[mobilePageIndex];
-
   return (
     <div className="legal-scene-backdrop">
       <section
@@ -413,7 +421,7 @@ export default function MentionLegal({ closeWindow }) {
               <div className="mobile-book-page-content">
                 {renderPage(mobilePage.page)}
               </div>
-              <small className="mobile-book-folio">Feuille {mobilePageIndex + 1} / {MOBILE_BOOK_PAGES.length}</small>
+              <small className="mobile-book-folio">Feuille {safeMobilePageIndex + 1} / {MOBILE_BOOK_PAGES.length}</small>
             </article>
             <aside className="mobile-bookmarks" aria-label="Accès direct aux chapitres">
               {LEGAL_SECTIONS.map((section) => (
@@ -430,8 +438,8 @@ export default function MentionLegal({ closeWindow }) {
               ))}
             </aside>
             <nav className="mobile-book-controls" aria-label="Navigation du registre">
-              <button type="button" onClick={() => turnMobile(-1)} disabled={mobilePageIndex === 0 || isMobileBusy}>Précédent</button>
-              <button type="button" onClick={() => turnMobile(1)} disabled={mobilePageIndex === MOBILE_BOOK_PAGES.length - 1 || isMobileBusy}>Suivant</button>
+              <button type="button" onClick={() => turnMobile(-1)} disabled={safeMobilePageIndex === 0 || isMobileBusy}>Précédent</button>
+              <button type="button" onClick={() => turnMobile(1)} disabled={safeMobilePageIndex === MOBILE_BOOK_PAGES.length - 1 || isMobileBusy}>Suivant</button>
             </nav>
           </div>
         )}

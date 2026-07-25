@@ -2,7 +2,7 @@
     position: fixed
     // The book is a modal scene. It must stay above taskbar and desktop
     // windows; only privacy consent deliberately sits higher.
-    z-index: 2147482000
+    z-index: 50000
     inset: 0
     overflow: hidden
     background: radial-gradient(circle at 50% 45%, rgba(255, 222, 158, .12), rgba(0, 0, 0, .42))
@@ -554,7 +554,7 @@
     -webkit-backface-visibility: visible
 
     &.bookmark-on-leaf
-        transform: translateZ(5px)
+        transform: translateZ(16px)
 
     &.bookmark-back
         transform: rotateY(180deg) translateZ(5px)
@@ -574,14 +574,12 @@
         outline: 2px solid #f1d78d
         outline-offset: 2px
 
-// A front-page tab becomes a left-side tab after its leaf rotates 180°.
-// Counter-rotate its own face: otherwise its clipped tip is mirrored while
-// tabs carried by a verso keep their normal orientation.
-.book-leaf.is-turned:not(.is-active-turn) .bookmark-tab.bookmark-front
-    // A turned front page uses the former right edge as its outer left edge.
-    // Its compact reverse likewise leaves only an 8px grip outside.
-    right: -17px
-    transform: rotateY(180deg) translateZ(-5px)
+// The turned leaf already mirrors its tab onto the left edge.
+// Keep every tab in the same local frame as on the right: applying a second
+// rotateY here would reverse the notch twice and break the mirror illusion.
+.book-leaf.is-turned:not(.is-active-turn) .bookmark-tab
+    right: -8px
+    transform: translateZ(-29px)
 
 .book-leaf.is-active-turn .bookmark-tab span
     color: transparent

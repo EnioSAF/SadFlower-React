@@ -70,7 +70,13 @@ const TaskBar = ({
           </div>
           <div className='about'>
             <button className='taskbar-button' onClick={onPrivacyClick}>
-              <span className='auth-icon' aria-hidden='true'>🔒</span>
+              <Image
+                src='/Icon/Windows95/Sort by Category [Without duplicates]/Locks & Keys/Document Locked.ico'
+                alt='Privacy'
+                width={32}
+                height={32}
+                className='auth-icon'
+              />
               Privacy
             </button>
           </div>

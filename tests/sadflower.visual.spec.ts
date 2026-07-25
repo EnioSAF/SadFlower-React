@@ -25,7 +25,7 @@ test.describe("SadFlower visual smoke", () => {
 
   test("privacy setup gates optional services after boot", async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
       localStorage.removeItem("sadflower-privacy-v1");
     });
@@ -50,7 +50,7 @@ test.describe("SadFlower visual smoke", () => {
   test("MentionLegal behaves like a physical point-and-click book", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile-chrome", "La scène mobile plein écran sera conçue séparément.");
     await page.addInitScript(() => {
-      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
     });
     await page.goto("/");
@@ -87,7 +87,7 @@ test.describe("SadFlower visual smoke", () => {
   test("MentionLegal keeps turned verso bookmarks compact", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile-chrome", "La scène mobile plein écran sera conçue séparément.");
     await page.addInitScript(() => {
-      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
       localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
     });
@@ -101,12 +101,22 @@ test.describe("SadFlower visual smoke", () => {
     }
     await expect(page.locator('.bookmark-back.is-current-bookmark')).toHaveCount(0);
     await expect(page.locator('.bookmark-front.is-current-bookmark')).toHaveCount(1);
+
+    const turnedBookmarkStyles = await page.locator('.book-leaf.is-turned .bookmark-tab').evaluateAll(
+      (bookmarks) => bookmarks.map((bookmark) => ({
+        right: getComputedStyle(bookmark).right,
+        transform: getComputedStyle(bookmark).transform,
+      })),
+    );
+    expect(turnedBookmarkStyles.length).toBeGreaterThan(0);
+    expect(turnedBookmarkStyles.every(({ right }) => right === '-8px')).toBe(true);
+    expect(turnedBookmarkStyles.every(({ transform }) => transform.startsWith('matrix3d(1,'))).toBe(true);
   });
 
   test("MentionLegal uses a full-screen single-page reader on mobile", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au lecteur mobile.");
     await page.addInitScript(() => {
-      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
       localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
     });
@@ -128,7 +138,7 @@ test.describe("SadFlower visual smoke", () => {
   test("MentionLegal preserves the physical sheet during both flip directions", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name === "mobile-chrome", "La scène mobile plein écran sera conçue séparément.");
     await page.addInitScript(() => {
-      localStorage.setItem("version", "1.0.2");
+      localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
     });
     await page.goto("/");

@@ -80,7 +80,10 @@ function pairPages(pages) {
       id: `sheet-${index / 2 + 1}`,
       kind: 'paper',
       front: pages[index],
-      back: pages[index + 1],
+      back: pages[index + 1] || {
+        id: `sheet-${index / 2 + 1}-blank-verso`,
+        type: 'blank',
+      },
     });
   }
   return sheets;
