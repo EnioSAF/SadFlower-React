@@ -11,6 +11,7 @@ class MyDocument extends Document {
             <Html lang='fr'>
                 <Head>
                     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500&display=swap" rel="stylesheet" />
+                    <link rel="icon" href="/favicon.ico" data-sadflower-tab-default="true" />
 
                     <title>SadFlower HUB</title>
                     <meta name='description' content='LE MONDE DE LA SADFLOWER DANS UN SEUL ET MÊME PORTAIL. PORTOFOLIO/CV/MUSIQUE/CREATIONS...' />
