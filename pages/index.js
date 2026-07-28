@@ -116,6 +116,20 @@ function HomePage() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [showUserList, setShowUserList] = useState(false);
 
+  const activeWindow = isMyWorkOpen
+    ? "mywork"
+    : isArticleExeOpen
+      ? "articles"
+      : isMentionLegalOpen
+        ? "mentionLegal"
+        : isTwitchWindowOpen
+          ? "twitch"
+          : isWhoamiOpen
+            ? "whoami"
+            : isUserInfoOpen || isEditProfileOpen || isSignInOpen || isSignUpOpen
+              ? "profile"
+              : null;
+
   // Fonction pour gérer le Tamagotchi
   const [isTamagotchiWidgetOpen, setIsTamagotchiWidgetOpen] = useState(false);
   const openTamagotchiWidget = () => {
@@ -186,7 +200,7 @@ function HomePage() {
 
   return (
     <div className='pinchbulgewrapper'>
-      <BrowserTabEffects isBooting={!bootComplete} />
+      <BrowserTabEffects isBooting={!bootComplete} activeWindow={activeWindow} />
       <div className='scanlines'>
         <div className='crt'>
           <div className='desktop'>

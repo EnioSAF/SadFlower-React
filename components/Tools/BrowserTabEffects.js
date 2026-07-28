@@ -14,15 +14,25 @@ const glitchText = (text) => {
     .join("");
 };
 
-const LOADING_FAVICON = "/Icon/Windows95/Sort by Category [Without duplicates]/Windows/Windows 95 logo.ico";
+const ICON_ROOT = "/Icon/Windows95/Sort by Category [Without duplicates]";
+const BOOT_ICON = `${ICON_ROOT}/Programs/Program wait.ico`;
+const EASTER_EGG_ICON = `${ICON_ROOT}/Dialog icons/Warning.ico`;
+const WINDOW_STATES = {
+  mywork: { title: "MyWork.exe | SadFlower HUB", icon: `${ICON_ROOT}/Programs/Web-document program.ico` },
+  articles: { title: "Articles.exe | SadFlower HUB", icon: `${ICON_ROOT}/Folders/Folder catalog.ico` },
+  mentionLegal: { title: "MentionLegal.exe | SadFlower HUB", icon: `${ICON_ROOT}/Books/Book.ico` },
+  twitch: { title: "Twitch.exe | SadFlower HUB", icon: `${ICON_ROOT}/Media/Movie frame (in hands).ico` },
+  whoami: { title: "WhoAmI.exe | SadFlower HUB", icon: `${ICON_ROOT}/Help/Help book.ico` },
+  profile: { title: "User profile | SadFlower HUB", icon: `${ICON_ROOT}/People/User.ico` },
+};
 
-export default function BrowserTabEffects({ isBooting }) {
+export default function BrowserTabEffects({ isBooting, activeWindow }) {
   const timeoutIds = useRef([]);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const timeouts = timeoutIds.current;
-    const setLoadingFavicon = () => {
+    const setTemporaryFavicon = (href) => {
       let favicon = document.querySelector("link[data-sadflower-tab-glitch]");
       if (!favicon) {
         favicon = document.createElement("link");
@@ -30,7 +40,7 @@ export default function BrowserTabEffects({ isBooting }) {
         favicon.dataset.sadflowerTabGlitch = "true";
         document.head.appendChild(favicon);
       }
-      favicon.href = LOADING_FAVICON;
+      favicon.href = href;
     };
     const reset = () => {
       document.title = DEFAULT_TITLE;
@@ -55,6 +65,7 @@ export default function BrowserTabEffects({ isBooting }) {
       let frame = 0;
       const renderBootFrame = () => {
         document.title = bootTitles[frame];
+        setTemporaryFavicon(BOOT_ICON);
         frame = (frame + 1) % bootTitles.length;
       };
 
@@ -66,13 +77,20 @@ export default function BrowserTabEffects({ isBooting }) {
       };
     }
 
+    const windowState = WINDOW_STATES[activeWindow];
+    if (windowState) {
+      document.title = windowState.title;
+      setTemporaryFavicon(windowState.icon);
+      return reset;
+    }
+
     const flash = (message = glitchText(DEFAULT_TITLE), duration = 650) => {
       document.title = message;
-      setLoadingFavicon();
+      setTemporaryFavicon(EASTER_EGG_ICON);
       later(reset, duration);
     };
     const scheduleAmbientGlitch = () => {
-      const delay = 45000 + Math.random() * 75000;
+      const delay = 180000 + Math.random() * 420000;
       later(() => {
         if (!document.hidden) flash();
         scheduleAmbientGlitch();
@@ -95,7 +113,6 @@ export default function BrowserTabEffects({ isBooting }) {
     reset();
     document.addEventListener("click", handleClick);
     if (!reducedMotion) {
-      later(() => flash(glitchText(DEFAULT_TITLE), 1000), 5000 + Math.random() * 7000);
       scheduleAmbientGlitch();
     }
 
@@ -104,7 +121,7 @@ export default function BrowserTabEffects({ isBooting }) {
       timeouts.forEach(window.clearTimeout);
       reset();
     };
-  }, [isBooting]);
+  }, [activeWindow, isBooting]);
 
   return null;
 }
