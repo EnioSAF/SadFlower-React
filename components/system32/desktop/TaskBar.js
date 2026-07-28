@@ -41,7 +41,14 @@ const TaskBar = ({
   return (
     <div className='footer'>
       <button className='start-button' onClick={toggleStartMenu}>
-        <span className='logo'>🌸</span>
+        <Image
+          className='logo'
+          src='/Icon/flower-start.ico'
+          alt=''
+          width={18}
+          height={18}
+          aria-hidden='true'
+        />
         <span className='start-text'>Start</span>
       </button>
       {showStartMenu && (

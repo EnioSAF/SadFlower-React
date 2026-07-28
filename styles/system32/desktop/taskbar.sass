@@ -10,7 +10,7 @@
     display: flex
     justify-content: space-between
     padding: 0 16px
-    align-items: top
+    align-items: center
 
     ::before
     bottom: 10px  // Ajuste cette valeur pour agrandir le bas du background
@@ -21,7 +21,12 @@
 .start-button
     background-color: #ffffff
     border: none
-    padding: 2px 30px
+    display: inline-flex
+    align-items: center
+    justify-content: flex-start
+    gap: 6px
+    min-height: 30px
+    padding: 4px 12px 4px 8px
     border-radius: 4px
     font-weight: bold
     cursor: pointer
@@ -30,18 +35,11 @@
     margin-left: 20px
 
 .start-text
-    position: relative
-    bottom: 3px
-    vertical-align: middle
-    margin-top: 4px
-    display: inline-block
+    line-height: 18px
 
 .logo
-    position: relative
-    bottom: 4px
-    font-size: 24px
-    vertical-align: middle
-    margin-right: 5px
+    display: block
+    flex: 0 0 18px
 
 
 // Start-Menu
