@@ -1,3 +1,5 @@
+@use 'sass:color'
+
 .titre-sectionsarticles
     margin-bottom: 10px
     text-align: center
@@ -30,7 +32,7 @@
             color: #000000
 
             &:hover
-                background-color: darken(#8a8a8b, 10%)
+                background-color: color.adjust(#8a8a8b, $lightness: -10%)
 
         li
             list-style: none

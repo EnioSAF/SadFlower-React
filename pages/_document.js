@@ -13,7 +13,6 @@ class MyDocument extends Document {
                     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500&display=swap" rel="stylesheet" />
                     <link rel="icon" href="/favicon.ico" data-sadflower-tab-default="true" />
 
-                    <title>SadFlower HUB</title>
                     <meta name='description' content='LE MONDE DE LA SADFLOWER DANS UN SEUL ET MÊME PORTAIL. PORTOFOLIO/CV/MUSIQUE/CREATIONS...' />
                     <meta name='keywords' content='Enio, enio, ENIO, sadflower, SADFLOWER, SadFlower, Enio SadFlower, ENIO SADFLOWER, enio sadflower, sadflowerhub, SadFlowerHub, SadFlower Hub, SadFlowerCorp, sadflowercorp' />
                     <meta name='author' content='Enio SadFlower' />

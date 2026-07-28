@@ -1,5 +1,7 @@
+@use 'sass:color'
+
 .window-body
-    background: darken($color: #c0c0c0, $amount: 5%) // On assombrit un peu pour le style
+    background: color.adjust(#c0c0c0, $lightness: -5%) // On assombrit un peu pour le style
 
 .header_space
     text-align: center // Centrage suprême pour USER
@@ -13,7 +15,7 @@
     display: flex
     flex-direction: column
     border: 2px solid #fff // Cadre blanc pour l'effet "fenêtre"
-    background: darken($color: #808080, $amount: 10%) // Un peu plus sombre pour faire ressortir l'avatar
+    background: color.adjust(#808080, $lightness: -10%) // Un peu plus sombre pour faire ressortir l'avatar
 
     .avatar
         display: flex
