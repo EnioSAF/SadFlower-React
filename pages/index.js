@@ -24,6 +24,7 @@ import PopUpManager from "@/components/system32/windows/PopUp/PopUpManager";
 import Icon from "@/components/system32/applications/icon";
 import BootsScreen from "@/components/system32/windows/bootscreen";
 import TaskBar from "@/components/system32/desktop/TaskBar";
+import BrowserTabEffects from "@/components/Tools/BrowserTabEffects";
 
 import "98.css";
 import "/styles/styles.sass";
@@ -185,6 +186,7 @@ function HomePage() {
 
   return (
     <div className='pinchbulgewrapper'>
+      <BrowserTabEffects isBooting={!bootComplete} />
       <div className='scanlines'>
         <div className='crt'>
           <div className='desktop'>
