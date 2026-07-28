@@ -7,8 +7,6 @@ import ReactMarkdown from 'react-markdown';
 
 import styles from "@/styles/utils/style.module.sass";
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/Articles/window-contenu.sass";
 
 const FeaturedWindow = ({ articleData, closeWindow, onClick }) => {
   // Fonction pour vérifier la taille de l'écran

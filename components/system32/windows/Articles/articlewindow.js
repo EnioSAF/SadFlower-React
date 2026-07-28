@@ -6,7 +6,6 @@ import FeaturedWindow from "./featuredwindow";
 import SimpleWindow from "./simplewindow";
 import fetchBlogs from "@/components/Tools/Blog/fetch-blogs";
 
-import "/styles/system32/windows/Articles/articlewindow.sass";
 import "98.css";
 
 const ArticleExe = ({ onClose }) => {

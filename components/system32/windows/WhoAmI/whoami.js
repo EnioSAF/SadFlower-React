@@ -13,10 +13,7 @@ import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 import ChatGPTModule from "./ChatGPTModule";
 import TimeLineEnio from "./VerticalTimeline";
 
-import "/styles/styles.sass";
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/WhoAmI//whoami.sass";
 import "react-vertical-timeline-component/style.min.css";
 
 const Whoami = ({ closeWindow, username }) => {

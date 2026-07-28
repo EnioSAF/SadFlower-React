@@ -6,8 +6,6 @@ import { API } from "/components/Tools/SignInOut/constant";
 import { setToken, setUser, setSadGotchuId } from "components/Tools/SignInOut/strapitoken";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-
 const SignIn = ({
   closeWindow,
   switchToSignUp,

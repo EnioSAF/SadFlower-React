@@ -3,8 +3,6 @@ import { BOOK_LEAVES, BOOK_META, BOOKMARK_TARGETS } from './bookData';
 import { LEGAL_SECTIONS } from './legalData';
 import { playBookPoof, playPageTurn } from './bookSounds';
 import { resolveMobileBookPage } from './mobilePageResolver';
-import '/styles/system32/windows/MentionLegal/bookscene.sass';
-
 const TURN_MS = 260;
 const COVER_TURN_MS = 330;
 const CASCADE_STEP_MS = 60;

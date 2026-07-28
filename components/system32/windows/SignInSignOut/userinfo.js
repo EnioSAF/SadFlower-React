@@ -14,9 +14,6 @@ import { PixelArtCard } from "react-pixelart-face-card";
 import TamagotchiWidget from "../../applications/SadGotchu/Tamagotchi-Widget";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/SignInSignOut/userinfo.sass";
-
 const UserInfo = ({
   closeWindow,
   setLoginStatus,

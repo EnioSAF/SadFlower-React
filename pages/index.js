@@ -27,9 +27,6 @@ import TaskBar from "@/components/system32/desktop/TaskBar";
 import BrowserTabEffects from "@/components/Tools/BrowserTabEffects";
 
 import "98.css";
-import "/styles/styles.sass";
-import "/styles/system32/windows/index.sass"
-import "/styles/system32/desktop/crt.sass";
 
 const PRIVACY_STORAGE_KEY = "sadflower-privacy-v1";
 const DEFAULT_PRIVACY_CONSENT = { analytics: false, externalMedia: false };

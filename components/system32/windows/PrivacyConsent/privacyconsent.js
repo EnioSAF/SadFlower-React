@@ -1,7 +1,5 @@
 import { useState } from 'react';
 
-import '/styles/system32/windows/PrivacyConsent/privacyconsent.sass';
-
 const DEFAULT_CONSENT = { analytics: false, externalMedia: false };
 
 export default function PrivacyConsent({ initialConsent, onSave, onOpenLegal }) {

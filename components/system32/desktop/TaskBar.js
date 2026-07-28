@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import "/styles/system32/desktop/taskbar.sass";
 
 const TaskBar = ({
   user,

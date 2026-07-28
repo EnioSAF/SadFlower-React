@@ -8,9 +8,6 @@ import { getToken } from "@/components/Tools/SignInOut/strapitoken";
 import EditAvatar from "@/components/Tools/SignInOut/EditAvatar";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/SignInSignOut/editprofile.sass"
-
 const EditProfile = ({ closeWindow }) => {
   const { user, setUser } = useAuthContext();
   const [formData, setFormData] = useState({ username: "", email: "" });

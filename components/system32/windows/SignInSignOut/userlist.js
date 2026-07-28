@@ -8,9 +8,6 @@ import { Tilt } from 'react-next-tilt';
 import { sprites } from "@/components/system32/applications/SadGotchu/Tamagotchi-Core.js";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/SignInSignOut/userlist.sass";
-
 const UserList = ({ closeWindow }) => {
   const [users, setUsers] = useState([]);
 

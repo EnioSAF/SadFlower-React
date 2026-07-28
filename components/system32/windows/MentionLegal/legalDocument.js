@@ -1,8 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { LEGAL_SECTIONS } from './legalData';
-import '/styles/system32/windows/MentionLegal/legalroute.sass';
-
 function LegalText({ children }) {
   return children.split(/(\[[^\]]+\])/g).map((part, index) => (
     part.startsWith('[') && part.endsWith(']')

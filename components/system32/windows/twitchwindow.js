@@ -6,9 +6,6 @@ import { TwitchPlayer } from "react-twitch-embed";
 import { TwitchChat } from "react-twitch-embed";
 
 import "/styles/utils/style.module.sass";
-import "/styles/system32/windows/twitchwindow.sass";
-import "/styles/system32/windows/window.sass";
-
 const TwitchWindow = ({ closeWindow, externalMediaAllowed, onAllowExternalMedia }) => {
   const embed = useRef();
 

@@ -2,8 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { Rnd } from 'react-rnd';
 import { useZIndex } from '@/components/Tools/ZIndexContext';
 import { SERVICES, buildRequestPayload, isFormValid } from './myWorkData';
-import '/styles/system32/windows/window.sass';
-import '/styles/system32/windows/MyWork/mywork.sass';
 import '98.css';
 
 const initialForm = { name: '', email: '', phone: '', preferredDate: '', message: '', consent: false };

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { PixelArtCard } from "react-pixelart-face-card";
-import '/styles/system32/windows/SignInSignOut/editavatar.sass'
-
 const EditAvatar = ({ initialAvatar, onSave }) => {
   const [avatar, setAvatar] = useState(initialAvatar);
 

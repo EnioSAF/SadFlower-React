@@ -6,10 +6,6 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { PowerGlitch } from 'powerglitch';
 
 import "/styles/utils/style.module.sass";
-import "styles/system32/windows/PopUp/OskarWash/CoolBug4Sell/coolbug4sell.sass";
-import "/styles/system32/windows/window.sass";
-
-
 const CoolBug4Sell = ({ closeWindow }) => {
 
     // - Glitch les images

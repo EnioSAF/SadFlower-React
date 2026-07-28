@@ -6,8 +6,6 @@ import { setToken, setUser } from "/components/Tools/SignInOut/strapitoken";
 import generateRandomAvatar from "/components/Tools/SignInOut/AvatarGenerator";
 
 import "98.css";
-import "/styles/system32/windows/window.sass";
-
 const SignUp = ({
   closeWindow,
   switchToSignIn,

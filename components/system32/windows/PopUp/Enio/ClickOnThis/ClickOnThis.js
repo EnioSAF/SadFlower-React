@@ -6,10 +6,6 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 import { PowerGlitch } from 'powerglitch';
 
 import "/styles/utils/style.module.sass";
-import "styles/system32/windows/PopUp/Enio/ClickOnThis/clickonthis.sass";
-import "/styles/system32/windows/window.sass";
-
-
 const ClickOnThis = ({ closeWindow }) => {
 
     // - Glitch les images

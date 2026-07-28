@@ -4,9 +4,6 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 
 import "/styles/utils/style.module.sass";
 import "98.css";
-import "/styles/system32/windows/window.sass";
-import "/styles/system32/windows/aboutpage.sass";
-
 const AboutPage = ({ closeWindow }) => {
 
 
