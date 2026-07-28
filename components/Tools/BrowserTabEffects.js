@@ -38,18 +38,19 @@ export default function BrowserTabEffects({ isBooting }) {
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const timeouts = timeoutIds.current;
-    let favicon = document.querySelector('link[rel="icon"]');
-
-    if (!favicon) {
-      favicon = document.createElement("link");
-      favicon.rel = "icon";
-      document.head.appendChild(favicon);
-    }
-
-    const originalFavicon = favicon.getAttribute("href") || "/favicon.ico";
+    const setGlitchFavicon = (href) => {
+      let favicon = document.querySelector("link[data-sadflower-tab-glitch]");
+      if (!favicon) {
+        favicon = document.createElement("link");
+        favicon.rel = "icon";
+        favicon.dataset.sadflowerTabGlitch = "true";
+        document.head.appendChild(favicon);
+      }
+      favicon.href = href;
+    };
     const reset = () => {
       document.title = DEFAULT_TITLE;
-      favicon.href = originalFavicon;
+      document.querySelector("link[data-sadflower-tab-glitch]")?.remove();
     };
     const later = (callback, delay) => {
       const id = window.setTimeout(callback, delay);
@@ -67,7 +68,7 @@ export default function BrowserTabEffects({ isBooting }) {
       let frame = 0;
       const renderBootFrame = () => {
         document.title = bootTitles[frame];
-        favicon.href = faviconSvg(frame % 2 === 0);
+        setGlitchFavicon(faviconSvg(frame % 2 === 0));
         frame = (frame + 1) % bootTitles.length;
       };
 
@@ -81,7 +82,7 @@ export default function BrowserTabEffects({ isBooting }) {
 
     const flash = (message = glitchText(DEFAULT_TITLE), duration = 650) => {
       document.title = message;
-      favicon.href = faviconSvg(true);
+      setGlitchFavicon(faviconSvg(true));
       later(reset, duration);
     };
     const scheduleAmbientGlitch = () => {
