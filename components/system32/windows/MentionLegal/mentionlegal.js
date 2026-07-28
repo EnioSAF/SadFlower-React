@@ -487,7 +487,8 @@ export default function MentionLegal({ closeWindow }) {
               : -1;
             const bookmarkIsCurrent = bookmarkSection
               && bookmarkSide === 'front'
-              && BOOKMARK_TARGETS[bookmarkSection.id] === turnedCount;
+              && BOOKMARK_TARGETS[bookmarkSection.id] === turnedCount
+              && !turned;
             const closedCoverDirection = pose === 'closed-front' && index === 0
               ? 1
               : pose === 'closed-back' && index === totalLeaves - 1
