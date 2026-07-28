@@ -87,7 +87,7 @@ const Whoami = ({ closeWindow, username }) => {
         position={isMobileScreen()}
         disableDragging={isMobileScreen()}>
         <div className='title-bar'>
-          <div className='title-bar-text'>WhoAmI</div>
+          <div className='title-bar-text'>WhoAmI.exe</div>
           <div className='title-bar-controls'>
             <button aria-label='Minimize' />
             <button aria-label='Maximize' />

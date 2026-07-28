@@ -38,16 +38,15 @@ const ArticleExe = ({ onClose }) => {
         fetchBlogs("filters[IsFeatured][$eq]=true"),
         fetchBlogs("filters[IsFeatured][$eq]=false"),
       ]);
-      // Supposons que fetchBlogs renvoie un objet avec un champ data contenant les articles
-      const featuredBlogsData = featuredBlogsResponse.data;
-      const blogsData = blogsResponse.data;
+      const featuredBlogsData = featuredBlogsResponse.data || [];
+      const blogsData = blogsResponse.data || [];
 
       setFeaturedBlogs(featuredBlogsResponse);
       setBlogs(blogsResponse);
 
       // Extraction et mise en place des catégories uniques
-      const featuredCategories = [...new Set(featuredBlogsData.map(blog => blog.attributes.Category))];
-      const articleCategories = [...new Set(blogsData.map(blog => blog.attributes.Category))];
+      const featuredCategories = [...new Set(featuredBlogsData.map(blog => blog.attributes?.Category).filter(Boolean))];
+      const articleCategories = [...new Set(blogsData.map(blog => blog.attributes?.Category).filter(Boolean))];
       setCategoriesFeatured(['All', ...featuredCategories]);
       setCategoriesArticles(['All', ...articleCategories]);
     };
@@ -81,7 +80,7 @@ const ArticleExe = ({ onClose }) => {
     const start = (currentPage - 1) * articlesPerPage;
     let filteredData = currentCategory === 'All'
       ? data
-      : data.filter(blog => blog.attributes.Category === currentCategory);
+      : data.filter(blog => blog.attributes?.Category === currentCategory);
 
     const paginatedData = filteredData.slice(start, start + articlesPerPage);
 
@@ -216,11 +215,11 @@ const ArticleExe = ({ onClose }) => {
               <button onClick={() => changeArticlesPage(Math.min(totalArticlesPages, currentPageArticles + 1))}>Suivant</button>
             </div>
           </div>
-          <div className='status-bar'>
-            <p className='status-bar-field'>Articles</p>
-            <p className='status-bar-field'>ReadMode : on</p>
-            <p className='status-bar-field'>CPU Usage: 10%</p>
-          </div>
+        </div>
+        <div className='status-bar'>
+          <p className='status-bar-field'>Articles</p>
+          <p className='status-bar-field'>ReadMode : on</p>
+          <p className='status-bar-field'>CPU Usage: 10%</p>
         </div>
       </Rnd>
 

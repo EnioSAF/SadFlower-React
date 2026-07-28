@@ -7,8 +7,9 @@ import { TwitchChat } from "react-twitch-embed";
 
 import "/styles/utils/style.module.sass";
 import "/styles/system32/windows/twitchwindow.sass";
+import "/styles/system32/windows/window.sass";
 
-const TwitchWindow = ({ closeWindow }) => {
+const TwitchWindow = ({ closeWindow, externalMediaAllowed, onAllowExternalMedia }) => {
   const embed = useRef();
 
   // Pour gérer le Z-index
@@ -30,6 +31,15 @@ const TwitchWindow = ({ closeWindow }) => {
   };
 
   const twitchPlayer = useMemo(() => {
+    if (!externalMediaAllowed) {
+      return (
+        <div className='twitch-consent-prompt'>
+          <h2>Contenu externe bloqué</h2>
+          <p>Le lecteur Twitch reste désactivé tant que vous ne l’autorisez pas.</p>
+          <button type='button' onClick={onAllowExternalMedia}>Autoriser Twitch</button>
+        </div>
+      );
+    }
     return (
       <TwitchPlayer
         channel='EnioSadFlower'
@@ -39,11 +49,12 @@ const TwitchWindow = ({ closeWindow }) => {
         onReady={(e) => (embed.current = e)}
       />
     );
-  }, []); // Les crochets vides indiquent que le composant doit être mémorisé une seule fois
+  }, [externalMediaAllowed, onAllowExternalMedia]);
 
   const twitchChat = useMemo(() => {
+    if (!externalMediaAllowed) return null;
     return <TwitchChat channel='EnioSadFlower' darkMode />;
-  }, []); // Les crochets vides indiquent que le composant doit être mémorisé une seule fois
+  }, [externalMediaAllowed]);
 
   return (
     <>

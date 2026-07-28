@@ -13,8 +13,12 @@ body
         pointer-events: none
 
 .desktop
-    grid-template-rows: repeat(auto-fill, minmax(120px, 1fr))
-    gap: 10px // Ajuste l'espacement entre les icônes
-    justify-self: start
-    padding-left: 50px
+    // padding-left: 50px  // Removed for style purpose but kept in case
     margin: 30px
+
+.desktop-icons
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    gap: 28px
+    width: 120px

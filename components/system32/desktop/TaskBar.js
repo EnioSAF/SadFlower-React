@@ -9,6 +9,7 @@ const TaskBar = ({
   onSignUpClick,
   onUserInfoClick,
   onUserListClick,
+  onPrivacyClick,
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showStartMenu, setShowStartMenu] = useState(false);
@@ -40,7 +41,14 @@ const TaskBar = ({
   return (
     <div className='footer'>
       <button className='start-button' onClick={toggleStartMenu}>
-        <span className='logo'>🌸</span>
+        <Image
+          className='logo'
+          src='/Icon/flower-start.ico'
+          alt=''
+          width={18}
+          height={18}
+          aria-hidden='true'
+        />
         <span className='start-text'>Start</span>
       </button>
       {showStartMenu && (
@@ -65,6 +73,18 @@ const TaskBar = ({
                 className='auth-icon'
               />
               About
+            </button>
+          </div>
+          <div className='about'>
+            <button className='taskbar-button' onClick={onPrivacyClick}>
+              <Image
+                src='/Icon/Windows95/Sort by Category [Without duplicates]/Locks & Keys/Document Locked.ico'
+                alt='Privacy'
+                width={32}
+                height={32}
+                className='auth-icon'
+              />
+              Privacy
             </button>
           </div>
           {!user ? (
