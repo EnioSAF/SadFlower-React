@@ -44,7 +44,10 @@ export default function BrowserTabEffects({ isBooting, activeWindow }) {
     };
     const reset = () => {
       document.title = DEFAULT_TITLE;
-      document.querySelector("link[data-sadflower-tab-glitch]")?.remove();
+      const temporaryFavicon = document.querySelector("link[data-sadflower-tab-glitch]");
+      if (temporaryFavicon) {
+        temporaryFavicon.href = `/favicon.ico?tab-reset=${Date.now()}`;
+      }
       document
         .querySelector("link[data-sadflower-tab-default]")
         ?.setAttribute("href", "/favicon.ico");
