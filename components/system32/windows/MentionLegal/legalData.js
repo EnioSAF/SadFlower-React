@@ -18,7 +18,7 @@ export const LEGAL_SECTIONS = [
       ['Données collectées', 'Les demandes MyWork peuvent contenir nom, e-mail, téléphone, date souhaitée, message et choix de prestation.'],
       ['Finalités', 'Ces données servent à répondre aux demandes de devis ou de réservation, assurer le suivi des échanges, prévenir les abus et sécuriser le service.'],
       ['Base légale', 'La base applicable dépend du traitement : mesures précontractuelles pour répondre à une demande, obligation légale lorsque nécessaire, ou consentement lorsqu’il est demandé séparément.'],
-      ['Destinataires', 'Les données sont accessibles aux seules personnes habilitées et aux prestataires techniques nécessaires au fonctionnement du site : [LISTE DES PRESTATAIRES QUI REÇOIVENT DES DONNÉES PERSONNELLES].'],
+      ['Destinataires', 'Les données sont accessibles aux seules personnes habilitées et aux prestataires techniques nécessaires au fonctionnement du site : [Enio SadFlower, HEROKU, VERCEL, OVH].'],
       ['Conservation', 'Les demandes sans contrat sont conservées pendant 3 ans après le dernier échange, puis supprimées ou anonymisées, sauf obligation légale ou litige à traiter.'],
       ['Vos droits', 'Vous pouvez demander accès, rectification, effacement, limitation, opposition ou portabilité lorsque ces droits s’appliquent, en écrivant à [enio.sadflower@gmail.com]. Vous pouvez aussi saisir la CNIL.'],
     ],

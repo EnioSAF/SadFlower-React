@@ -144,6 +144,16 @@
         grid-template-columns: 35% 1fr
         gap: 10px
 
+        > *
+            min-width: 0
+
+    .selected-service h2
+        margin: 6px 0
+        font-size: clamp(1.4rem, 4vw, 2.5rem)
+        line-height: 1.08
+        overflow-wrap: anywhere
+        word-break: break-word
+
     .quote-form
         display: flex
         flex-direction: column
@@ -169,12 +179,49 @@
             font: inherit
 
         .consent
+            align-self: stretch
             flex-direction: row
             align-items: center
+            justify-content: flex-start
+            gap: 7px
+            width: 40%
+            min-height: 22px
+            padding: 4px 6px
+            border: 1px inset #fff
+            background: #fffbe6
+            color: #111
             font-weight: normal
+            text-align: left
+            cursor: pointer
 
-            input
-                width: auto
+            .consent-box
+                display: inline-grid
+                place-items: center
+                width: 16px
+                height: 16px
+                flex: 0 0 auto
+                position: relative
+                box-sizing: border-box
+                border: 2px inset #fff
+                background: #fff
+
+            > span:last-child
+                padding-left: 2%
+
+            &.is-checked .consent-box
+                border-style: inset
+                background: #d8eaff
+
+                &::after
+                    content: ''
+                    position: absolute
+                    top: 1px
+                    left: 4px
+                    width: 4px
+                    height: 7px
+                    border: solid #123e6b
+                    border-width: 0 2px 2px 0
+                    transform: rotate(45deg)
 
         .privacy-note
             display: block
