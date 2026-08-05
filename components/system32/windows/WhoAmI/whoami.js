@@ -17,6 +17,7 @@ import "98.css";
 import "react-vertical-timeline-component/style.min.css";
 
 const GITHUB_CONTRIBUTIONS_URL = 'https://github-contributions-api.jogruber.de/v4/EnioSAF?y=last';
+const GITHUB_ACTIVITY_START_YEAR = 2022;
 
 const getGitStats = (contributions, total) => {
   const activeDays = contributions.filter(({ count }) => count > 0);
@@ -44,6 +45,8 @@ const getGitStats = (contributions, total) => {
 const Whoami = ({ closeWindow, username }) => {
   const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
   const [gitStats, setGitStats] = useState(null);
+  const [allTimeStats, setAllTimeStats] = useState(null);
+  const [isAllTimeVisible, setIsAllTimeVisible] = useState(false);
   // Pour gérer le Z-index
   const { bringToFront, zIndex: globalZIndex } = useZIndex();
   const [zIndex, setZIndex] = useState(globalZIndex);
@@ -106,6 +109,31 @@ const Whoami = ({ closeWindow, username }) => {
 
     return () => controller.abort();
   }, []);
+
+  const toggleAllTimeActivity = async () => {
+    const nextVisibility = !isAllTimeVisible;
+    setIsAllTimeVisible(nextVisibility);
+
+    if (!nextVisibility || allTimeStats) {
+      return;
+    }
+
+    const years = Array.from(
+      { length: new Date().getFullYear() - GITHUB_ACTIVITY_START_YEAR + 1 },
+      (_, index) => GITHUB_ACTIVITY_START_YEAR + index
+    );
+    const results = await Promise.all(
+      years.map(async (year) => {
+        const response = await fetch(`https://github-contributions-api.jogruber.de/v4/EnioSAF?y=${year}`);
+        const { total } = await response.json();
+        return { year, count: response.ok ? total[year] ?? 0 : 0 };
+      })
+    );
+    const total = results.reduce((sum, { count }) => sum + count, 0);
+    const bestYear = results.reduce((best, item) => item.count > best.count ? item : best, results[0]);
+
+    setAllTimeStats({ total, bestYear, years: results });
+  };
 
   return (
     <>
@@ -227,6 +255,31 @@ const Whoami = ({ closeWindow, username }) => {
                     >
                       Open GitHub profile
                     </a>
+                    <button
+                      className='GitCalendar__allTimeButton'
+                      type='button'
+                      onClick={toggleAllTimeActivity}
+                      aria-expanded={isAllTimeVisible}
+                    >
+                      {isAllTimeVisible ? 'Hide all-time activity' : 'Show all-time activity'}
+                    </button>
+                    {isAllTimeVisible && (
+                      <div className='GitCalendar__allTime' aria-live='polite'>
+                        {allTimeStats ? (
+                          <>
+                            <p><strong>{allTimeStats.total}</strong> contributions since {GITHUB_ACTIVITY_START_YEAR} · peak: <strong>{allTimeStats.bestYear.count}</strong> in {allTimeStats.bestYear.year}</p>
+                            <div className='GitCalendar__yearGrid'>
+                              {allTimeStats.years.map(({ year, count }) => (
+                                <div key={year}>
+                                  <strong>{count}</strong>
+                                  <span>{year}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ) : <p>Loading all-time activity…</p>}
+                      </div>
+                    )}
                   </section>
                 </div>
               </ParallaxLayer>

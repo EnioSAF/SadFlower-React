@@ -158,6 +158,47 @@
             color: #000080
             font-size: 0.9em
 
+        &__allTimeButton
+            float: right
+            margin-top: 6px
+            font-family: 'MS Sans Serif', sans-serif
+            font-size: 0.9em
+
+        &__allTime
+            clear: both
+            margin-top: 12px
+            border-top: 1px solid #808080
+            padding-top: 10px
+
+            p
+                margin: 0 0 8px
+
+            strong
+                color: #14532d
+
+        &__yearGrid
+            display: grid
+            grid-template-columns: repeat(5, 1fr)
+            gap: 5px
+
+            > div
+                display: flex
+                flex-direction: column
+                border: 1px solid #808080
+                border-top-color: #fff
+                border-left-color: #fff
+                background: #d7d7d7
+                padding: 6px
+
+            strong
+                font-size: 1.4em
+                line-height: 1
+
+            span
+                margin-top: 3px
+                color: #404040
+                font-size: 0.82em
+
         &:hover
             transform: translate(1px, 1px)
             box-shadow: 2px 2px 0 #808080
@@ -178,6 +219,9 @@
 
                 strong
                     font-size: 1.4em
+
+            &__yearGrid
+                grid-template-columns: repeat(3, 1fr)
 
             &__graph
                 justify-content: flex-start
