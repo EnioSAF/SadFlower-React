@@ -60,15 +60,127 @@
         font-size: 1.25em
 
     .GitCalendar
+        box-sizing: border-box
         border: 2px solid #000
-        background: #f4f4f4
-        padding: 10px
+        outline: 2px solid #fff
+        box-shadow: 3px 3px 0 #808080
+        background: #e7e7e7
+        padding: 12px
         width: 90%
-        height: 50% !important
+        color: #1f1f1f
+        font-size: 0.8em
+
+        &__header
+            display: flex
+            align-items: flex-start
+            justify-content: space-between
+            gap: 12px
+            border-bottom: 1px solid #808080
+            margin-bottom: 10px
+            padding-bottom: 8px
+
+            h2
+                margin: 0
+                font-size: 1.45em
+
+            p
+                margin: 3px 0 0
+                color: #4a4a4a
+                font-size: 0.9em
+
+        &__stats
+            display: grid
+            grid-template-columns: repeat(4, 1fr)
+            gap: 6px
+            margin-bottom: 12px
+
+            > div
+                display: flex
+                flex-direction: column
+                min-width: 0
+                border: 1px solid #808080
+                border-top-color: #fff
+                border-left-color: #fff
+                background: #d7d7d7
+                padding: 7px 6px
+
+            strong
+                color: #14532d
+                font-size: 1.6em
+                line-height: 1
+
+            span
+                margin-top: 4px
+                color: #404040
+                font-size: 0.78em
+                line-height: 1.1
+
+        &__live
+            flex: 0 0 auto
+            border: 1px solid #14532d
+            background: #d8efdc
+            color: #14532d
+            font-size: 0.75em
+            font-weight: bold
+            letter-spacing: 0.08em
+            line-height: 1
+            padding: 4px 5px
+
+            &::before
+                content: ''
+                display: inline-block
+                width: 6px
+                height: 6px
+                margin-right: 4px
+                background: #2e8b57
+                vertical-align: 0
+
+        &__graph
+            display: flex
+            justify-content: center
+            width: 100%
+            overflow: hidden
+
+            .react-activity-calendar
+                font-family: 'MS Sans Serif', sans-serif !important
+
+            > div
+                max-width: 100%
+
+            svg
+                display: block
+                max-width: 100%
+                height: auto
+
+        &__link
+            display: inline-block
+            margin-top: 8px
+            color: #000080
+            font-size: 0.9em
 
         &:hover
-            transform: translateY(-5px)
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25)
+            transform: translate(1px, 1px)
+            box-shadow: 2px 2px 0 #808080
+
+        @media (max-width: 600px)
+            width: 100%
+            padding: 8px
+
+            &__header
+                h2
+                    font-size: 1.2em
+
+                p
+                    font-size: 0.7em
+
+            &__stats
+                grid-template-columns: repeat(2, 1fr)
+
+                strong
+                    font-size: 1.4em
+
+            &__graph
+                justify-content: flex-start
 
     // Section ChatGPT
 

@@ -16,8 +16,34 @@ import TimeLineEnio from "./VerticalTimeline";
 import "98.css";
 import "react-vertical-timeline-component/style.min.css";
 
+const GITHUB_CONTRIBUTIONS_URL = 'https://github-contributions-api.jogruber.de/v4/EnioSAF?y=last';
+
+const getGitStats = (contributions, total) => {
+  const activeDays = contributions.filter(({ count }) => count > 0);
+  const bestDay = activeDays.reduce(
+    (best, activity) => (activity.count > best.count ? activity : best),
+    { count: 0, date: '' }
+  );
+  let currentStreak = 0;
+  let bestStreak = 0;
+
+  contributions.forEach(({ count }) => {
+    currentStreak = count > 0 ? currentStreak + 1 : 0;
+    bestStreak = Math.max(bestStreak, currentStreak);
+  });
+
+  return {
+    total,
+    activeDays: activeDays.length,
+    bestDay: bestDay.count,
+    bestDayDate: bestDay.date,
+    bestStreak,
+  };
+};
+
 const Whoami = ({ closeWindow, username }) => {
   const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
+  const [gitStats, setGitStats] = useState(null);
   // Pour gérer le Z-index
   const { bringToFront, zIndex: globalZIndex } = useZIndex();
   const [zIndex, setZIndex] = useState(globalZIndex);
@@ -65,6 +91,21 @@ const Whoami = ({ closeWindow, username }) => {
       return { x, y, width: windowWidth, height: windowHeight };
     }
   };
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(GITHUB_CONTRIBUTIONS_URL, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(response))
+      .then(({ contributions, total }) => setGitStats(getGitStats(contributions, total.lastYear)))
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          setGitStats(null);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
 
   return (
     <>
@@ -140,20 +181,53 @@ const Whoami = ({ closeWindow, username }) => {
                   <p>{`Mon voyage musical et professionnel, ponctué d'expériences diverses, de l'Escape Game à la technicité au sein de structures reconnues comme un CHU et EDF RTE, m'a enseigné l'importance du travail en équipe et de la cohésion. La musique, quant à elle, a aiguisé ma sensibilité artistique et la rigueur, essentielle dans le monde du développement web où l'esthétique et la fonctionnalité doivent fusionner harmonieusement.`}</p>
                   <p>{`Aujourd'hui, je m'oriente vers le web développement, désireux de lier ma passion pour l'informatique à cette créativité que je puisse dans l'art, la musique et mes univers. Parfaitement bilingue grâce à des expériences à l'international, dont un séjour marquant à New York, je suis prêt à m'engager dans le défi du numérique, armé de ma sociabilité et d'une volonté de contribuer activement à des projets stimulants.`}</p>
                   <p>{`Je suis Enio, et je suis ici pour apporter ma pierre à l'édifice d'internet, en mêlant technique, art, musique et innovation.`}</p>
-                  <div className='GitCalendar'>
-                    <h2>Git Activity</h2>
-                    <GitHubCalendar
-                      username='EnioSAF'
-                      year={2024}
-                      showWeekdayLabels='true'
-                      weekStart='1'
-                      maxLevel='4'
-                      colorScheme='dark'
-                    />
-                    <a href='https://github.com/EnioSAF/' target='_blank'>
-                      <p color='green'>GitHub</p>
+                  <section className='GitCalendar' aria-labelledby='git-activity-title'>
+                    <div className='GitCalendar__header'>
+                      <div>
+                        <h2 id='git-activity-title'>Git Activity</h2>
+                        <p>GitHub contribution report · last 12 months</p>
+                      </div>
+                      <span className='GitCalendar__live' aria-label='Live GitHub data'>LIVE</span>
+                    </div>
+                    <div className='GitCalendar__stats' aria-live='polite'>
+                      <div><strong>{gitStats?.total ?? '—'}</strong><span>contributions</span></div>
+                      <div><strong>{gitStats?.activeDays ?? '—'}</strong><span>active days</span></div>
+                      <div><strong>{gitStats?.bestStreak ?? '—'}</strong><span>best streak</span></div>
+                      <div><strong>{gitStats?.bestDay ?? '—'}</strong><span>best day</span></div>
+                    </div>
+                    <div className='GitCalendar__graph' aria-label='Contribution activity for latest six months'>
+                      <GitHubCalendar
+                        username='EnioSAF'
+                        year='last'
+                        transformData={(data) => data.slice(-182)}
+                        transformTotalCount={false}
+                        showWeekdayLabels={false}
+                        weekStart={1}
+                        blockSize={13}
+                        blockMargin={3}
+                        fontSize={12}
+                        labels={{
+                          totalCount: 'Latest six months',
+                          legend: {
+                            less: 'Less',
+                            more: 'More',
+                          },
+                        }}
+                        theme={{
+                          light: ['#c8d4ca', '#9cc9a5', '#64a875', '#387b4d', '#14532d'],
+                          dark: ['#c8d4ca', '#9cc9a5', '#64a875', '#387b4d', '#14532d'],
+                        }}
+                      />
+                    </div>
+                    <a
+                      className='GitCalendar__link'
+                      href='https://github.com/EnioSAF/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      Open GitHub profile
                     </a>
-                  </div>
+                  </section>
                 </div>
               </ParallaxLayer>
               <ParallaxLayer
