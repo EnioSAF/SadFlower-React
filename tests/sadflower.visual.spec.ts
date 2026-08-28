@@ -23,6 +23,54 @@ test.describe("SadFlower visual smoke", () => {
     await expect(page.getByText("Quick quote / reservation")).toBeVisible();
   });
 
+  test("SadFlowerDiscs opens and completes a dispense cycle", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: /A1 — DEMO DISC 01/ }).click();
+    await expect(dialog.getByText("DISC A1 READY")).toBeVisible();
+    await dialog.getByRole("button", { name: "OBTENIR" }).click();
+    await expect(dialog.getByText("DISPENSING")).toBeVisible();
+    await expect(dialog.getByText("TAKE DISC")).toBeVisible();
+    await expect(dialog.locator(".cd-delivered-disc")).toBeVisible();
+    await dialog.getByRole("button", { name: "RESET" }).click();
+    await expect(dialog.getByText("SELECT DISC")).toBeVisible();
+  });
+
+  test("SadFlowerDiscs stays usable by keyboard on mobile", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au distributeur mobile.");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    const dialogBox = await dialog.boundingBox();
+    const viewport = page.viewportSize();
+    if (!dialogBox || !viewport) throw new Error("La fenêtre du distributeur est introuvable.");
+    expect(dialogBox.x).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.y).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(viewport.width);
+    expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(viewport.height);
+
+    const secondDisc = dialog.getByRole("button", { name: /A2 — DEMO DISC 02/ });
+    await secondDisc.focus();
+    await page.keyboard.press("Enter");
+    await expect(dialog.getByText("DISC A2 READY")).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "OBTENIR" })).toBeEnabled();
+  });
+
   test("privacy setup gates optional services after boot", async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem("version", "1.2.0");

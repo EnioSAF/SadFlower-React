@@ -1,0 +1,507 @@
+.cd-vending-window
+  display: flex
+  flex-direction: column
+  box-sizing: border-box
+  overflow: hidden
+  background: #c0c0c0
+
+  > .title-bar
+    flex: 0 0 auto
+
+  > .status-bar
+    flex: 0 0 auto
+    margin: 2px
+
+.cd-vending-body
+  flex: 1 1 auto
+  min-height: 0
+  margin: 3px !important
+  padding: clamp(8px, 1.8vw, 16px)
+  overflow: auto
+  color: #e8eeee
+  background: radial-gradient(circle at 50% 0, #374045 0, #191f22 42%, #090c0e 100%)
+  box-shadow: inset 0 0 42px #000
+
+.cd-vending-machine
+  --machine-red: #f05b46
+  --machine-cyan: #6ed6d1
+  --machine-amber: #f6d365
+  position: relative
+  width: min(100%, 690px)
+  min-width: 320px
+  margin: 0 auto
+  padding: 13px
+  border: 2px solid #788386
+  border-radius: 9px 9px 4px 4px
+  background: linear-gradient(100deg, #242b2e 0 3%, #606a6c 4%, #293033 10%, #111618 48%, #353e41 86%, #6d7778 96%, #22282a 100%)
+  box-shadow: 0 17px 30px #000c, inset 2px 0 #a8b0b1, inset -2px 0 #0a0d0e
+  font-family: "Courier New", monospace
+  isolation: isolate
+
+  &::before
+    content: ""
+    position: absolute
+    inset: 4px
+    z-index: -1
+    border: 1px solid #111
+    border-radius: 6px
+    opacity: .55
+    background: repeating-linear-gradient(102deg, transparent 0 21px, #fff1 22px, transparent 23px 54px)
+
+.cd-machine-header
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+  gap: 10px
+  margin: 0 8px 11px
+  padding: 7px 11px 6px
+  border: 1px solid #0c0e0f
+  border-bottom-color: #778184
+  color: #eefafa
+  background: linear-gradient(180deg, #171c1e, #090c0d)
+  box-shadow: inset 0 0 16px #6ed6d126, 0 1px #7e8789
+  letter-spacing: .16em
+  text-shadow: 0 0 7px #6ed6d1
+
+  span
+    font-size: clamp(15px, 2.7vw, 24px)
+    font-weight: 900
+
+  small
+    color: #9aa3a5
+    font-size: clamp(7px, 1.2vw, 10px)
+    letter-spacing: .08em
+
+.cd-machine-cabinet
+  display: grid
+  grid-template-columns: minmax(0, 1fr) 142px
+  gap: 12px
+
+.cd-machine-glass
+  position: relative
+  min-height: 356px
+  padding: 20px 18px
+  overflow: hidden
+  border: 6px solid #202729
+  border-top-color: #525d60
+  border-left-color: #455053
+  background: linear-gradient(115deg, #c9ffff15, transparent 24% 70%, #b8ffff0d), radial-gradient(ellipse at 50% 15%, #74d9d52b, #071012 65%)
+  box-shadow: inset 0 0 33px #000, inset 0 0 8px #6ed6d180, 0 0 0 1px #080a0b
+  perspective: 700px
+
+  &::before
+    content: ""
+    position: absolute
+    inset: -20% 36% -20% 18%
+    z-index: 3
+    pointer-events: none
+    transform: rotate(12deg)
+    background: linear-gradient(90deg, transparent, #fff1, #d7ffff28, transparent)
+
+  &::after
+    content: ""
+    position: absolute
+    inset: 0
+    z-index: 4
+    pointer-events: none
+    opacity: .45
+    background: repeating-linear-gradient(0deg, transparent 0 4px, #0002 5px)
+
+.cd-machine-rack
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: 21px 12px
+  transform: rotateX(1deg)
+
+.cd-album-slot
+  position: relative
+  display: grid
+  place-items: center
+  min-width: 0
+  min-height: 145px
+  padding: 8px 7px 29px
+  border: 1px solid #101415
+  border-radius: 2px
+  color: #dfe7e7
+  background: linear-gradient(145deg, #323b3e, #0b0f11 68%)
+  box-shadow: inset 1px 1px #657174, inset -2px -2px #030405, 0 8px 12px #0009
+  cursor: pointer
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease
+
+  &::after
+    content: ""
+    position: absolute
+    right: 9px
+    bottom: 23px
+    left: 9px
+    height: 5px
+    border-top: 1px solid #788386
+    background: #07090a
+    box-shadow: 0 3px 3px #000
+
+  &:hover:not(:disabled)
+    filter: brightness(1.2)
+    transform: translateY(-2px)
+
+  &:focus-visible
+    outline: 3px solid var(--machine-amber)
+    outline-offset: 3px
+
+  &.is-selected
+    transform: translateY(-5px) scale(1.025)
+    box-shadow: inset 1px 1px #859093, inset -2px -2px #030405, 0 0 0 2px var(--disc-accent), 0 0 19px var(--disc-accent)
+
+    .cd-slot-light
+      background: var(--machine-amber)
+      box-shadow: 0 0 8px var(--machine-amber)
+
+  &:disabled
+    cursor: wait
+
+.cd-slot-light
+  position: absolute
+  top: 6px
+  right: 6px
+  width: 5px
+  height: 5px
+  border-radius: 50%
+  background: #273033
+  box-shadow: inset 0 0 2px #000
+
+.cd-slot-cover
+  position: relative
+  display: block
+  width: min(88px, 100%)
+  aspect-ratio: 1
+  filter: drop-shadow(4px 6px 3px #000a)
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+.cd-slot-label
+  position: absolute
+  right: 7px
+  bottom: 6px
+  left: 7px
+  z-index: 2
+  display: flex
+  align-items: center
+  gap: 5px
+  overflow: hidden
+  font-size: 7px
+  white-space: nowrap
+  text-align: left
+
+  strong
+    flex: 0 0 auto
+    padding: 1px 3px
+    color: #111
+    background: var(--disc-accent)
+
+  span
+    overflow: hidden
+    text-overflow: ellipsis
+
+.cd-machine-empty
+  position: absolute
+  inset: 45% 0 auto
+  margin: 0
+  text-align: center
+  color: #899395
+  letter-spacing: .15em
+
+.cd-machine-controls
+  position: relative
+  display: flex
+  flex-direction: column
+  gap: 13px
+  padding: 23px 13px 15px
+  border: 2px solid #15191b
+  background: linear-gradient(95deg, #3b4447, #171d1f 15% 82%, #424b4e)
+  box-shadow: inset 1px 1px #7d8789, inset -2px -2px #080a0b
+
+.cd-control-screws
+  position: absolute
+  inset: 5px
+  pointer-events: none
+
+  i
+    position: absolute
+    width: 5px
+    height: 5px
+    border-radius: 50%
+    background: #0a0c0d
+    box-shadow: inset 1px 1px #758083
+
+    &:nth-child(2)
+      right: 0
+    &:nth-child(3)
+      bottom: 0
+    &:nth-child(4)
+      right: 0
+      bottom: 0
+
+.cd-machine-display
+  display: grid
+  min-height: 55px
+  place-items: center
+  padding: 7px
+  border: 4px solid #0b0d0e
+  color: var(--machine-red)
+  background: #160705
+  box-shadow: inset 0 0 14px #f05b4630, 0 1px #657073
+  font-family: "Courier New", monospace
+  font-size: 12px
+  font-weight: 700
+  letter-spacing: .06em
+  line-height: 1.2
+  text-align: center
+  text-shadow: 0 0 7px var(--machine-red)
+
+  &[data-phase="dispensing"]
+    animation: cd-led-flicker .18s steps(2) infinite
+
+.cd-selection-readout
+  display: flex
+  align-items: center
+  justify-content: space-between
+  margin: 0
+  color: #98a3a5
+  font-size: 8px
+  letter-spacing: .08em
+
+  strong
+    display: grid
+    width: 34px
+    height: 28px
+    place-items: center
+    border: 2px inset #70797b
+    color: #171b1c
+    background: #aab2ac
+    font-size: 14px
+
+.cd-obtain-button, .cd-reset-button, .cd-mute-button
+  min-height: 44px
+  font-family: "Courier New", monospace
+  font-weight: 900
+
+.cd-obtain-button
+  border: 4px outset #b83f32
+  color: #fff3e5
+  background: linear-gradient(#f06450, #a42e27)
+  box-shadow: 0 4px 0 #54120f, 0 7px 10px #0009
+  text-shadow: 1px 1px #591914
+
+  &:active:not(:disabled)
+    transform: translateY(3px)
+    border-style: inset
+    box-shadow: 0 1px 0 #54120f
+
+  &:disabled
+    filter: grayscale(.8) brightness(.55)
+
+.cd-mute-button
+  min-height: 32px
+  color: #bdc5c6
+  background: #293033
+  font-size: 9px
+
+.cd-coin-return
+  margin-top: auto
+  padding: 8px 3px
+  border: 2px inset #51595c
+  color: #646d6f
+  background: #111516
+  font-size: 8px
+  text-align: center
+
+.cd-delivery-zone
+  grid-column: 1 / -1
+  display: grid
+  grid-template-columns: 1fr 142px
+  gap: 12px
+  align-items: end
+
+.cd-delivery-tray
+  position: relative
+  height: 92px
+  overflow: visible
+  border: 6px solid #1f2527
+  border-top-color: #0a0d0e
+  background: radial-gradient(ellipse at 50% 100%, #313b3e, #030405 65%)
+  box-shadow: inset 0 11px 17px #000, 0 1px #778183
+
+.cd-tray-flap
+  position: absolute
+  inset: 11px 18px auto
+  height: 45px
+  display: grid
+  place-items: end center
+  border: 1px solid #0a0c0d
+  color: #596164
+  background: linear-gradient(#2c3437, #0c1011)
+  box-shadow: inset 0 2px #465054
+  font-size: 8px
+  letter-spacing: .12em
+
+.cd-delivered-disc
+  position: absolute
+  z-index: 5
+  bottom: 7px
+  left: 50%
+  width: 92px
+  height: 92px
+  transform: translateX(-50%) rotate(-8deg)
+  animation: cd-drop 620ms cubic-bezier(.2, .8, .2, 1) both
+  filter: drop-shadow(7px 9px 5px #000)
+
+  img
+    width: 100%
+    height: 100%
+
+.cd-reset-button
+  color: #222
+  background: #bfc5be
+
+.cd-machine-status
+  display: flex
+  align-items: center
+  gap: 9px
+  margin: 10px 8px 0
+  color: #99a2a4
+  font-size: 8px
+  letter-spacing: .1em
+
+  span:last-child
+    margin-left: auto
+
+.cd-status-led
+  width: 7px
+  height: 7px
+  border-radius: 50%
+  background: #6ed6d1
+  box-shadow: 0 0 8px #6ed6d1
+
+.cd-vending-machine[data-phase="dispensing"]
+  .cd-machine-glass
+    animation: cd-machine-shudder .14s linear infinite
+
+  .cd-status-led
+    background: var(--machine-amber)
+    box-shadow: 0 0 8px var(--machine-amber)
+
+@keyframes cd-drop
+  0%
+    opacity: 0
+    transform: translate(-50%, -225px) rotate(30deg) scale(.8)
+  72%
+    opacity: 1
+    transform: translate(-50%, 4px) rotate(-12deg) scale(1)
+  100%
+    transform: translate(-50%, 0) rotate(-8deg) scale(1)
+
+@keyframes cd-machine-shudder
+  0%, 100%
+    transform: translateX(0)
+  50%
+    transform: translateX(1px)
+
+@keyframes cd-led-flicker
+  0%, 55%
+    opacity: 1
+  56%, 100%
+    opacity: .58
+
+@media (max-width: 600px)
+  .cd-vending-window
+    width: calc(100vw - 8px) !important
+    height: calc(100dvh - 48px) !important
+
+    > .title-bar
+      margin-top: 0
+      font-size: 1em
+
+      .title-bar-controls button
+        margin-right: 0
+        transform: none
+
+  .cd-vending-body
+    padding: 5px
+
+  .cd-vending-machine
+    min-width: 0
+    padding: 8px
+
+  .cd-machine-header
+    margin: 0 3px 7px
+
+  .cd-machine-cabinet
+    grid-template-columns: minmax(0, 1fr) 105px
+    gap: 7px
+
+  .cd-machine-glass
+    min-height: 310px
+    padding: 14px 9px
+    border-width: 4px
+
+  .cd-machine-rack
+    gap: 14px 6px
+
+  .cd-album-slot
+    min-height: 124px
+    padding: 5px 4px 27px
+
+  .cd-slot-cover
+    width: min(68px, 100%)
+
+  .cd-slot-label
+    right: 4px
+    left: 4px
+
+    span
+      display: none
+
+  .cd-machine-controls
+    gap: 9px
+    padding: 18px 7px 10px
+
+  .cd-machine-display
+    min-height: 49px
+    padding: 4px
+    font-size: 9px
+
+  .cd-selection-readout span
+    display: none
+
+  .cd-delivery-zone
+    grid-template-columns: 1fr 105px
+    gap: 7px
+
+  .cd-machine-status
+    margin: 7px 3px 0
+
+@media (max-width: 390px)
+  .cd-machine-cabinet
+    grid-template-columns: 1fr
+
+  .cd-machine-controls
+    display: grid
+    grid-template-columns: 1fr 1fr
+
+  .cd-machine-display, .cd-selection-readout, .cd-coin-return
+    grid-column: 1 / -1
+
+  .cd-delivery-zone
+    grid-template-columns: 1fr
+
+  .cd-reset-button
+    width: 100%
+
+@media (prefers-reduced-motion: reduce)
+  .cd-vending-machine *, .cd-vending-machine *::before, .cd-vending-machine *::after
+    scroll-behavior: auto !important
+    animation-duration: .01ms !important
+    animation-iteration-count: 1 !important
+    transition-duration: .01ms !important

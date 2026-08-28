@@ -14,6 +14,7 @@ import Whoami from "@/components/system32/windows/WhoAmI/whoami";
 import ArticleExe from "@/components/system32/windows/Articles/articlewindow";
 import TwitchWindow from "@/components/system32/windows/twitchwindow";
 import MyWork from "@/components/system32/windows/MyWork/mywork";
+import CdVendingMachineWindow from "@/components/system32/windows/CdVendingMachine/cdVendingMachineWindow";
 import MentionLegal from "@/components/system32/windows/MentionLegal/mentionlegal";
 import { playBookSettle } from "@/components/system32/windows/MentionLegal/bookSounds";
 import PrivacyConsent from "@/components/system32/windows/PrivacyConsent/privacyconsent";
@@ -104,6 +105,7 @@ function HomePage() {
   const [isTwitchWindowOpen, setIsTwitchWindowOpen] = useState(false);
   const [isWhoamiOpen, setWhoamiOpen] = useState(false);
   const [isMyWorkOpen, setIsMyWorkOpen] = useState(false);
+  const [isCdVendingMachineOpen, setIsCdVendingMachineOpen] = useState(false);
   const [isMentionLegalOpen, setIsMentionLegalOpen] = useState(false);
 
   // Fonction pour le SignIn et SignUp et EditProfile et UserList
@@ -113,8 +115,10 @@ function HomePage() {
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [showUserList, setShowUserList] = useState(false);
 
-  const activeWindow = isMyWorkOpen
-    ? "mywork"
+  const activeWindow = isCdVendingMachineOpen
+    ? "cdVendingMachine"
+    : isMyWorkOpen
+      ? "mywork"
     : isArticleExeOpen
       ? "articles"
       : isMentionLegalOpen
@@ -178,6 +182,9 @@ function HomePage() {
       case "MyWork":
         setIsMyWorkOpen(true);
         break;
+      case "CdVendingMachine":
+        setIsCdVendingMachineOpen(true);
+        break;
       case "MentionLegal":
         playBookSettle();
         setIsPrivacyLegalPreviewOpen(false);
@@ -219,6 +226,11 @@ function HomePage() {
                 title='MyWork.exe'
                 iconPath='/Icon/Windows95/Sort by Category [Without duplicates]/Programs/Web-document program.ico'
                 onClick={() => handleIconClick("MyWork")}
+              />
+              <Icon
+                title='SadFlowerDiscs.exe'
+                iconPath='/CdVendingMachine/icon.svg'
+                onClick={() => handleIconClick("CdVendingMachine")}
               />
               <Icon
                 title='Articles.exe'
@@ -269,6 +281,9 @@ function HomePage() {
               )}
               {isMyWorkOpen && (
                 <MyWork closeWindow={() => setIsMyWorkOpen(false)} />
+              )}
+              {isCdVendingMachineOpen && (
+                <CdVendingMachineWindow closeWindow={() => setIsCdVendingMachineOpen(false)} />
               )}
               {isMentionLegalOpen && (
                 <MentionLegal closeWindow={() => {

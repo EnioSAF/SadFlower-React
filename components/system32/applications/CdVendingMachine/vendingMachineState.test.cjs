@@ -8,6 +8,7 @@ const {
   transitionMachine,
 } = require('./vendingMachineState');
 const { DEMO_ALBUMS } = require('./vendingMachineData');
+const { playMachineSound, stopMachineAudio } = require('./machineAudio');
 
 test('catalogue exposes six unique stable slots', () => {
   assert.equal(DEMO_ALBUMS.length, 6);
@@ -41,4 +42,9 @@ test('reset clears selection and invalid events preserve state', () => {
   const selected = transitionMachine(INITIAL_MACHINE_STATE, { type: 'SELECT', albumId: 'demo-04' });
   assert.deepEqual(transitionMachine(selected, { type: 'UNKNOWN' }), selected);
   assert.deepEqual(transitionMachine(selected, { type: 'RESET' }), INITIAL_MACHINE_STATE);
+});
+
+test('audio feedback is a safe no-op outside the browser', async () => {
+  await assert.doesNotReject(() => playMachineSound('select', false));
+  assert.doesNotThrow(() => stopMachineAudio());
 });
