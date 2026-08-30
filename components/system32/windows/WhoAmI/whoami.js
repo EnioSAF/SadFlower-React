@@ -5,7 +5,6 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 import GitHubCalendar from "react-github-calendar";
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 // import { Particles, initParticlesEngine } from "@tsparticles/react";
 // import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 // import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
@@ -164,17 +163,13 @@ const Whoami = ({ closeWindow, username }) => {
             />
           </div>
         </div>
-        <div className='window-body'>
+        <div className='window-body whoami-window-body'>
           <div className="titre-whoami">
             <h3>Who Am I</h3>
           </div>
           <div className='sections-container'>
-            <Parallax className="Parallax" pages={3}>
-              <ParallaxLayer
-                className="section-presentation"
-                speed={1}
-                factor={2}
-              >
+            <div className="whoami-scroll-content">
+              <section className="section-presentation">
                 {/* <Particles options={retroGamingParticles} /> */}
                 <Tilt
                   scale={1.05}
@@ -282,25 +277,16 @@ const Whoami = ({ closeWindow, username }) => {
                     )}
                   </section>
                 </div>
-              </ParallaxLayer>
-              <ParallaxLayer
-                className="section-chatGPT"
-                offset={1}
-                speed={1.2}
-                factor={1}
-              >
+              </section>
+              <section className="section-chatGPT">
                 {/* <Particles options={matrixParticles} /> */}
                 <ChatGPTModule />
-              </ParallaxLayer>
+              </section>
 
-              <ParallaxLayer
-                className="section-timeline"
-                offset={2}
-                speed={1}
-              >
+              <section className="section-timeline">
                 <TimeLineEnio />
-              </ParallaxLayer>
-            </Parallax>
+              </section>
+            </div>
           </div>
         </div>
 

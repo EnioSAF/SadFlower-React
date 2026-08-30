@@ -20,7 +20,6 @@ import "/styles/system32/windows/SignInSignOut/editavatar.sass";
 import "/styles/system32/windows/SignInSignOut/editprofile.sass";
 import "/styles/system32/windows/SignInSignOut/userinfo.sass";
 import "/styles/system32/windows/SignInSignOut/userlist.sass";
-import "/styles/system32/windows/WhoAmI/SkillCard.sass";
 import "/styles/system32/windows/WhoAmI/ChatGPTModule.sass";
 import "/styles/system32/windows/PopUp/Enio/ClickOnThis/clickonthis.sass";
 import "/styles/system32/windows/PopUp/OskarWash/CoolBug4Sell/coolbug4sell.sass";

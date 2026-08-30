@@ -3,30 +3,40 @@
     flex-direction: column
     gap: 10px // Espace entre les colonnes et rangées
 
+.whoami-window-body
+    overflow: hidden !important
+
 .sections-container
+    position: relative
     display: flex
     flex-direction: column
+    flex: 1 1 auto
+    min-height: 0
+    overflow: hidden
     gap: 10px
 
 .titre-whoami
+    flex: 0 0 60px
     gap: 10px
     align-self: center
     height: 60px
 
-.Parallax
+.whoami-scroll-content
     display: flex
+    flex-direction: column
+    gap: 24px
     width: 100% !important
     height: 100% !important
     flex: 1 1 auto
     min-height: 0
-    right: 0%
+    overflow-x: hidden
+    overflow-y: auto
 
     // Section Presentation
 
 .section-presentation
     display: flex
-    inset: auto !important
-    height: auto !important
+    flex: 0 0 auto
     flex-direction: column
     align-items: center
     align-content: center
@@ -52,7 +62,7 @@
         align-items: center
         padding: 10px
         width: 85%
-        margin-bottom: 500px
+        margin-bottom: 0
         border: 2px solid #0078D7
         border-radius: 10px
         background: #FFF
@@ -231,23 +241,19 @@
 .section-chatGPT
     display: flex
     position: relative
+    flex: 0 0 auto
     flex-direction: column
     align-items: center
-
-    @media (max-width: 600px)
-        padding: 550px 0 // Ajoute un peu d'air en haut et en bas sur petits écrans
-        height: 18% !important
-        z-index: 5
-        .textarea-chatpgt
-            z-index: 5
+    width: 100%
 
     // Style section en bas (timeline)
 
 .section-timeline
     display: flex
+    flex: 0 0 auto
     flex-direction: column
-    overflow: auto
     align-items: center
+    width: 100%
 
     .vertical-timeline-element-date
 
