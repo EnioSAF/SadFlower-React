@@ -6,7 +6,7 @@ import { DEMO_ALBUMS } from "./vendingMachineData";
 import { INITIAL_MACHINE_STATE, MACHINE_PHASES, transitionMachine } from "./vendingMachineState";
 import { playMachineSound, stopMachineAudio } from "./machineAudio";
 
-export default function CdVendingMachine({ albums = DEMO_ALBUMS }) {
+export default function CdVendingMachine({ albums = DEMO_ALBUMS, onClose }) {
   const [state, dispatch] = useReducer(transitionMachine, INITIAL_MACHINE_STATE);
   const [muted, setMuted] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -78,9 +78,14 @@ export default function CdVendingMachine({ albums = DEMO_ALBUMS }) {
       data-phase={state.phase}
       aria-label="Distributeur de CD SadFlower"
     >
-      <div className="cd-machine-header" aria-hidden="true">
+      <div className="cd-machine-header">
         <span>SADFLOWER</span>
         <small>DISC DISPENSER / UNIT 01</small>
+        {onClose && (
+          <button type="button" className="cd-machine-close" aria-label="Fermer le distributeur" onClick={onClose}>
+            ×
+          </button>
+        )}
       </div>
 
       <div className="cd-machine-cabinet">

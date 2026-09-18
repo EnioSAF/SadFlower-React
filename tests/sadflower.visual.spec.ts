@@ -44,6 +44,45 @@ test.describe("SadFlower visual smoke", () => {
     await expect(dialog.getByText("SELECT DISC")).toBeVisible();
   });
 
+  test("SadFlowerDiscs uses its machine body as the floating window", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Vérification du déplacement sur ordinateur.");
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    const machine = dialog.locator(".cd-vending-machine");
+    await expect(machine).toBeVisible();
+    await expect(dialog.locator(".title-bar, .status-bar")).toHaveCount(0);
+    const dialogBox = await dialog.boundingBox();
+    const machineBox = await machine.boundingBox();
+    if (!dialogBox || !machineBox) throw new Error("Le distributeur est introuvable.");
+    expect(Math.abs(dialogBox.x - machineBox.x)).toBeLessThanOrEqual(2);
+    expect(Math.abs(dialogBox.y - machineBox.y)).toBeLessThanOrEqual(2);
+    const taskbarBox = await page.locator(".footer").boundingBox();
+    if (!taskbarBox) throw new Error("La barre des tâches est introuvable.");
+    expect(machineBox.y + machineBox.height).toBeLessThanOrEqual(taskbarBox.y);
+
+    const handle = dialog.locator(".cd-machine-header");
+    const beforeDrag = await dialog.boundingBox();
+    const handleBox = await handle.boundingBox();
+    if (!beforeDrag || !handleBox) throw new Error("La poignée du distributeur est introuvable.");
+    await page.mouse.move(handleBox.x + handleBox.width / 2, handleBox.y + handleBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(handleBox.x + handleBox.width / 2 + 40, handleBox.y + handleBox.height / 2 + 25, { steps: 4 });
+    await page.mouse.up();
+    const afterDrag = await dialog.boundingBox();
+    if (!afterDrag) throw new Error("Le distributeur a disparu après déplacement.");
+    expect(afterDrag.x - beforeDrag.x).toBeGreaterThan(20);
+
+    await dialog.getByRole("button", { name: "Fermer le distributeur" }).click();
+    await expect(dialog).toBeHidden();
+  });
+
   test("SadFlowerDiscs stays usable by keyboard on mobile", async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au distributeur mobile.");
     await page.emulateMedia({ reducedMotion: "reduce" });
