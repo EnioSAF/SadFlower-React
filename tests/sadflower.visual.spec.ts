@@ -57,6 +57,8 @@ test.describe("SadFlower visual smoke", () => {
     const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
     const machine = dialog.locator(".cd-vending-machine");
     await expect(machine).toBeVisible();
+    const machineShadow = await machine.evaluate((element) => getComputedStyle(element).boxShadow);
+    expect(machineShadow).not.toContain("0px 17px 30px");
     await expect(dialog.locator(".title-bar, .status-bar")).toHaveCount(0);
     const dialogBox = await dialog.boundingBox();
     const machineBox = await machine.boundingBox();
@@ -81,6 +83,68 @@ test.describe("SadFlower visual smoke", () => {
 
     await dialog.getByRole("button", { name: "Fermer le distributeur" }).click();
     await expect(dialog).toBeHidden();
+  });
+
+  test("SadFlowerDiscs can be resized from its cabinet on desktop", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "chromium", "Redimensionnement réservé au bureau.");
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    const grip = dialog.locator(".cd-machine-resize-handle");
+    await expect(grip).toBeVisible();
+    const before = await dialog.boundingBox();
+    const gripBox = await grip.boundingBox();
+    if (!before || !gripBox) throw new Error("Le distributeur ou sa poignée est introuvable.");
+    await page.mouse.move(gripBox.x + gripBox.width / 2, gripBox.y + gripBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(gripBox.x + gripBox.width / 2 - 90, gripBox.y + gripBox.height / 2 - 90, { steps: 6 });
+    await page.mouse.up();
+
+    const after = await dialog.boundingBox();
+    if (!after) throw new Error("Le distributeur a disparu après redimensionnement.");
+    expect(after.width).toBeLessThan(before.width - 50);
+    expect(after.height).toBeLessThan(before.height - 50);
+    await expect(dialog.getByRole("button", { name: "OBTENIR" })).toBeVisible();
+  });
+
+  test("SadFlowerDiscs keeps selection and controls aligned on narrow mobile", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au mobile.");
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
+    });
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    const shellBox = await dialog.boundingBox();
+    const glassBox = await dialog.locator(".cd-machine-glass").boundingBox();
+    const controlsBox = await dialog.locator(".cd-machine-controls").boundingBox();
+    const obtainBox = await dialog.getByRole("button", { name: "OBTENIR" }).boundingBox();
+    const taskbarBox = await page.locator(".footer").boundingBox();
+    if (!shellBox || !glassBox || !controlsBox || !obtainBox || !taskbarBox) {
+      throw new Error("La géométrie du distributeur est introuvable.");
+    }
+    expect(Math.abs(shellBox.x - (375 - shellBox.x - shellBox.width)), JSON.stringify(shellBox)).toBeLessThanOrEqual(2);
+    expect(controlsBox.x).toBeGreaterThanOrEqual(glassBox.x + glassBox.width);
+    expect(controlsBox.y).toBeLessThan(glassBox.y + 20);
+    expect(obtainBox.y + obtainBox.height).toBeLessThan(taskbarBox.y);
+
+    await page.setViewportSize({ width: 320, height: 667 });
+    await expect.poll(async () => (await dialog.boundingBox())?.width).toBeLessThanOrEqual(304);
+    const narrowBox = await dialog.boundingBox();
+    if (!narrowBox) throw new Error("Le distributeur a disparu après réduction du viewport.");
+    expect(narrowBox.x).toBeGreaterThanOrEqual(0);
+    expect(Math.abs(narrowBox.x - (320 - narrowBox.x - narrowBox.width))).toBeLessThanOrEqual(2);
+    expect(await dialog.evaluate((element) => element.scrollWidth)).toBeLessThanOrEqual(narrowBox.width);
   });
 
   test("SadFlowerDiscs stays usable by keyboard on mobile", async ({ page }, testInfo) => {

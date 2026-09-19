@@ -1,5 +1,6 @@
 .cd-vending-shell
   box-sizing: border-box
+  container-type: inline-size
   max-height: calc(100dvh - 44px)
   overflow-x: hidden
   overflow-y: auto
@@ -9,6 +10,21 @@
 
   &::-webkit-scrollbar
     display: none
+
+.cd-machine-resize-handle
+  z-index: 10
+
+  &::after
+    content: ""
+    position: absolute
+    right: 3px
+    bottom: 3px
+    width: 12px
+    height: 12px
+    border-right: 3px solid #b2babb
+    border-bottom: 3px solid #b2babb
+    filter: drop-shadow(1px 1px 1px #000)
+    pointer-events: none
 
 .cd-vending-machine
   --machine-red: #f05b46
@@ -23,7 +39,7 @@
   border: 2px solid #788386
   border-radius: 9px 9px 4px 4px
   background: linear-gradient(100deg, #242b2e 0 3%, #606a6c 4%, #293033 10%, #111618 48%, #353e41 86%, #6d7778 96%, #22282a 100%)
-  box-shadow: 0 17px 30px #000c, inset 2px 0 #a8b0b1, inset -2px 0 #0a0d0e
+  box-shadow: inset 2px 0 #a8b0b1, inset -2px 0 #0a0d0e
   font-family: "Courier New", monospace
   isolation: isolate
 
@@ -445,6 +461,7 @@
   .cd-vending-shell
     max-height: calc(100dvh - 48px)
 
+@container (max-width: 600px)
   .cd-vending-machine
     min-width: 0
     padding: 8px
@@ -505,7 +522,7 @@
   .cd-machine-status
     margin: 7px 3px 0
 
-@media (max-width: 390px)
+@container (max-width: 300px)
   .cd-machine-cabinet
     grid-template-columns: 1fr
 
