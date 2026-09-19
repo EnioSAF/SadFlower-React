@@ -16,6 +16,8 @@ import "/styles/system32/windows/MentionLegal/bookscene.sass";
 import "/styles/system32/windows/MentionLegal/legalroute.sass";
 import "/styles/system32/windows/MyWork/mywork.sass";
 import "/styles/system32/windows/CdVendingMachine/cd-vending-machine.sass";
+import "/styles/system32/windows/CdVendingMachine/booster-demo.sass";
+import "@kongyo2/cards-css/styles.css";
 import "/styles/system32/windows/PrivacyConsent/privacyconsent.sass";
 import "/styles/system32/windows/SignInSignOut/editavatar.sass";
 import "/styles/system32/windows/SignInSignOut/editprofile.sass";

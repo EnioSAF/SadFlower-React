@@ -1,0 +1,448 @@
+.booster-demo
+  --ink: #ecede4
+  --muted: #93a19e
+  --line: rgba(164, 212, 202, .2)
+  position: relative
+  isolation: isolate
+  min-height: 100dvh
+  padding: 0 clamp(20px, 5vw, 92px)
+  overflow: hidden
+  color: var(--ink)
+  background: #111a1b
+  font-family: 'Courier New', monospace
+
+  *, *::before, *::after
+    box-sizing: border-box
+
+  &::after
+    content: ''
+    position: absolute
+    z-index: -1
+    inset: 0
+    pointer-events: none
+    opacity: .14
+    background: repeating-linear-gradient(0deg, transparent 0 2px, #77948e 3px, transparent 4px)
+
+  button, input
+    font: inherit
+
+  button:focus-visible, a:focus-visible, input:focus-visible
+    outline: 2px solid #efc278
+    outline-offset: 4px
+
+  &__ambient
+    position: absolute
+    z-index: -2
+    inset: 0
+    background: radial-gradient(ellipse at 61% 43%, rgba(70, 119, 115, .23), transparent 48%), radial-gradient(ellipse at 8% 85%, rgba(113, 46, 63, .2), transparent 45%), #111a1b
+
+  &__topbar, &__footer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 20px
+    min-height: 72px
+    border-bottom: 1px solid var(--line)
+    color: var(--muted)
+    font-size: 10px
+    letter-spacing: .14em
+
+  &__back, &__footer a
+    color: var(--ink)
+    text-decoration: none
+
+  &__back:hover, &__footer a:hover
+    color: #f3c87c
+
+  &__status
+    display: inline-flex
+    align-items: center
+    gap: 8px
+    i
+      width: 7px
+      height: 7px
+      border-radius: 50%
+      background: #71c9b6
+      box-shadow: 0 0 12px #71c9b6
+
+  &__layout
+    display: grid
+    grid-template-columns: minmax(260px, 1fr) minmax(350px, 1.1fr)
+    align-items: center
+    gap: clamp(25px, 5vw, 100px)
+    max-width: 1350px
+    min-height: calc(100dvh - 132px)
+    margin: auto
+    padding: 35px 0
+
+  &__intro
+    padding-bottom: 50px
+    .booster-demo__eyebrow
+      margin-bottom: 24px
+    h1
+      margin: 0 0 28px
+      font-size: clamp(52px, 7vw, 108px)
+      line-height: .9
+      letter-spacing: -.09em
+      font-weight: 900
+      em
+        color: #f2bb80
+        font-style: normal
+    > p:not(.booster-demo__eyebrow)
+      max-width: 390px
+      color: #b2beba
+      font-size: clamp(13px, 1.15vw, 16px)
+      line-height: 1.8
+
+  &__eyebrow
+    color: #7fd5c4
+    font-size: 11px
+    letter-spacing: .28em
+
+  &__steps
+    display: flex
+    gap: 20px
+    flex-wrap: wrap
+    margin-top: 58px
+    color: #637874
+    font-size: 10px
+    letter-spacing: .05em
+    span
+      padding-top: 11px
+      border-top: 1px solid #44605a
+    .active
+      color: #efd19c
+      border-color: #efd19c
+
+  &__stage
+    position: relative
+    display: flex
+    flex-direction: column
+    min-height: min(700px, calc(100dvh - 144px))
+    border: 1px solid #52605d
+    background: linear-gradient(145deg, rgba(99, 126, 118, .13), transparent 28%), #202a2b
+    box-shadow: inset 0 0 0 5px #141d1f, inset 0 0 0 6px #3d4d4b, 18px 24px 0 rgba(0, 0, 0, .18)
+
+  &__stage-top, &__stage-bottom
+    display: flex
+    justify-content: space-between
+    gap: 10px
+    margin: 8px
+    padding: 14px 17px
+    border-bottom: 1px solid var(--line)
+    color: #9bb2ab
+    font-size: 9px
+    letter-spacing: .12em
+
+  &__stage-bottom
+    margin-top: auto
+    border: 0
+    border-top: 1px solid var(--line)
+
+  &__pack-wrap, &__reveal, &__complete
+    display: flex
+    flex: 1
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    padding: 20px
+
+  &__pack
+    position: relative
+    width: min(294px, 86%)
+    height: 445px
+    overflow: visible
+    border: 1px solid #e1c8b0
+    background: repeating-linear-gradient(99deg, rgba(255,255,255,.09) 0 2px, transparent 2px 9px), linear-gradient(145deg, #b94b5b 1%, #8d3b56 26%, #b47474 48%, #255e65 79%, #123a45)
+    box-shadow: 0 26px 36px rgba(0,0,0,.44), inset 0 0 0 8px rgba(25,25,30,.16), inset 0 0 0 9px rgba(255,255,255,.35)
+    transform: rotate(-3deg)
+    transition: transform .25s
+    &::before
+      content: ''
+      position: absolute
+      z-index: 1
+      top: 0
+      left: 0
+      width: var(--tear-progress)
+      height: 29px
+      background: linear-gradient(180deg, #321f2d, #775363 48%, #221e2c)
+      box-shadow: inset 0 -4px 6px rgba(0,0,0,.55)
+
+  &__pack-top, &__pack-bottom
+    position: absolute
+    right: 0
+    left: 0
+    height: 29px
+    overflow: hidden
+    border-top: 1px solid rgba(255,255,255,.38)
+    border-bottom: 1px solid rgba(255,255,255,.4)
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0 2px, rgba(0,0,0,.12) 2px 4px)
+    color: #fff2dc
+    text-align: center
+    white-space: nowrap
+    font-size: 9px
+    line-height: 28px
+    letter-spacing: .14em
+
+  &__pack-top
+    top: 0
+    z-index: 2
+    clip-path: inset(0 -100% 0 var(--tear-progress))
+    transform: translateX(var(--tear-offset)) rotate(var(--tear-angle))
+
+  &__pack-bottom
+    bottom: 0
+    span
+      padding: 0 8px
+
+  &__pack-art
+    position: absolute
+    inset: 45px 15px
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    overflow: hidden
+    border: 1px solid rgba(255,232,205,.45)
+    background: radial-gradient(circle at 50% 38%, rgba(250,218,188,.4), transparent 30%), rgba(26,27,37,.2)
+    text-align: center
+    strong
+      z-index: 1
+      color: #fff2da
+      font-size: 41px
+      line-height: .9
+      letter-spacing: -.08em
+      text-shadow: 2px 4px 0 #653b50
+    small
+      position: absolute
+      bottom: 29px
+      color: #fce2c7
+      font-size: 9px
+      letter-spacing: .13em
+
+  &__pack-flower
+    z-index: 1
+    margin-bottom: 8px
+    color: #f6cf9d
+    font-size: 124px
+    line-height: 1
+    text-shadow: 0 0 29px rgba(246,202,148,.5)
+
+  &__pack-orbit
+    position: absolute
+    width: 260px
+    height: 260px
+    border: 1px solid rgba(245,222,187,.52)
+    border-radius: 50%
+    transform: rotate(35deg) scaleX(.55)
+    &--two
+      transform: rotate(-35deg) scaleX(.55)
+
+  &__tear-line
+    position: absolute
+    z-index: 3
+    top: 32px
+    right: 0
+    left: 0
+    height: 2px
+    background: repeating-linear-gradient(90deg, #fff4df 0 6px, transparent 6px 11px)
+    opacity: .8
+
+  &__tear-control
+    position: absolute
+    z-index: 4
+    top: 51px
+    right: 18px
+    left: 18px
+    display: block
+    height: 34px
+    background: rgba(10,25,28,.78)
+    color: #f9ddad
+    text-align: center
+    cursor: ew-resize
+    span
+      display: block
+      pointer-events: none
+      font-size: 10px
+      line-height: 34px
+      letter-spacing: .2em
+      b
+        padding-left: 8px
+    input
+      position: absolute
+      inset: 0
+      width: 100%
+      height: 100%
+      margin: 0
+      opacity: .04
+      cursor: ew-resize
+
+  &__hint
+    margin: 31px 0 0
+    color: #eed6b4
+    font-size: 10px
+    letter-spacing: .12em
+    span
+      font-size: 16px
+
+  &__reveal
+    width: 100%
+    justify-content: flex-start
+    padding: 4px clamp(15px, 5%, 38px) 18px
+    animation: booster-enter .4s ease-out both
+
+  &__card-head, &__card-footer
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 12px
+    width: 100%
+    max-width: 420px
+    color: #b0c3ba
+    font-size: 10px
+    letter-spacing: .12em
+
+  &__rarity
+    padding: 5px 8px
+    border: 1px solid #b6a27c
+    color: #e8c990
+
+  &__holo-mount
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 100%
+    min-height: 355px
+    margin: 9px 0
+    perspective: 1000px
+    .holo-card, > img
+      width: min(220px, 61vw)
+      max-height: 320px
+      aspect-ratio: 2.5 / 3.5
+    > img
+      object-fit: contain
+
+  &__card-footer
+    strong
+      color: #f1d9b5
+      font-size: 15px
+    span
+      max-width: 160px
+      text-align: right
+      line-height: 1.4
+      font-size: 8px
+
+  &__action
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: min(420px, 100%)
+    margin-top: 18px
+    padding: 14px 17px
+    border: 1px solid #eab77d
+    background: #bd594d
+    color: #fff3df
+    cursor: pointer
+    font-size: 12px
+    text-transform: uppercase
+    letter-spacing: .1em
+    box-shadow: 4px 4px 0 #101819
+    &:hover
+      background: #d16955
+
+  &__complete
+    justify-content: center
+    width: 100%
+    animation: booster-enter .4s ease-out both
+    h2
+      margin: 0 0 24px
+      color: #f1d2a5
+      font-size: clamp(25px, 3vw, 40px)
+      letter-spacing: -.05em
+    .booster-demo__action
+      margin-top: 24px
+
+  &__complete-icon
+    color: #eccd8d
+    font-size: 90px
+    line-height: 1
+
+  &__pull-list
+    width: min(420px, 100%)
+    border-top: 1px solid var(--line)
+    > div
+      display: flex
+      align-items: center
+      gap: 16px
+      padding: 15px 0
+      border-bottom: 1px solid var(--line)
+      font-size: 10px
+      span
+        color: #80d0bd
+      strong
+        flex: 1
+        color: #fff2d9
+      small
+        color: #d6aa86
+
+  &__footer
+    min-height: 60px
+    border-top: 1px solid var(--line)
+    border-bottom: 0
+    font-size: 9px
+
+@keyframes booster-enter
+  from
+    opacity: 0
+    transform: translateY(14px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+@media (max-width: 830px)
+  .booster-demo
+    &__layout
+      grid-template-columns: 1fr
+      gap: 12px
+      padding: 45px 0
+    &__intro
+      padding-bottom: 0
+      h1
+        font-size: clamp(48px, 11vw, 82px)
+    &__steps
+      margin-top: 26px
+    &__stage
+      min-height: 620px
+
+@media (max-width: 480px)
+  .booster-demo
+    padding: 0 14px
+    &__topbar
+      min-height: 56px
+      > span:nth-child(2)
+        display: none
+    &__intro h1
+      font-size: clamp(43px, 13vw, 65px)
+    &__stage
+      min-height: 600px
+    &__stage-top, &__stage-bottom
+      font-size: 7px
+    &__pack
+      width: min(260px, 85%)
+      height: 400px
+    &__holo-mount
+      min-height: 310px
+      .holo-card, > img
+        width: min(190px, 58vw)
+    &__footer
+      align-items: flex-start
+      flex-direction: column
+      gap: 5px
+      padding: 14px 0
+
+@media (prefers-reduced-motion: reduce)
+  .booster-demo
+    &__reveal, &__complete
+      animation: none
+    &__pack, &__pack-top
+      transition: none
