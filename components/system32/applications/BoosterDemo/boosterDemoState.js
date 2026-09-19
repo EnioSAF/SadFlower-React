@@ -1,4 +1,4 @@
-const initialState = Object.freeze({ phase: 'sealed', progress: 0, cardIndex: 0 });
+const initialState = Object.freeze({ phase: 'sealed', progress: 0, cardIndex: 0, cardRevealed: false });
 
 function transition(state, action) {
   if (action.type === 'RESET') return initialState;
@@ -9,10 +9,14 @@ function transition(state, action) {
     return { ...state, progress, phase: progress === 100 ? 'revealing' : 'sealed' };
   }
 
-  if (action.type === 'NEXT' && state.phase === 'revealing') {
+  if (action.type === 'REVEAL' && state.phase === 'revealing' && !state.cardRevealed) {
+    return { ...state, cardRevealed: true };
+  }
+
+  if (action.type === 'NEXT' && state.phase === 'revealing' && state.cardRevealed) {
     if (!Number.isInteger(action.cardCount) || action.cardCount <= 0) return state;
     if (state.cardIndex + 1 >= action.cardCount) return { ...state, phase: 'complete' };
-    return { ...state, cardIndex: state.cardIndex + 1 };
+    return { ...state, cardIndex: state.cardIndex + 1, cardRevealed: false };
   }
 
   return state;

@@ -48,8 +48,94 @@ function HoloCard({ card, index }) {
 
 export default function BoosterDemo() {
   const [state, dispatch] = useReducer(transition, initialState);
+  const [leaving, setLeaving] = useState(false);
+  const tearFrame = useRef(null);
+  const nextTimer = useRef(null);
+  const pointer = useRef(null);
+  const progress = useRef(0);
   const current = cards[state.cardIndex];
   const revealing = state.phase === 'revealing';
+
+  useEffect(() => {
+    progress.current = state.progress;
+  }, [state.progress]);
+
+  useEffect(() => () => {
+    cancelAnimationFrame(tearFrame.current);
+    clearTimeout(nextTimer.current);
+  }, []);
+
+  const autoTear = () => {
+    if (state.phase !== 'sealed') return;
+    cancelAnimationFrame(tearFrame.current);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      progress.current = 100;
+      dispatch({ type: 'TEAR', progress: 100 });
+      return;
+    }
+    const from = progress.current;
+    const started = performance.now();
+    const duration = Math.max(280, (100 - from) * 9);
+    const step = (now) => {
+      const fraction = Math.min(1, (now - started) / duration);
+      const eased = 1 - (1 - fraction) ** 3;
+      const nextProgress = Math.min(100, from + (100 - from) * eased);
+      progress.current = nextProgress;
+      dispatch({ type: 'TEAR', progress: nextProgress });
+      if (fraction < 1) tearFrame.current = requestAnimationFrame(step);
+    };
+    tearFrame.current = requestAnimationFrame(step);
+  };
+
+  const startTearPointer = (event) => {
+    if (state.phase !== 'sealed') return;
+    cancelAnimationFrame(tearFrame.current);
+    pointer.current = {
+      id: event.pointerId,
+      startX: event.clientX,
+      startProgress: progress.current,
+      width: event.currentTarget.getBoundingClientRect().width,
+      dragged: false,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const moveTearPointer = (event) => {
+    const active = pointer.current;
+    if (!active || active.id !== event.pointerId || state.phase !== 'sealed') return;
+    const distance = event.clientX - active.startX;
+    if (Math.abs(distance) < 5 && !active.dragged) return;
+    active.dragged = true;
+    const nextProgress = Math.min(100, Math.max(active.startProgress, active.startProgress + (distance / Math.max(1, active.width - 16)) * 100));
+    progress.current = nextProgress;
+    dispatch({ type: 'TEAR', progress: nextProgress });
+  };
+
+  const endTearPointer = (event) => {
+    const active = pointer.current;
+    if (!active || active.id !== event.pointerId) return;
+    pointer.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    if (!active.dragged) autoTear();
+  };
+
+  const nextCard = () => {
+    if (!state.cardRevealed || leaving) return;
+    setLeaving(true);
+    nextTimer.current = setTimeout(() => {
+      dispatch({ type: 'NEXT', cardCount: cards.length });
+      setLeaving(false);
+    }, 380);
+  };
+
+  const reset = () => {
+    cancelAnimationFrame(tearFrame.current);
+    clearTimeout(nextTimer.current);
+    progress.current = 0;
+    pointer.current = null;
+    setLeaving(false);
+    dispatch({ type: 'RESET' });
+  };
 
   return <>
     <Head><title>Booster Lab — SadFlower</title><meta name="description" content="Démo d'ouverture de booster et cartes holographiques SadFlower." /></Head>
@@ -76,8 +162,11 @@ export default function BoosterDemo() {
         <section className="booster-demo__stage" aria-live="polite" aria-label="Ouverture du booster">
           <div className="booster-demo__stage-top"><span>PACK DISPENSER</span><span>NO. 001—003</span></div>
           {state.phase === 'sealed' && <div className="booster-demo__pack-wrap">
-            <div className="booster-demo__pack" style={{ '--tear-progress': `${state.progress}%`, '--tear-offset': `${state.progress * 2}px`, '--tear-angle': `${state.progress * -0.1}deg` }}>
+            <div className="booster-demo__pack" style={{ '--tear-progress': `${state.progress}%`, '--tear-lift': `${state.progress * -0.32}px`, '--tear-rotate': `${state.progress * -0.07}deg`, '--tear-opacity': state.progress > 0 ? 1 : 0 }}>
               <div className="booster-demo__pack-top" aria-hidden="true"><span>✦ SADFLOWER ✦ SADFLOWER ✦ SADFLOWER ✦</span></div>
+              <div className="booster-demo__pack-peel" aria-hidden="true"><span>✦ SADFLOWER ✦ SADFLOWER ✦ SADFLOWER ✦</span></div>
+              <div className="booster-demo__pack-curl" aria-hidden="true" />
+              <div className="booster-demo__pack-tear-edge" aria-hidden="true" />
               <div className="booster-demo__pack-art" aria-hidden="true">
                 <span className="booster-demo__pack-orbit booster-demo__pack-orbit--one" />
                 <span className="booster-demo__pack-orbit booster-demo__pack-orbit--two" />
@@ -87,25 +176,30 @@ export default function BoosterDemo() {
               </div>
               <div className="booster-demo__pack-bottom" aria-hidden="true">3 CARDS INSIDE <span>✦</span> OPEN YOUR WORLD</div>
               <div className="booster-demo__tear-line" aria-hidden="true" />
-              <label className="booster-demo__tear-control">
+              <button type="button" className="booster-demo__tear-control" aria-label="Déchirer le booster" onPointerDown={startTearPointer} onPointerMove={moveTearPointer} onPointerUp={endTearPointer} onPointerCancel={() => { pointer.current = null; }} onClick={(event) => { if (event.detail === 0) autoTear(); }}>
                 <span>DÉCHIRE ICI <b>→</b></span>
-                <input aria-label="Déchirer le booster" type="range" min="0" max="100" value={state.progress} onChange={(event) => dispatch({ type: 'TEAR', progress: Number(event.target.value) })} />
-              </label>
+              </button>
             </div>
-            <p className="booster-demo__hint">GLISSE LA BANDE VERS LA DROITE <span>↗</span></p>
+            <p className="booster-demo__hint">CLIQUE OU GLISSE LA BANDE <span>↗</span></p>
           </div>}
-          {revealing && <div className="booster-demo__reveal" key={state.cardIndex}>
-            <div className="booster-demo__card-head"><span>CARTE {String(state.cardIndex + 1).padStart(2, '0')} / 03</span><span className="booster-demo__rarity">{current.type}</span></div>
-            <HoloCard card={current} index={state.cardIndex} />
-            <div className="booster-demo__card-footer"><strong>{current.name}</strong><span>BOUGE TA SOURIS OU TON DOIGT SUR LA CARTE</span></div>
-            <button className="booster-demo__action" onClick={() => dispatch({ type: 'NEXT', cardCount: cards.length })}>{state.cardIndex === cards.length - 1 ? 'Voir le tirage' : 'Carte suivante'} <span>↗</span></button>
+          {revealing && <div className="booster-demo__reveal">
+            <div className="booster-demo__card-head"><span>CARTE {String(state.cardIndex + 1).padStart(2, '0')} / 03</span><span className="booster-demo__rarity">{state.cardRevealed ? current.type : 'FACE CACHÉE'}</span></div>
+            <div className="booster-demo__deck" key={state.cardIndex}>
+              {cards.slice(state.cardIndex + 1).map((card, offset) => <div className="booster-demo__card-back booster-demo__card-back--stacked" key={card.name} style={{ '--stack-offset': `${(cards.length - state.cardIndex - offset - 1) * 9}px`, '--stack-rotate': `${(cards.length - state.cardIndex - offset - 1) * 2}deg` }}><Image src="/booster-demo/card-back.svg" alt="" width={500} height={700} unoptimized /></div>)}
+              <div className={`booster-demo__turning-card${state.cardRevealed ? ' is-revealed' : ''}${leaving ? ' is-leaving' : ''}`}>
+                <button className="booster-demo__card-back booster-demo__card-back--top" aria-label="Retourner la carte" disabled={state.cardRevealed} onClick={() => dispatch({ type: 'REVEAL' })}><Image src="/booster-demo/card-back.svg" alt="Dos de carte SadFlower" width={500} height={700} unoptimized /></button>
+                <div className="booster-demo__card-face"><HoloCard card={current} index={state.cardIndex} /></div>
+              </div>
+            </div>
+            <div className="booster-demo__card-footer">{state.cardRevealed ? <><strong>{current.name}</strong><span>BOUGE TA SOURIS OU TON DOIGT SUR LA CARTE</span></> : <strong>CLIQUE POUR RETOURNER LA CARTE</strong>}</div>
+            {state.cardRevealed && <button className="booster-demo__action" disabled={leaving} onClick={nextCard}>{state.cardIndex === cards.length - 1 ? 'Voir le tirage' : 'Carte suivante'} <span>↗</span></button>}
           </div>}
           {state.phase === 'complete' && <div className="booster-demo__complete">
             <div className="booster-demo__complete-icon">✳</div>
             <p className="booster-demo__eyebrow">FIN DE SÉQUENCE</p>
             <h2>PACK OUVERT</h2>
             <div className="booster-demo__pull-list">{cards.map((card, i) => <div key={card.name}><span>0{i + 1}</span><strong>{card.name}</strong><small>{card.type}</small></div>)}</div>
-            <button className="booster-demo__action" onClick={() => dispatch({ type: 'RESET' })}>Réessayer <span>↻</span></button>
+            <button className="booster-demo__action" onClick={reset}>Réessayer <span>↻</span></button>
           </div>}
           <div className="booster-demo__stage-bottom"><span>SF CARD SYSTEMS</span><span>INSERT COIN · NO COIN REQUIRED</span></div>
         </section>

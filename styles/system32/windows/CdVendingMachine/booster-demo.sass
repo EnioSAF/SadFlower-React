@@ -164,11 +164,11 @@
       top: 0
       left: 0
       width: var(--tear-progress)
-      height: 29px
-      background: linear-gradient(180deg, #321f2d, #775363 48%, #221e2c)
-      box-shadow: inset 0 -4px 6px rgba(0,0,0,.55)
+      height: 39px
+      background: linear-gradient(180deg, #100d16 12%, #342431 55%, #11191e 85%, #c68c8d 100%)
+      box-shadow: inset 0 10px 14px rgba(0,0,0,.65), 0 2px 4px rgba(0,0,0,.45)
 
-  &__pack-top, &__pack-bottom
+  &__pack-top, &__pack-peel, &__pack-bottom
     position: absolute
     right: 0
     left: 0
@@ -188,7 +188,47 @@
     top: 0
     z-index: 2
     clip-path: inset(0 -100% 0 var(--tear-progress))
-    transform: translateX(var(--tear-offset)) rotate(var(--tear-angle))
+
+  &__pack-peel
+    top: 0
+    z-index: 3
+    width: var(--tear-progress)
+    right: auto
+    border-bottom: 2px solid #ffd3ba
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.24) 0 2px, rgba(0,0,0,.15) 2px 4px), linear-gradient(175deg, #c98496, #8c455f 60%, #e7b4a7)
+    box-shadow: 5px 8px 11px rgba(0,0,0,.5), inset 0 -5px 7px rgba(245,189,176,.5)
+    transform: translateY(var(--tear-lift)) rotate(var(--tear-rotate))
+    transform-origin: left center
+    clip-path: polygon(0 0, 100% 0, 100% 68%, 98% 92%, 95% 71%, 92% 100%, 88% 82%, 84% 100%, 80% 80%, 76% 100%, 72% 80%, 68% 100%, 64% 80%, 60% 100%, 56% 80%, 52% 100%, 48% 80%, 44% 100%, 40% 80%, 36% 100%, 32% 80%, 28% 100%, 24% 80%, 20% 100%, 16% 80%, 12% 100%, 8% 80%, 4% 100%, 0 82%)
+    span
+      display: block
+      width: 294px
+
+  &__pack-curl
+    position: absolute
+    z-index: 4
+    top: var(--tear-lift)
+    left: var(--tear-progress)
+    width: 20px
+    height: 33px
+    opacity: var(--tear-opacity)
+    border-radius: 0 45% 48% 0
+    background: linear-gradient(90deg, #f8cdb6 0%, #733a55 42%, #edb4ae 84%, #4a2938 100%)
+    box-shadow: 4px 5px 8px rgba(0,0,0,.52)
+    transform: translateX(-50%) rotate(11deg)
+
+  &__pack-tear-edge
+    position: absolute
+    z-index: 4
+    top: -6px
+    left: var(--tear-progress)
+    width: 12px
+    height: 44px
+    opacity: var(--tear-opacity)
+    background: repeating-linear-gradient(150deg, #ffe0ba 0 3px, #794552 3px 6px)
+    clip-path: polygon(25% 0, 100% 10%, 55% 22%, 100% 35%, 30% 48%, 95% 62%, 40% 75%, 100% 88%, 15% 100%, 0 100%, 0 0)
+    transform: translateX(-50%) rotate(-8deg)
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,.8))
 
   &__pack-bottom
     bottom: 0
@@ -240,8 +280,8 @@
 
   &__tear-line
     position: absolute
-    z-index: 3
-    top: 32px
+    z-index: 2
+    top: 37px
     right: 0
     left: 0
     height: 2px
@@ -250,32 +290,36 @@
 
   &__tear-control
     position: absolute
-    z-index: 4
-    top: 51px
-    right: 18px
-    left: 18px
+    z-index: 5
+    top: 0
+    right: 0
+    left: 0
     display: block
-    height: 34px
-    background: rgba(10,25,28,.78)
+    width: 100%
+    height: 85px
+    padding: 0
+    border: 0
+    background: transparent
     color: #f9ddad
     text-align: center
-    cursor: ew-resize
+    cursor: grab
+    touch-action: none
+    &:active
+      cursor: grabbing
     span
+      position: absolute
+      top: 51px
+      right: 18px
+      left: 18px
       display: block
+      height: 34px
+      background: rgba(10,25,28,.78)
       pointer-events: none
       font-size: 10px
       line-height: 34px
       letter-spacing: .2em
       b
         padding-left: 8px
-    input
-      position: absolute
-      inset: 0
-      width: 100%
-      height: 100%
-      margin: 0
-      opacity: .04
-      cursor: ew-resize
 
   &__hint
     margin: 31px 0 0
@@ -288,7 +332,7 @@
   &__reveal
     width: 100%
     justify-content: flex-start
-    padding: 4px clamp(15px, 5%, 38px) 18px
+    padding: 13px clamp(15px, 5%, 38px) 18px
     animation: booster-enter .4s ease-out both
 
   &__card-head, &__card-footer
@@ -307,13 +351,66 @@
     border: 1px solid #b6a27c
     color: #e8c990
 
+  &__deck
+    position: relative
+    width: min(220px, 61vw)
+    height: 340px
+    margin: 19px 0 8px
+    perspective: 1100px
+
+  &__card-back
+    position: absolute
+    inset: 0
+    display: block
+    width: 100%
+    height: auto
+    padding: 0
+    overflow: hidden
+    border: 0
+    border-radius: 9px
+    background: #242532
+    box-shadow: 0 16px 25px rgba(0,0,0,.44)
+    img
+      display: block
+      width: 100%
+      height: auto
+    &--stacked
+      transform: translate(var(--stack-offset), calc(var(--stack-offset) * -1)) rotate(var(--stack-rotate))
+    &--top
+      cursor: pointer
+      backface-visibility: hidden
+      -webkit-backface-visibility: hidden
+      &:hover
+        filter: brightness(1.15)
+
+  &__turning-card
+    position: absolute
+    inset: 0
+    z-index: 3
+    transform-style: preserve-3d
+    transition: transform .58s cubic-bezier(.23,.77,.22,1), opacity .38s
+    &.is-revealed
+      transform: rotateY(180deg)
+    &.is-leaving
+      transform: translateX(-160px) rotate(-17deg) rotateY(180deg)
+      opacity: 0
+
+  &__card-face
+    position: absolute
+    inset: 0
+    transform: rotateY(180deg)
+    backface-visibility: hidden
+    -webkit-backface-visibility: hidden
+    pointer-events: none
+    .is-revealed &
+      pointer-events: auto
+
   &__holo-mount
     display: flex
     justify-content: center
     align-items: center
     width: 100%
-    min-height: 355px
-    margin: 9px 0
+    height: 100%
     perspective: 1000px
     .holo-card, > img
       width: min(220px, 61vw)
@@ -323,6 +420,7 @@
       object-fit: contain
 
   &__card-footer
+    min-height: 35px
     strong
       color: #f1d9b5
       font-size: 15px
@@ -349,6 +447,9 @@
     box-shadow: 4px 4px 0 #101819
     &:hover
       background: #d16955
+    &:disabled
+      cursor: wait
+      opacity: .68
 
   &__complete
     justify-content: center
@@ -431,9 +532,11 @@
       width: min(260px, 85%)
       height: 400px
     &__holo-mount
-      min-height: 310px
       .holo-card, > img
         width: min(190px, 58vw)
+    &__deck
+      width: min(190px, 58vw)
+      height: 296px
     &__footer
       align-items: flex-start
       flex-direction: column
@@ -444,5 +547,5 @@
   .booster-demo
     &__reveal, &__complete
       animation: none
-    &__pack, &__pack-top
+    &__pack, &__pack-top, &__turning-card
       transition: none

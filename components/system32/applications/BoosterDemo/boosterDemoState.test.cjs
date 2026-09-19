@@ -14,12 +14,23 @@ test('a full tear opens the pack exactly once', () => {
   assert.deepEqual(transition(opened, { type: 'TEAR', progress: 0 }), opened);
 });
 
-test('cards reveal in order, then the pack can reset', () => {
+test('a face-down card must be turned before moving to the next card', () => {
   let state = transition(initialState, { type: 'TEAR', progress: 100 });
+  assert.equal(state.cardRevealed, false);
+  assert.deepEqual(transition(state, { type: 'NEXT', cardCount: 3 }), state);
+
+  state = transition(state, { type: 'REVEAL' });
+  assert.equal(state.cardRevealed, true);
   state = transition(state, { type: 'NEXT', cardCount: 3 });
   assert.equal(state.cardIndex, 1);
+  assert.equal(state.cardRevealed, false);
+
+  state = transition(state, { type: 'REVEAL' });
   state = transition(state, { type: 'NEXT', cardCount: 3 });
   assert.equal(state.cardIndex, 2);
+  assert.equal(state.cardRevealed, false);
+
+  state = transition(state, { type: 'REVEAL' });
   state = transition(state, { type: 'NEXT', cardCount: 3 });
   assert.equal(state.phase, 'complete');
   assert.deepEqual(transition(state, { type: 'RESET' }), initialState);
@@ -27,6 +38,7 @@ test('cards reveal in order, then the pack can reset', () => {
 
 test('invalid progress and reveal actions leave state unchanged', () => {
   assert.deepEqual(transition(initialState, { type: 'NEXT', cardCount: 3 }), initialState);
+  assert.deepEqual(transition(initialState, { type: 'REVEAL' }), initialState);
   assert.deepEqual(transition(initialState, { type: 'TEAR', progress: NaN }), initialState);
   assert.deepEqual(transition(initialState, { type: 'TEAR', progress: -20 }), initialState);
 });
