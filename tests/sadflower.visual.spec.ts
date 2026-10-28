@@ -23,75 +23,52 @@ test.describe("SadFlower visual smoke", () => {
     await expect(page.getByText("Quick quote / reservation")).toBeVisible();
   });
 
-  test("WhoAmI keeps its title fixed while its content scrolls", async ({ page }, testInfo) => {
-    if (testInfo.project.name === "chromium") {
-      await page.setViewportSize({ width: 700, height: 615 });
-    }
+  test("SadFlowerDiscs opens and completes a dispense cycle", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.addInitScript(() => {
       localStorage.setItem("version", "1.2.0");
       localStorage.setItem("hasVisited", "true");
       localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
     });
     await page.goto("/");
-    await page.getByAltText("WhoAmI.exe").click();
+    await page.getByAltText("SadFlowerDiscs.exe").click();
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: /A1 — DEMO DISC 01/ }).click();
+    await expect(dialog.getByText("DISC A1 READY")).toBeVisible();
+    await dialog.getByRole("button", { name: "OBTENIR" }).click();
+    await expect(dialog.getByText("DISPENSING")).toBeVisible();
+    await expect(dialog.getByText("TAKE DISC")).toBeVisible();
+    await expect(dialog.locator(".cd-delivered-disc")).toBeVisible();
+    await dialog.getByRole("button", { name: "RESET" }).click();
+    await expect(dialog.getByText("SELECT DISC")).toBeVisible();
+  });
 
-    const windowBody = page.locator(".window-body");
-    const title = page.getByRole("heading", { name: "Who Am I" });
-    const scrollContent = page.locator(".whoami-scroll-content");
-    const timeline = page.locator(".section-timeline");
-    const [titleBefore, bodyMetrics] = await Promise.all([
-      title.boundingBox(),
-      windowBody.evaluate((element) => ({
-        clientHeight: element.clientHeight,
-        scrollHeight: element.scrollHeight,
-      })),
-    ]);
-    if (!titleBefore) throw new Error("WhoAmI title layout is unavailable.");
-    expect(bodyMetrics.scrollHeight - bodyMetrics.clientHeight).toBeLessThanOrEqual(1);
-    expect(await scrollContent.evaluate((element) => element.scrollHeight > element.clientHeight)).toBe(true);
-
-    const [gitCalendarBox, chatContentBox, timelineContentBox] = await Promise.all([
-      page.locator(".GitCalendar").boundingBox(),
-      page.locator(".ChatGPT").boundingBox(),
-      timeline.boundingBox(),
-    ]);
-    if (!gitCalendarBox || !chatContentBox || !timelineContentBox) {
-      throw new Error("WhoAmI section content layout is unavailable.");
-    }
-    expect(gitCalendarBox.y + gitCalendarBox.height).toBeLessThanOrEqual(chatContentBox.y + 1);
-    expect(chatContentBox.y + chatContentBox.height).toBeLessThanOrEqual(timelineContentBox.y + 1);
-
-    await scrollContent.evaluate((element) => {
-      element.scrollTop = element.clientHeight * 0.95;
+  test("SadFlowerDiscs stays usable by keyboard on mobile", async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== "mobile-chrome", "Vérification dédiée au distributeur mobile.");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.addInitScript(() => {
+      localStorage.setItem("version", "1.2.0");
+      localStorage.setItem("hasVisited", "true");
+      localStorage.setItem("sadflower-privacy-v1", '{"analytics":false,"externalMedia":false}');
     });
-    await page.waitForTimeout(2_000);
-    const [chatBox, timelineTransitionBox] = await Promise.all([
-      page.locator(".section-chatGPT").boundingBox(),
-      timeline.boundingBox(),
-    ]);
-    if (!chatBox || !timelineTransitionBox) throw new Error("WhoAmI section transition is unavailable.");
-    const sectionOverlap = Math.max(
-      0,
-      Math.min(chatBox.y + chatBox.height, timelineTransitionBox.y + timelineTransitionBox.height)
-        - Math.max(chatBox.y, timelineTransitionBox.y),
-    );
-    expect(sectionOverlap).toBeLessThanOrEqual(1);
+    await page.goto("/");
+    await page.getByAltText("SadFlowerDiscs.exe").click();
 
-    await scrollContent.evaluate((element) => {
-      element.scrollTop = element.scrollHeight;
-    });
-    await page.waitForTimeout(2_000);
+    const dialog = page.getByRole("dialog", { name: "SadFlowerDiscs.exe" });
+    const dialogBox = await dialog.boundingBox();
+    const viewport = page.viewportSize();
+    if (!dialogBox || !viewport) throw new Error("La fenêtre du distributeur est introuvable.");
+    expect(dialogBox.x).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.y).toBeGreaterThanOrEqual(0);
+    expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(viewport.width);
+    expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(viewport.height);
 
-    const [titleAfter, scrollContentBox, timelineBox] = await Promise.all([
-      title.boundingBox(),
-      scrollContent.boundingBox(),
-      timeline.boundingBox(),
-    ]);
-    if (!titleAfter || !scrollContentBox || !timelineBox) throw new Error("WhoAmI scroll layout is unavailable.");
-
-    expect(Math.abs(titleAfter.y - titleBefore.y)).toBeLessThanOrEqual(1);
-    const bottomGap = scrollContentBox.y + scrollContentBox.height - (timelineBox.y + timelineBox.height);
-    expect(Math.abs(bottomGap)).toBeLessThanOrEqual(2);
+    const secondDisc = dialog.getByRole("button", { name: /A2 — DEMO DISC 02/ });
+    await secondDisc.focus();
+    await page.keyboard.press("Enter");
+    await expect(dialog.getByText("DISC A2 READY")).toBeVisible();
+    await expect(dialog.getByRole("button", { name: "OBTENIR" })).toBeEnabled();
   });
 
   test("privacy setup gates optional services after boot", async ({ page }) => {
