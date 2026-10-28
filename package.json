@@ -11,8 +11,6 @@
     "test:visual": "playwright test"
   },
   "dependencies": {
-    "@react-spring/parallax": "^9.7.3",
-    "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^2.2.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",

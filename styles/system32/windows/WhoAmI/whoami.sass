@@ -3,30 +3,40 @@
     flex-direction: column
     gap: 10px // Espace entre les colonnes et rangées
 
+.whoami-window-body
+    overflow: hidden !important
+
 .sections-container
+    position: relative
     display: flex
     flex-direction: column
+    flex: 1 1 auto
+    min-height: 0
+    overflow: hidden
     gap: 10px
 
 .titre-whoami
+    flex: 0 0 60px
     gap: 10px
     align-self: center
     height: 60px
 
-.Parallax
+.whoami-scroll-content
     display: flex
+    flex-direction: column
+    gap: 24px
     width: 100% !important
     height: 100% !important
     flex: 1 1 auto
     min-height: 0
-    right: 0%
+    overflow-x: hidden
+    overflow-y: auto
 
     // Section Presentation
 
 .section-presentation
     display: flex
-    inset: auto !important
-    height: auto !important
+    flex: 0 0 auto
     flex-direction: column
     align-items: center
     align-content: center
@@ -52,7 +62,7 @@
         align-items: center
         padding: 10px
         width: 85%
-        margin-bottom: 500px
+        margin-bottom: 0
         border: 2px solid #0078D7
         border-radius: 10px
         background: #FFF
@@ -60,38 +70,190 @@
         font-size: 1.25em
 
     .GitCalendar
+        box-sizing: border-box
         border: 2px solid #000
-        background: #f4f4f4
-        padding: 10px
+        outline: 2px solid #fff
+        box-shadow: 3px 3px 0 #808080
+        background: #e7e7e7
+        padding: 12px
         width: 90%
-        height: 50% !important
+        color: #1f1f1f
+        font-size: 0.8em
+
+        &__header
+            display: flex
+            align-items: flex-start
+            justify-content: space-between
+            gap: 12px
+            border-bottom: 1px solid #808080
+            margin-bottom: 10px
+            padding-bottom: 8px
+
+            h2
+                margin: 0
+                font-size: 1.45em
+
+            p
+                margin: 3px 0 0
+                color: #4a4a4a
+                font-size: 0.9em
+
+        &__stats
+            display: grid
+            grid-template-columns: repeat(4, 1fr)
+            gap: 6px
+            margin-bottom: 12px
+
+            > div
+                display: flex
+                flex-direction: column
+                min-width: 0
+                border: 1px solid #808080
+                border-top-color: #fff
+                border-left-color: #fff
+                background: #d7d7d7
+                padding: 7px 6px
+
+            strong
+                color: #14532d
+                font-size: 1.6em
+                line-height: 1
+
+            span
+                margin-top: 4px
+                color: #404040
+                font-size: 0.78em
+                line-height: 1.1
+
+        &__live
+            flex: 0 0 auto
+            border: 1px solid #14532d
+            background: #d8efdc
+            color: #14532d
+            font-size: 0.75em
+            font-weight: bold
+            letter-spacing: 0.08em
+            line-height: 1
+            padding: 4px 5px
+
+            &::before
+                content: ''
+                display: inline-block
+                width: 6px
+                height: 6px
+                margin-right: 4px
+                background: #2e8b57
+                vertical-align: 0
+
+        &__graph
+            display: flex
+            justify-content: center
+            width: 100%
+            overflow: hidden
+
+            .react-activity-calendar
+                font-family: 'MS Sans Serif', sans-serif !important
+
+            > div
+                max-width: 100%
+
+            svg
+                display: block
+                max-width: 100%
+                height: auto
+
+        &__link
+            display: inline-block
+            margin-top: 8px
+            color: #000080
+            font-size: 0.9em
+
+        &__allTimeButton
+            float: right
+            margin-top: 6px
+            font-family: 'MS Sans Serif', sans-serif
+            font-size: 0.9em
+
+        &__allTime
+            clear: both
+            margin-top: 12px
+            border-top: 1px solid #808080
+            padding-top: 10px
+
+            p
+                margin: 0 0 8px
+
+            strong
+                color: #14532d
+
+        &__yearGrid
+            display: grid
+            grid-template-columns: repeat(5, 1fr)
+            gap: 5px
+
+            > div
+                display: flex
+                flex-direction: column
+                border: 1px solid #808080
+                border-top-color: #fff
+                border-left-color: #fff
+                background: #d7d7d7
+                padding: 6px
+
+            strong
+                font-size: 1.4em
+                line-height: 1
+
+            span
+                margin-top: 3px
+                color: #404040
+                font-size: 0.82em
 
         &:hover
-            transform: translateY(-5px)
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25)
+            transform: translate(1px, 1px)
+            box-shadow: 2px 2px 0 #808080
+
+        @media (max-width: 600px)
+            width: 100%
+            padding: 8px
+
+            &__header
+                h2
+                    font-size: 1.2em
+
+                p
+                    font-size: 0.7em
+
+            &__stats
+                grid-template-columns: repeat(2, 1fr)
+
+                strong
+                    font-size: 1.4em
+
+            &__yearGrid
+                grid-template-columns: repeat(3, 1fr)
+
+            &__graph
+                justify-content: flex-start
 
     // Section ChatGPT
 
 .section-chatGPT
     display: flex
     position: relative
+    flex: 0 0 auto
     flex-direction: column
     align-items: center
-
-    @media (max-width: 600px)
-        padding: 550px 0 // Ajoute un peu d'air en haut et en bas sur petits écrans
-        height: 18% !important
-        z-index: 5
-        .textarea-chatpgt
-            z-index: 5
+    width: 100%
 
     // Style section en bas (timeline)
 
 .section-timeline
     display: flex
+    flex: 0 0 auto
     flex-direction: column
-    overflow: auto
     align-items: center
+    width: 100%
 
     .vertical-timeline-element-date
 

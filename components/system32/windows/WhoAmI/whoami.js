@@ -5,7 +5,6 @@ import { useZIndex } from "@/components/Tools/ZIndexContext";
 import GitHubCalendar from "react-github-calendar";
 import { PixelArtCard } from "react-pixelart-face-card";
 import { Tilt } from 'react-next-tilt';
-import { Parallax, ParallaxLayer } from "@react-spring/parallax";
 // import { Particles, initParticlesEngine } from "@tsparticles/react";
 // import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
 // import { retroGamingParticles, matrixParticles, cardGameParticles } from "../applications/particlesConfig";
@@ -16,8 +15,37 @@ import TimeLineEnio from "./VerticalTimeline";
 import "98.css";
 import "react-vertical-timeline-component/style.min.css";
 
+const GITHUB_CONTRIBUTIONS_URL = 'https://github-contributions-api.jogruber.de/v4/EnioSAF?y=last';
+const GITHUB_ACTIVITY_START_YEAR = 2022;
+
+const getGitStats = (contributions, total) => {
+  const activeDays = contributions.filter(({ count }) => count > 0);
+  const bestDay = activeDays.reduce(
+    (best, activity) => (activity.count > best.count ? activity : best),
+    { count: 0, date: '' }
+  );
+  let currentStreak = 0;
+  let bestStreak = 0;
+
+  contributions.forEach(({ count }) => {
+    currentStreak = count > 0 ? currentStreak + 1 : 0;
+    bestStreak = Math.max(bestStreak, currentStreak);
+  });
+
+  return {
+    total,
+    activeDays: activeDays.length,
+    bestDay: bestDay.count,
+    bestDayDate: bestDay.date,
+    bestStreak,
+  };
+};
+
 const Whoami = ({ closeWindow, username }) => {
   const [maxTokens, setMaxTokens] = useState(); //Change ici le nombre de token par session
+  const [gitStats, setGitStats] = useState(null);
+  const [allTimeStats, setAllTimeStats] = useState(null);
+  const [isAllTimeVisible, setIsAllTimeVisible] = useState(false);
   // Pour gérer le Z-index
   const { bringToFront, zIndex: globalZIndex } = useZIndex();
   const [zIndex, setZIndex] = useState(globalZIndex);
@@ -66,6 +94,46 @@ const Whoami = ({ closeWindow, username }) => {
     }
   };
 
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(GITHUB_CONTRIBUTIONS_URL, { signal: controller.signal })
+      .then((response) => response.ok ? response.json() : Promise.reject(response))
+      .then(({ contributions, total }) => setGitStats(getGitStats(contributions, total.lastYear)))
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          setGitStats(null);
+        }
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  const toggleAllTimeActivity = async () => {
+    const nextVisibility = !isAllTimeVisible;
+    setIsAllTimeVisible(nextVisibility);
+
+    if (!nextVisibility || allTimeStats) {
+      return;
+    }
+
+    const years = Array.from(
+      { length: new Date().getFullYear() - GITHUB_ACTIVITY_START_YEAR + 1 },
+      (_, index) => GITHUB_ACTIVITY_START_YEAR + index
+    );
+    const results = await Promise.all(
+      years.map(async (year) => {
+        const response = await fetch(`https://github-contributions-api.jogruber.de/v4/EnioSAF?y=${year}`);
+        const { total } = await response.json();
+        return { year, count: response.ok ? total[year] ?? 0 : 0 };
+      })
+    );
+    const total = results.reduce((sum, { count }) => sum + count, 0);
+    const bestYear = results.reduce((best, item) => item.count > best.count ? item : best, results[0]);
+
+    setAllTimeStats({ total, bestYear, years: results });
+  };
+
   return (
     <>
       <Rnd
@@ -95,17 +163,13 @@ const Whoami = ({ closeWindow, username }) => {
             />
           </div>
         </div>
-        <div className='window-body'>
+        <div className='window-body whoami-window-body'>
           <div className="titre-whoami">
             <h3>Who Am I</h3>
           </div>
           <div className='sections-container'>
-            <Parallax className="Parallax" pages={3}>
-              <ParallaxLayer
-                className="section-presentation"
-                speed={1}
-                factor={2}
-              >
+            <div className="whoami-scroll-content">
+              <section className="section-presentation">
                 {/* <Particles options={retroGamingParticles} /> */}
                 <Tilt
                   scale={1.05}
@@ -140,40 +204,89 @@ const Whoami = ({ closeWindow, username }) => {
                   <p>{`Mon voyage musical et professionnel, ponctué d'expériences diverses, de l'Escape Game à la technicité au sein de structures reconnues comme un CHU et EDF RTE, m'a enseigné l'importance du travail en équipe et de la cohésion. La musique, quant à elle, a aiguisé ma sensibilité artistique et la rigueur, essentielle dans le monde du développement web où l'esthétique et la fonctionnalité doivent fusionner harmonieusement.`}</p>
                   <p>{`Aujourd'hui, je m'oriente vers le web développement, désireux de lier ma passion pour l'informatique à cette créativité que je puisse dans l'art, la musique et mes univers. Parfaitement bilingue grâce à des expériences à l'international, dont un séjour marquant à New York, je suis prêt à m'engager dans le défi du numérique, armé de ma sociabilité et d'une volonté de contribuer activement à des projets stimulants.`}</p>
                   <p>{`Je suis Enio, et je suis ici pour apporter ma pierre à l'édifice d'internet, en mêlant technique, art, musique et innovation.`}</p>
-                  <div className='GitCalendar'>
-                    <h2>Git Activity</h2>
-                    <GitHubCalendar
-                      username='EnioSAF'
-                      year={2024}
-                      showWeekdayLabels='true'
-                      weekStart='1'
-                      maxLevel='4'
-                      colorScheme='dark'
-                    />
-                    <a href='https://github.com/EnioSAF/' target='_blank'>
-                      <p color='green'>GitHub</p>
+                  <section className='GitCalendar' aria-labelledby='git-activity-title'>
+                    <div className='GitCalendar__header'>
+                      <div>
+                        <h2 id='git-activity-title'>Git Activity</h2>
+                        <p>GitHub contribution report · last 12 months</p>
+                      </div>
+                      <span className='GitCalendar__live' aria-label='Live GitHub data'>LIVE</span>
+                    </div>
+                    <div className='GitCalendar__stats' aria-live='polite'>
+                      <div><strong>{gitStats?.total ?? '—'}</strong><span>contributions</span></div>
+                      <div><strong>{gitStats?.activeDays ?? '—'}</strong><span>active days</span></div>
+                      <div><strong>{gitStats?.bestStreak ?? '—'}</strong><span>best streak</span></div>
+                      <div><strong>{gitStats?.bestDay ?? '—'}</strong><span>best day</span></div>
+                    </div>
+                    <div className='GitCalendar__graph' aria-label='Contribution activity for latest six months'>
+                      <GitHubCalendar
+                        username='EnioSAF'
+                        year='last'
+                        transformData={(data) => data.slice(-182)}
+                        transformTotalCount={false}
+                        showWeekdayLabels={false}
+                        weekStart={1}
+                        blockSize={13}
+                        blockMargin={3}
+                        fontSize={12}
+                        labels={{
+                          totalCount: 'Latest six months',
+                          legend: {
+                            less: 'Less',
+                            more: 'More',
+                          },
+                        }}
+                        theme={{
+                          light: ['#c8d4ca', '#9cc9a5', '#64a875', '#387b4d', '#14532d'],
+                          dark: ['#c8d4ca', '#9cc9a5', '#64a875', '#387b4d', '#14532d'],
+                        }}
+                      />
+                    </div>
+                    <a
+                      className='GitCalendar__link'
+                      href='https://github.com/EnioSAF/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      Open GitHub profile
                     </a>
-                  </div>
+                    <button
+                      className='GitCalendar__allTimeButton'
+                      type='button'
+                      onClick={toggleAllTimeActivity}
+                      aria-expanded={isAllTimeVisible}
+                    >
+                      {isAllTimeVisible ? 'Hide all-time activity' : 'Show all-time activity'}
+                    </button>
+                    {isAllTimeVisible && (
+                      <div className='GitCalendar__allTime' aria-live='polite'>
+                        {allTimeStats ? (
+                          <>
+                            <p><strong>{allTimeStats.total}</strong> contributions since {GITHUB_ACTIVITY_START_YEAR} · peak: <strong>{allTimeStats.bestYear.count}</strong> in {allTimeStats.bestYear.year}</p>
+                            <div className='GitCalendar__yearGrid'>
+                              {allTimeStats.years.map(({ year, count }) => (
+                                <div key={year}>
+                                  <strong>{count}</strong>
+                                  <span>{year}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </>
+                        ) : <p>Loading all-time activity…</p>}
+                      </div>
+                    )}
+                  </section>
                 </div>
-              </ParallaxLayer>
-              <ParallaxLayer
-                className="section-chatGPT"
-                offset={1}
-                speed={1.2}
-                factor={1}
-              >
+              </section>
+              <section className="section-chatGPT">
                 {/* <Particles options={matrixParticles} /> */}
                 <ChatGPTModule />
-              </ParallaxLayer>
+              </section>
 
-              <ParallaxLayer
-                className="section-timeline"
-                offset={2}
-                speed={1}
-              >
+              <section className="section-timeline">
                 <TimeLineEnio />
-              </ParallaxLayer>
-            </Parallax>
+              </section>
+            </div>
           </div>
         </div>
 
